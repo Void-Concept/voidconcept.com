@@ -1,7 +1,19 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { CdkStack } from './stacks/cdk-stack';
+import { FrontendStack } from './stacks/frontend-stack';
+import { HostedZoneStack } from './stacks/hostedzone-stack';
+
+import config from './config';
+const { domainName } = config;
 
 const app = new cdk.App();
-new CdkStack(app, 'CdkStack');
+
+const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
+    domainName: domainName
+})
+
+new FrontendStack(app, 'FrontendStack', {
+    domainName: domainName,
+    hostedZone: hostedZoneStack.hostedZone
+});
