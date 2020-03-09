@@ -5,19 +5,19 @@ import { FrontendStack } from './stacks/frontend-stack';
 import { HostedZoneStack } from './stacks/hostedzone-stack';
 
 import config from './config';
-const { domainName } = config;
 
 const app = new cdk.App();
 
 const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
-    domainName: domainName,
+    domainName: config.domainName,
+    privateCName: config.privateCName,
     env: {
         region: "us-east-1"
     }
 })
 
 new FrontendStack(app, 'FrontendStack', {
-    domainName: domainName,
+    domainName: config.domainName,
     hostedZone: hostedZoneStack.hostedZone,
     certificate: hostedZoneStack.certificate,
     env: {
