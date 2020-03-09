@@ -4,37 +4,48 @@ import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import { CfnOutput } from '@aws-cdk/core';
 
 interface FrontendStackProps extends cdk.StackProps {
     domainName: string,
     hostedZone: route53.IHostedZone
+    certificate: acm.ICertificate
 }
 
 export class FrontendStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props: FrontendStackProps) {
         super(scope, id, props);
 
-        const frontendBucket = new s3.Bucket(this, "frontendBucket");
-
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
-            domainName: props.domainName
+        const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, "frontendOAI");
+        const frontendBucket = new s3.Bucket(this, "frontendBucket", {
+            websiteIndexDocument: "index.html",
+            websiteErrorDocument: "index.html"
         });
+        frontendBucket.grantRead(originAccessIdentity);
 
         const frontendCdn = new cloudfront.CloudFrontWebDistribution(this, "frontendDistribution", {
             originConfigs: [{
                 s3OriginSource: {
-                    s3BucketSource: frontendBucket
+                    s3BucketSource: frontendBucket,
+                    originAccessIdentity: originAccessIdentity
                 },
                 behaviors: [{
                     isDefaultBehavior: true
                 }]
             }],
-            viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(certificate, {
+            viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(props.certificate, {
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2018
             }),
-            priceClass: cloudfront.PriceClass.PRICE_CLASS_100
+            errorConfigurations: [{
+                errorCode: 403,
+                responseCode: 200,
+                responsePagePath: "/index.html"
+            }, {
+                errorCode: 404,
+                responseCode: 200,
+                responsePagePath: "/index.html"
+            }],
+            priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
+            viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
         });
 
         new route53.ARecord(this, "frontendCdnRecord", {

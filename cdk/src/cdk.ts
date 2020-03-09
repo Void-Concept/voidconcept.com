@@ -19,6 +19,7 @@ const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
 new FrontendStack(app, 'FrontendStack', {
     domainName: domainName,
     hostedZone: hostedZoneStack.hostedZone,
+    certificate: hostedZoneStack.certificate,
     env: {
         region: "us-east-1"
     }
