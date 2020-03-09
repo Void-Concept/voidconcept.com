@@ -6,7 +6,6 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as route53Targets from '@aws-cdk/aws-route53-targets';
 
 interface FrontendStackProps extends cdk.StackProps {
-    domainName: string,
     hostedZone: route53.IHostedZone
     certificate: acm.ICertificate
 }
@@ -15,26 +14,27 @@ export class FrontendStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props: FrontendStackProps) {
         super(scope, id, props);
 
-        const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, "frontendOAI");
+        const domainName = props.hostedZone.zoneName
+
         const frontendBucket = new s3.Bucket(this, "frontendBucket", {
             websiteIndexDocument: "index.html",
             websiteErrorDocument: "index.html",
             accessControl: s3.BucketAccessControl.PUBLIC_READ,
+            publicReadAccess: true,
         });
-        frontendBucket.grantRead(originAccessIdentity);
 
         const frontendCdn = new cloudfront.CloudFrontWebDistribution(this, "frontendDistribution", {
             originConfigs: [{
                 s3OriginSource: {
-                    s3BucketSource: frontendBucket,
-                    originAccessIdentity: originAccessIdentity
+                    s3BucketSource: frontendBucket
                 },
                 behaviors: [{
                     isDefaultBehavior: true
                 }]
             }],
             viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(props.certificate, {
-                securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2018
+                securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2018,
+                aliases: [domainName]
             }),
             errorConfigurations: [{
                 errorCode: 403,
