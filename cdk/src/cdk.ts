@@ -10,7 +10,9 @@ const app = new cdk.App();
 
 const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
     domainName: config.domainName,
-    privateCName: config.privateCName,
+    cnames: config.additionalDnsRecords.cnames,
+    txts: config.additionalDnsRecords.txts,
+    mxs: config.additionalDnsRecords.mxs,
     env: {
         region: "us-east-1"
     }

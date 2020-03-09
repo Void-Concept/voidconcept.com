@@ -1,13 +1,13 @@
 import * as cdk from '@aws-cdk/core';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as acm from '@aws-cdk/aws-certificatemanager';
+import { CnameConfig, TxtConfig, MxConfig } from '../config';
 
 interface HostedZoneStackProps extends cdk.StackProps {
     domainName: string
-    privateCName?: {
-        prefix: string
-        target: string
-    }
+    cnames?: CnameConfig[]
+    txts?: TxtConfig[]
+    mxs?: MxConfig[]
 }
 
 export class HostedZoneStack extends cdk.Stack {
@@ -32,12 +32,27 @@ export class HostedZoneStack extends cdk.Stack {
             zone: this.hostedZone,
         });
 
-        if (props.privateCName) {
-            new route53.CnameRecord(this, "PrivateCname", {
-                recordName: props.privateCName.prefix,
-                domainName: props.privateCName.target,
+        props.cnames && props.cnames.forEach(cname => {
+            new route53.CnameRecord(this, cname.id, {
+                recordName: cname.prefix,
+                domainName: cname.target,
                 zone: this.hostedZone,
             });
-        }
+        })
+        props.txts && props.txts.forEach(txt => {
+            new route53.TxtRecord(this, txt.id, {
+                values: txt.values,
+                zone: this.hostedZone
+            })
+        })
+        props.mxs && props.mxs.forEach(mxs => {
+            new route53.MxRecord(this, mxs.id, {
+                values: mxs.values.map((value, priority) => ({
+                    hostName: value,
+                    priority: priority
+                })),
+                zone: this.hostedZone
+            })
+        })
     }
 }
