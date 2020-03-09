@@ -18,7 +18,8 @@ export class FrontendStack extends cdk.Stack {
         const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, "frontendOAI");
         const frontendBucket = new s3.Bucket(this, "frontendBucket", {
             websiteIndexDocument: "index.html",
-            websiteErrorDocument: "index.html"
+            websiteErrorDocument: "index.html",
+            accessControl: s3.BucketAccessControl.PUBLIC_READ,
         });
         frontendBucket.grantRead(originAccessIdentity);
 
