@@ -16,7 +16,8 @@ export class FrontendStack extends cdk.Stack {
 
         const frontendBucket = new s3.Bucket(this, "frontendBucket");
 
-        const certificate = new acm.Certificate(this, "certificate", {
+        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
+            hostedZone: props.hostedZone,
             domainName: props.domainName
         });
 
@@ -31,7 +32,8 @@ export class FrontendStack extends cdk.Stack {
             }],
             viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(certificate, {
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2018
-            })
+            }),
+            priceClass: cloudfront.PriceClass.PRICE_CLASS_100
         });
 
         new route53.ARecord(this, "frontendCdnRecord", {

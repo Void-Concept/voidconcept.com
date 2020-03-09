@@ -9,7 +9,8 @@
         "watch": "tsc -w",
         "test": "jest",
         "cdk": "cdk",
-        "cdk-diff": "cdk diff"
+        "cdk-diff": "cdk diff",
+        "cdk-deploy": "cdk deploy \"*\""
     },
     "devDependencies": {
         "@aws-cdk/assert": "1.27.0",

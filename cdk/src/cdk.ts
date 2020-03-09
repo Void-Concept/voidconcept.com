@@ -10,10 +10,16 @@ const { domainName } = config;
 const app = new cdk.App();
 
 const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
-    domainName: domainName
+    domainName: domainName,
+    env: {
+        region: "us-east-1"
+    }
 })
 
 new FrontendStack(app, 'FrontendStack', {
     domainName: domainName,
-    hostedZone: hostedZoneStack.hostedZone
+    hostedZone: hostedZoneStack.hostedZone,
+    env: {
+        region: "us-east-1"
+    }
 });
