@@ -57,5 +57,9 @@ export class FrontendStack extends cdk.Stack {
         new cdk.CfnOutput(this, "FrontendBucketUri", {
             value: `s3://${frontendBucket.bucketName}`
         });
+
+        new cdk.CfnOutput(this, "FrontendCdnId", {
+            value: frontendCdn.distributionId
+        });
     }
 }
