@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import "./spellbook.css";
 import { spells, MAX_PREPARED, Spell } from './Spellbook';
 
-const localStorageSpellbook: SpellbookSpell[] = JSON.parse(localStorage.getItem("spellbook") || "") || []
+const localStorageSpellbook: SpellbookSpell[] = JSON.parse(localStorage.getItem("spellbook") || '""') || []
 
 const initialSpellbookSpells: SpellbookSpell[] = spells
     .map(spell => {

@@ -200,6 +200,17 @@ export const spells: Spell[] = [{
     duration: "Instantaneous",
     description: "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires Attunement to use, and how many Charges it has, if any. You learn whether any Spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it.\n\nIf you instead touch a creature throughout the casting, you learn what Spells, if any, are currently affecting it.",
 }, {
+    name: "Alarm",
+    level: "1st",
+    school: "Abjuration",
+    ritual: true,
+    castTime: "1 minute",
+    range: "30 ft",
+    components: "V, S, M",
+    materials: "A tiny bell and a piece of fine silver wire.",
+    duration: "8 hours",
+    description: "You set an alarm against unwanted intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot cube. Until the spell ends, an alarm alerts you whenever a Tiny or larger creature touches or enters the warded area. When you cast the spell, you can designate creatures that won't set off the alarm. You also choose whether the alarm is mental or audible.\n\nA mental alarm alerts you with a ping in your mind if you are within 1 mile of the warded area.This ping awakens you if you are sleeping.\n\nAn audible alarm produces the sound of a hand bell for 10 seconds within 60 feet.",
+}, {
     name: "Flaming Sphere",
     level: "2nd",
     school: "Conjuration",
