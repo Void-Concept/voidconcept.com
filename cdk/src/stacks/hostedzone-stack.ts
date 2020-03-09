@@ -27,15 +27,15 @@ export class HostedZoneStack extends cdk.Stack {
         });
 
         new route53.CnameRecord(this, "OldGHPagesCname", {
-            domainName: `old.${props.domainName}`,
-            recordName: "http://void-concept.github.io",
+            recordName: "old",
+            domainName: "http://void-concept.github.io",
             zone: this.hostedZone,
         });
 
         if (props.privateCName) {
             new route53.CnameRecord(this, "PrivateCname", {
-                domainName: `${props.privateCName.prefix}.${props.domainName}`,
-                recordName: props.privateCName.target,
+                recordName: props.privateCName.prefix,
+                domainName: props.privateCName.target,
                 zone: this.hostedZone,
             });
         }
