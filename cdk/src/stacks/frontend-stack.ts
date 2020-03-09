@@ -4,6 +4,7 @@ import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as route53Targets from '@aws-cdk/aws-route53-targets';
+import { CfnOutput } from '@aws-cdk/core';
 
 interface FrontendStackProps extends cdk.StackProps {
     domainName: string,
@@ -39,6 +40,10 @@ export class FrontendStack extends cdk.Stack {
         new route53.ARecord(this, "frontendCdnRecord", {
             zone: props.hostedZone,
             target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(frontendCdn))
+        });
+
+        new cdk.CfnOutput(this, "FrontendBucketUri", {
+            value: `s3://${frontendBucket.bucketName}`
         });
     }
 }
