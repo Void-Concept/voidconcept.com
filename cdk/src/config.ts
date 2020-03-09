@@ -13,7 +13,10 @@ export interface TxtConfig {
 
 export interface MxConfig {
     id: string
-    values: string[]
+    values: {
+        priority: number
+        value: string
+    }[]
 }
 
 export interface AppConfig {

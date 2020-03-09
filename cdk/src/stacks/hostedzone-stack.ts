@@ -42,14 +42,14 @@ export class HostedZoneStack extends cdk.Stack {
         props.txts && props.txts.forEach(txt => {
             new route53.TxtRecord(this, txt.id, {
                 values: txt.values,
-                zone: this.hostedZone
+                zone: this.hostedZone,
             })
         })
         props.mxs && props.mxs.forEach(mxs => {
             new route53.MxRecord(this, mxs.id, {
-                values: mxs.values.map((value, priority) => ({
-                    hostName: value,
-                    priority: priority
+                values: mxs.values.map(value => ({
+                    hostName: value.value,
+                    priority: value.priority
                 })),
                 zone: this.hostedZone
             })

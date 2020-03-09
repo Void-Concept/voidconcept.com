@@ -10,12 +10,10 @@ const app = new cdk.App();
 
 const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
     domainName: config.domainName,
-    cnames: config.additionalDnsRecords.cnames,
-    txts: config.additionalDnsRecords.txts,
-    mxs: config.additionalDnsRecords.mxs,
+    ...config.additionalDnsRecords,
     env: {
         region: "us-east-1"
-    }
+    },
 })
 
 new FrontendStack(app, 'FrontendStack', {
@@ -23,5 +21,5 @@ new FrontendStack(app, 'FrontendStack', {
     certificate: hostedZoneStack.certificate,
     env: {
         region: "us-east-1"
-    }
+    },
 });
