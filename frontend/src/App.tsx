@@ -12,6 +12,7 @@ function App() {
                 <Route path="/dnd/spellbook">
                     <SpellbookComponent />
                 </Route>
+                <Route path="/time/local/" render={LocalTimeComponent} exact />
                 <Route path="/time/local/:epochTime" render={LocalTimeComponent} />
                 <Route>
                     <Redirect to="/dnd/spellbook" />

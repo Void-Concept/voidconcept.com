@@ -43,4 +43,28 @@ describe("LocalTimezoneComponent", () => {
 
         expect(history.location.pathname).toEqual(`/time/local/${expectedEpochTime}`);
     });
+
+    it("should still display with no initial time", async () => {
+        const history = createMemoryHistory({
+            initialEntries: [`/time/local`]
+        });
+        const match = {
+            params: {}
+        } as Match<LocalTimeComponentParams>;
+
+        render(<LocalTimeComponent match={match} history={history} />);
+    });
+
+    it("should still display with invalid time", async () => {
+        const history = createMemoryHistory({
+            initialEntries: [`/time/local/notanumber`]
+        });
+        const match = {
+            params: {
+                epochTime: "notanumber"
+            }
+        } as Match<LocalTimeComponentParams>;
+
+        render(<LocalTimeComponent match={match} history={history} />);
+    });
 });

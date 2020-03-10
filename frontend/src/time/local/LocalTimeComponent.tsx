@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './local.css';
 
 export type LocalTimeComponentParams = {
-    epochTime: string
+    epochTime?: string
 }
 
 export interface LocalTimeComponentProps {
@@ -15,10 +15,14 @@ export interface LocalTimeComponentProps {
     history: History
 }
 
+const getEpochTime = (time?: string) => {
+    return (time && parseInt(time)) || parseInt(moment().format('x'))
+}
+
 export const LocalTimeComponent = ({ match, history }: LocalTimeComponentProps) => {
-    const timeNumber = parseInt(match.params.epochTime)
-    const time = moment(timeNumber)
-    const abbrZone = moment.tz.zone(moment.tz.guess())?.abbr(timeNumber)
+    const epochTime = getEpochTime(match.params.epochTime)
+    const time = moment(epochTime)
+    const abbrZone = moment.tz.zone(moment.tz.guess())?.abbr(epochTime)
 
     return (
         <div>
@@ -27,12 +31,12 @@ export const LocalTimeComponent = ({ match, history }: LocalTimeComponentProps) 
                     selected={time.toDate()}
                     onChange={(newDate) => {
                         if (newDate) {
-                            const newEpochTime = moment(newDate).format('x')
+                            const newEpochTime = newDate.getTime()
                             history.push(`/time/local/${newEpochTime}`)
                         }
                     }}
                     showTimeSelect
-                    dateFormat="yyyy-MM-dd hh:MM:SS a"
+                    dateFormat="yyyy-MM-dd hh:mm:SS a"
                 />
                 <span className="time-local-zone">{abbrZone}</span>
             </div>
