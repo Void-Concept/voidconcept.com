@@ -13,7 +13,7 @@ describe("LocalTimezoneComponent", () => {
             }
         } as Match<LocalTimeComponentParams>;
 
-        const wrapper = render(<LocalTimeComponent match={match} />);
+        const wrapper = render(<LocalTimeComponent match={match} history={createMemoryHistory()} />);
 
         expect(await wrapper.findByDisplayValue("2020-03-09 06:03:00 PM")).toBeDefined();
     });
