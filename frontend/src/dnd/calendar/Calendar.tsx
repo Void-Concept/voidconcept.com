@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
+import { CalendarDao } from './CalendarDao';
+import { CalendarDate, getDateAtOffset } from './util';
 
-export const Calendar = () => {
+interface CalendarProps {
+    calendarDao: CalendarDao
+}
+
+export const Calendar = ({ calendarDao }: CalendarProps) => {
+    const [date, setDate] = useState<CalendarDate | undefined>()
+    useEffect(() => {
+        const fetchDate = async () => {
+            const savedDate = await calendarDao.getDate()
+            setDate(savedDate)
+        }
+        fetchDate();
+    }, [])
+    if (!date) return <></>;
+
+    const nextDate = () => {
+        const nextDate = getDateAtOffset(date, 1);
+        setDate(nextDate)
+        calendarDao.setDate(nextDate)
+    }
+
+    const previousDate = () => {
+        const previousDate = getDateAtOffset(date, -1);
+        setDate(previousDate)
+        calendarDao.setDate(previousDate)
+    }
+
     return (
-        <CalendarDisplay
-            year={4067}
-            month={3}
-            day={25}
-        />
+        <>
+            <button onClick={previousDate}>Previous</button>
+            <CalendarDisplay
+                year={date.year}
+                month={date.month}
+                day={date.day}
+            />
+            <button onClick={nextDate}>Next</button>
+        </>
     );
 }
