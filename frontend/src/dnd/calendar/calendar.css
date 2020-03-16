@@ -1,0 +1,14 @@
+.dnd-calendar-button-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+}
+
+.dnd-calendar-container {
+    padding-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+}

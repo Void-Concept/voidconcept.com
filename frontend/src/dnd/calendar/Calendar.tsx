@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
 import { CalendarDate, getDateAtOffset } from './util';
+import "./calendar.css"
 
 interface CalendarProps {
     calendarDao: CalendarDao
@@ -31,14 +32,16 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
     }
 
     return (
-        <>
-            <button onClick={previousDate}>Previous</button>
-            <CalendarDisplay
-                year={date.year}
-                month={date.month}
-                day={date.day}
-            />
-            <button onClick={nextDate}>Next</button>
-        </>
+        <div className="dnd-calendar-container">
+            <div className="dnd-calendar-button-display">
+                <button onClick={previousDate}>Previous</button>
+                <CalendarDisplay
+                    year={date.year}
+                    month={date.month}
+                    day={date.day}
+                />
+                <button onClick={nextDate}>Next</button>
+            </div>
+        </div>
     );
 }
