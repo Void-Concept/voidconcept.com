@@ -7,7 +7,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const dynamoDb = new DynamoDB();
     const dynamoHelper = new DynamoHelper(dynamoDb, dynamoDbTableName);
 
-    return withCors(event.headers.Origin, await dependencyInjectedHandler(event, dynamoHelper));
+    const response = withCors(event.headers.Origin, await dependencyInjectedHandler(event, dynamoHelper));
+    console.log("responding with", response);
+    return response
 }
 
 export const dependencyInjectedHandler = async (
@@ -37,7 +39,7 @@ export const dependencyInjectedHandler = async (
 const withCors = (origin: string, response: APIGatewayProxyResult) => {
     return Object.assign({
         headers: Object.assign({
-            "Access-Control-Allow-Origin": origin
+            "Access-Control-Allow-Origin": "*"
         }, response.headers)
     }, response);
 }

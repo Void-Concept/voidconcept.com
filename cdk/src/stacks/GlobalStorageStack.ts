@@ -46,7 +46,11 @@ export class GlobalStorageStack extends cdk.Stack {
                 endpointType: apigateway.EndpointType.REGIONAL,
                 certificate: certificate
             },
-            defaultIntegration: new apigateway.LambdaIntegration(endpoint)
+            defaultIntegration: new apigateway.LambdaIntegration(endpoint),
+            defaultCorsPreflightOptions: {
+                allowOrigins: apigateway.Cors.ALL_ORIGINS,
+                allowMethods: apigateway.Cors.ALL_METHODS,
+            }
         });
         const dnd = api.root.addResource("dnd");
         const dndCalendar = dnd.addResource("calendar");
