@@ -7,7 +7,7 @@ export interface DndCalendar {
 }
 
 interface DynamoDndCalendar extends DynamoDB.AttributeMap {
-    id: {
+    name: {
         S: "DndCalendar"
     },
     value: {
@@ -38,7 +38,7 @@ export class DynamoHelper {
         const response = await this.dynamoDb.getItem({
             TableName: this.tableName,
             Key: {
-                id: {
+                name: {
                     S: "DndCalendar"
                 },
             }
@@ -56,7 +56,7 @@ export class DynamoHelper {
 
     postDndCalendar = async (calendar: DndCalendar): Promise<DndCalendar> => {
         const request: DynamoDndCalendar = {
-            id: {
+            name: {
                 S: "DndCalendar"
             },
             value: {

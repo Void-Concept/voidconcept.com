@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
 import { Calendar as DndCalendar } from './dnd/calendar/Calendar';
-import { MemoryCalendarDao } from './dnd/calendar/CalendarDao';
+import { GenericStorageCalendarDao } from './dnd/calendar/CalendarDao';
 
 function App() {
     return (
@@ -16,7 +16,7 @@ function App() {
                         <SpellbookComponent />
                     </Route>
                     <Route path="/dnd/calendar">
-                        <DndCalendar calendarDao={new MemoryCalendarDao()} />
+                        <DndCalendar calendarDao={new GenericStorageCalendarDao()} />
                     </Route>
                 </Route>
                 <Route path="/time/local/" render={LocalTimeComponent} exact />

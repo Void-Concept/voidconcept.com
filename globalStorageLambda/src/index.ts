@@ -7,7 +7,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const dynamoDb = new DynamoDB();
     const dynamoHelper = new DynamoHelper(dynamoDb, dynamoDbTableName);
 
-    return await dependencyInjectedHandler(event, dynamoHelper);
+    return withCors(event.headers.Origin, await dependencyInjectedHandler(event, dynamoHelper));
 }
 
 export const dependencyInjectedHandler = async (
@@ -21,16 +21,25 @@ export const dependencyInjectedHandler = async (
             body: JSON.stringify(calendar)
         };
     } else if (event.httpMethod === "POST") {
+        const calendar = await dynamoHelper.postDndCalendar(parseEventBody(event))
         return {
-            statusCode: 501,
-            body: "Not implemented"
-        }
+            statusCode: 200,
+            body: JSON.stringify(calendar)
+        };
     } else {
         return {
             statusCode: 404,
-            body: "Operation not found"
+            body: JSON.stringify("Operation not found")
         }
     }
+}
+
+const withCors = (origin: string, response: APIGatewayProxyResult) => {
+    return Object.assign({
+        headers: Object.assign({
+            "Access-Control-Allow-Origin": origin
+        }, response.headers)
+    }, response);
 }
 
 const parseEventBody = (event: APIGatewayProxyEvent): any => {
