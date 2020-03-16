@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { FrontendStack } from './stacks/frontend-stack';
-import { HostedZoneStack } from './stacks/hostedzone-stack';
+import { FrontendStack } from './stacks/FrontendStack';
+import { HostedZoneStack } from './stacks/HostedZoneStack';
 
 import config from './config';
 

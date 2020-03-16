@@ -1,6 +1,6 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import Cdk = require('../../stacks/frontend-stack');
+import Cdk = require('../../stacks/FrontendStack');
 
 describe("FrontendStack", () => {
     xit('should ', () => {

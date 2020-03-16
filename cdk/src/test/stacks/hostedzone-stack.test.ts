@@ -1,6 +1,6 @@
 import { expect as expectCDK, matchTemplate, MatchStyle, haveResourceLike } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import { HostedZoneStack } from '../../stacks/hostedzone-stack';
+import { HostedZoneStack } from '../../stacks/HostedZoneStack';
 
 describe("HostedZoneStack", () => {
     it('should expose the hosted zone so other stacks can add routes', () => {

@@ -6,11 +6,12 @@
     },
     "scripts": {
         "build": "tsc",
+        "build-deps": "yarn --cwd '../globalStorageLambda' bundle",
         "watch": "tsc -w",
         "test": "jest",
         "cdk": "cdk",
-        "cdk-diff": "cdk diff",
-        "cdk-deploy": "cdk deploy \"*\""
+        "cdk-diff": "yarn build-deps && cdk diff",
+        "cdk-deploy": "yarn build-deps && cdk deploy \"*\""
     },
     "devDependencies": {
         "@aws-cdk/assert": "1.27.0",
@@ -23,8 +24,11 @@
         "typescript": "~3.8.3"
     },
     "dependencies": {
+        "@aws-cdk/aws-apigateway": "^1.27.0",
         "@aws-cdk/aws-certificatemanager": "^1.27.0",
         "@aws-cdk/aws-cloudfront": "^1.27.0",
+        "@aws-cdk/aws-dynamodb": "^1.27.0",
+        "@aws-cdk/aws-lambda": "^1.27.0",
         "@aws-cdk/aws-route53": "^1.27.0",
         "@aws-cdk/aws-route53-targets": "^1.27.0",
         "@aws-cdk/aws-s3": "^1.27.0",
