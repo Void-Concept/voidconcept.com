@@ -2,7 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
 import { CalendarDate, getDateAtOffset } from './util';
+import MoonFullIcon from "mdi-react/MoonFullIcon";
+import MoonNewIcon from "mdi-react/MoonNewIcon";
+import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
+import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
 import "./calendar.css"
+
+interface MoonPhaseIconProps {
+    date: CalendarDate
+}
+const MoonPhaseIcon = ({ date }: MoonPhaseIconProps) => {
+    switch (date.day) {
+        case 2:
+            return <span title="Waning Half Moon"><MoonLastQuarterIcon /></span>
+        case 10:
+            return <span title="New Moon"><MoonNewIcon /></span>
+        case 17:
+            return <span title="Waxing Half Moon"><MoonFirstQuarterIcon /></span>
+        case 25:
+            return <span title="Full Moon"><MoonFullIcon /></span>
+
+        default:
+            return null
+    }
+};
 
 interface CalendarProps {
     calendarDao: CalendarDao
@@ -42,6 +65,9 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
                 />
                 <button onClick={nextDate}>Next</button>
             </div>
+            <div className="dnd-calendar-status">
+                <MoonPhaseIcon date={date} />
+            </div>
         </div>
     );
-}
+};

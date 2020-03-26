@@ -5,6 +5,24 @@ export interface CalendarDao {
     setDate: (date: CalendarDate) => Promise<CalendarDate>
 }
 
+export class InMemoryCalendarDao implements CalendarDao {
+    date: CalendarDate = {
+        year: 4067,
+        month: 3,
+        day: 25
+    };
+
+
+    async getDate(): Promise<CalendarDate> {
+        return this.date;
+    }
+
+    async setDate(date: CalendarDate): Promise<CalendarDate> {
+        this.date = date;
+        return this.date;
+    }
+}
+
 export class GenericStorageCalendarDao implements CalendarDao {
     async getDate() {
         const response = await fetch("https://globals.voidconcept.com/dnd/calendar", {
