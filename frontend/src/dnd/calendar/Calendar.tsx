@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
 import { CalendarDate, getDateAtOffset } from './util';
@@ -16,7 +16,7 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
             setDate(savedDate)
         }
         fetchDate();
-    }, [])
+    }, [calendarDao])
     if (!date) return <></>;
 
     const nextDate = () => {

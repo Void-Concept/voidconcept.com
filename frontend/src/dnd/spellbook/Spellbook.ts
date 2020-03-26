@@ -19,7 +19,7 @@ export type Spell = {
     alwaysPrepared?: boolean
 }
 
-export const MAX_PREPARED = 11;
+export const MAX_PREPARED = 13;
 
 export const spells: Spell[] = [{
     name: "Guidance",
@@ -326,4 +326,24 @@ export const spells: Spell[] = [{
     materials: "A hemispherical piece of clear crystal and matching hemispherical piece of gum arabic",
     duration: "1 minute",
     description: "A sphere of shimmering force encloses a creature or object of Large size or smaller within range. An unwilling creature must make a Dexterity saving throw. On a failed save, the creature is enclosed for the duration.\n\nNothing - not physical objects, energy, or other spell effects - can pass through the barrier, in or out, though a creature in the sphere can breathe there.The sphere is immune to all damage, and a creature or object inside can't be damaged by attacks or effects originating from outside, nor can a creature inside the sphere damage anything outside it.\n\nThe sphere is weightless and just large enough to contain the creature or object inside.An enclosed creature can use its action to push against the sphere's walls and thus roll the sphere at up to half the creature's speed.Similarly, the globe can be picked up and moved by other creatures.\n\nA disintegrate spell targeting the globe destroys it without harming anything inside it.",
+}, {
+    name: "Banishment",
+    level: "4th",
+    school: "Abjuration",
+    castTime: "1 action",
+    concentration: true,
+    range: "60 ft",
+    components: "V, S, M",
+    materials: "An item distasteful to the target",
+    duration: "1 minute",
+    description: "You attempt to send one creature that you can see within range to another plane of existence. The target must succeed on a Charisma saving throw or be banished.\n\nIf the target is native to the plane of existence you’re on, you banish the target to a harmless demiplane.While there, the target is incapacitated.The target remains there until the spell ends, at which point the target reappears in the space it left or in the nearest unoccupied space if that space is occupied.\n\nIf the target is native to a different plane of existence than the one you’re on, the target is banished with a faint popping noise, returning to its home plane.If the spell ends before 1 minute has passed, the target reappears in the space it left or in the nearest unoccupied space if that space is occupied.Otherwise, the target doesn’t return.",
+}, {
+    name: "Dimension Door",
+    level: "4th",
+    school: "Conjuration",
+    castTime: "1 action",
+    range: "500 ft",
+    components: "V",
+    duration: "Instantaneous",
+    description: "You teleport yourself from your current location to any other spot within range. You arrive at exactly the spot desired. It can be a place you can see, one you can visualize, or one you can describe by stating distance and direction, such as “200 feet straight downward” or “upward to the northwest at a 45-degree angle, 300 feet.”\n\nYou can bring along objects as long as their weight doesn’t exceed what you can carry.You can also bring one willing creature of your size or smaller who is carrying gear up to its carrying capacity.The creature must be within 5 feet of you when you cast this spell.\n\nIf you would arrive in a place already occupied by an object or a creature, you and any creature traveling with you each take 4d6 force damage, and the spell fails to teleport you.",
 }];
