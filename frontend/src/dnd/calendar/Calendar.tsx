@@ -6,6 +6,8 @@ import MoonFullIcon from "mdi-react/MoonFullIcon";
 import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
 import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
+import CowIcon from "mdi-react/CowIcon";
+import { getDayOfWeek } from './util';
 import "./calendar.css"
 
 interface MoonPhaseIconProps {
@@ -26,6 +28,17 @@ const MoonPhaseIcon = ({ date }: MoonPhaseIconProps) => {
             return null
     }
 };
+
+interface CowGloriaIconProps {
+    date: CalendarDate
+}
+const CowGloriaIcon = ({ date }: CowGloriaIconProps) => {
+    if (getDayOfWeek(date.year, date.month, date.day) !== "Wednesday") {
+        return null;
+    }
+
+    return <span title={"Cow Gloria"}><CowIcon /></span>
+}
 
 interface CalendarProps {
     calendarDao: CalendarDao
@@ -67,6 +80,7 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
             </div>
             <div className="dnd-calendar-status">
                 <MoonPhaseIcon date={date} />
+                <CowGloriaIcon date={date} />
             </div>
         </div>
     );

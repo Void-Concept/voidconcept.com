@@ -155,4 +155,25 @@ describe("Calendar", () => {
             expect(await wrapper.findByTitle("Waxing Half Moon")).toBeDefined();
         });
     });
+
+    describe("Gloria Icon", () => {
+        it("should display an icon for Cowloria on Wednesdays", async () => {
+            const calendarDao = {
+                getDate: jest.fn().mockResolvedValue({
+                    year: 4067,
+                    month: 3,
+                    day: 23
+                }),
+                setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
+                    return Promise.resolve(newDate);
+                })
+            } as CalendarDao;
+
+            const wrapper = render(
+                <Calendar calendarDao={calendarDao} />
+            );
+
+            expect(await wrapper.findByTitle("Cow Gloria")).toBeDefined();
+        });
+    })
 });
