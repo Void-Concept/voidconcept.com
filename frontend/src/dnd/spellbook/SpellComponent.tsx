@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 import "./spell.css";
 import CameraTimerIcon from "mdi-react/CameraTimerIcon";
 import BullseyeArrowIcon from "mdi-react/BullseyeArrowIcon";
