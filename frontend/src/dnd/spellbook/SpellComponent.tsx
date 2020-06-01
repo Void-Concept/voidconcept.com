@@ -84,12 +84,10 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
                         {spell.duration}
                     </span>
                 </div>
-                {showDescription && <>
+                {showDescription && <div className="spell-description-container" onClick={preventClick}>
                     <hr />
-                    <div className="spell-description">
-                        <SpellDescription description={(spell.description)} />
-                    </div>
-                </>}
+                    <SpellDescription description={(spell.description)} />
+                </div>}
             </div>
             <div className="spell-buttons">
                 <button className={`spell-button ${prepared && "spell-button-prepared"}`}
@@ -119,4 +117,9 @@ const SpellDescription = ({ description }: { description: string[] }) => {
             );
         })}
     </div>
+}
+
+const preventClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.preventDefault();
+    event.stopPropagation();
 }
