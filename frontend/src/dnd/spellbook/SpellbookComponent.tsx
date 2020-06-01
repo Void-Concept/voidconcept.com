@@ -9,7 +9,7 @@ const localStorageSpellbook: SpellbookSpell[] = JSON.parse(localStorage.getItem(
 const initialSpellbookSpells: SpellbookSpell[] = spells
     .map(spell => {
         const localStorageSpell = localStorageSpellbook.find(lsSpell => {
-            return R.equals(lsSpell.spell, spell);
+            return R.equals(lsSpell.spell.name, spell.name);
         })
         return {
             spell: spell,

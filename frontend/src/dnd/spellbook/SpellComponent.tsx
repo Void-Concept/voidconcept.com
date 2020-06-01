@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import "./spell.css";
 import CameraTimerIcon from "mdi-react/CameraTimerIcon";
 import BullseyeArrowIcon from "mdi-react/BullseyeArrowIcon";
@@ -87,7 +87,7 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
                 {showDescription && <>
                     <hr />
                     <div className="spell-description">
-                        {spell.description}
+                        <SpellDescription description={(spell.description)} />
                     </div>
                 </>}
             </div>
@@ -110,3 +110,13 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
         </div>
     );
 };
+
+const SpellDescription = ({ description }: { description: string[] }) => {
+    return <div className="spell-description">
+        {description.map((desc, index) => {
+            return (
+                <div key={index} className="spell-description-line">{desc}</div>
+            );
+        })}
+    </div>
+}

@@ -61,6 +61,10 @@
     white-space: pre-wrap;
 }
 
+.spell-description * {
+    margin-bottom: 16px
+}
+
 .m-r-4 {
     margin-right: 4px !important;
 }
