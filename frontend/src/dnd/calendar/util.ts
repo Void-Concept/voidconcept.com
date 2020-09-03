@@ -25,6 +25,12 @@ export const getDateEpoch = (date: CalendarDate): number => {
     return (date.year * MONTHS_IN_YEAR * DAYS_IN_MONTH) + ((date.month - 1) * DAYS_IN_MONTH) + (date.day - 1)
 }
 
+export const getWeekEpoch = (year: number, month: number, day: number): number => {
+    const epoch = getDateEpoch({ year, month, day })
+
+    return Math.floor(epoch / 7);
+}
+
 export const getEpochDate = (epoch: number): CalendarDate => {
 
     const year = Math.floor(epoch / (MONTHS_IN_YEAR * DAYS_IN_MONTH))

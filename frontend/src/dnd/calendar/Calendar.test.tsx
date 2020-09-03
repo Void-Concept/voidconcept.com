@@ -1,10 +1,25 @@
 import React from 'react';
 import { Calendar } from './Calendar';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, RenderResult } from '@testing-library/react';
 import { CalendarDao } from './CalendarDao';
 import { CalendarDate } from './util';
+import { act } from 'react-dom/test-utils';
 
 describe("Calendar", () => {
+    interface RenderContainerProps {
+        calendarDao: CalendarDao
+    }
+
+    const renderContainer = async ({ calendarDao }: RenderContainerProps): Promise<RenderResult> => {
+        let wrapper: RenderResult;
+        await act(async () => {
+            wrapper = render(
+                <Calendar calendarDao={calendarDao} />
+            );
+        })
+        return wrapper!;
+    }
+
     it('should display a calendar with current dnd date', async () => {
         const calendarDao = {
             getDate: jest.fn().mockResolvedValue({
@@ -156,24 +171,56 @@ describe("Calendar", () => {
         });
     });
 
-    describe("Gloria Icon", () => {
-        it("should display an icon for Cowloria on Wednesdays", async () => {
+    describe("Inn Payments", () => {
+        it("should display an icon for inn payments every other Monday starting 4067-06-01", async () => {
             const calendarDao = {
                 getDate: jest.fn().mockResolvedValue({
                     year: 4067,
-                    month: 3,
-                    day: 23
+                    month: 6,
+                    day: 1
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
                 })
             } as CalendarDao;
 
-            const wrapper = render(
-                <Calendar calendarDao={calendarDao} />
-            );
+            const wrapper = await renderContainer({ calendarDao });
 
-            expect(await wrapper.findByTitle("Cow Gloria")).toBeDefined();
-        });
+            expect(await wrapper.queryByTitle("Inn Payment")).toBeDefined();
+        })
+
+        it("should not display an icon for inn payments on off cycle Mondays", async () => {
+            const calendarDao = {
+                getDate: jest.fn().mockResolvedValue({
+                    year: 4067,
+                    month: 6,
+                    day: 8
+                }),
+                setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
+                    return Promise.resolve(newDate);
+                })
+            } as CalendarDao;
+
+            const wrapper = await renderContainer({ calendarDao });
+
+            expect(await wrapper.queryByTitle("Inn Payment")).toBeNull();
+        })
+
+        it("should display an icon for inn payments every other Monday again on 4067-06-15", async () => {
+            const calendarDao = {
+                getDate: jest.fn().mockResolvedValue({
+                    year: 4067,
+                    month: 6,
+                    day: 15
+                }),
+                setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
+                    return Promise.resolve(newDate);
+                })
+            } as CalendarDao;
+
+            const wrapper = await renderContainer({ calendarDao });
+
+            expect(await wrapper.queryByTitle("Inn Payment")).toBeDefined();
+        })
     })
 });

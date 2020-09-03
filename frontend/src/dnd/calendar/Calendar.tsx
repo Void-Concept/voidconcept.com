@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
-import { CalendarDate, getDateAtOffset } from './util';
+import { CalendarDate, getDateAtOffset, getWeekEpoch } from './util';
 import MoonFullIcon from "mdi-react/MoonFullIcon";
 import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
 import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
-import CowIcon from "mdi-react/CowIcon";
+import MoneyIcon from "mdi-react/MoneyUsdIcon";
 import { getDayOfWeek } from './util';
 import "./calendar.css"
 
@@ -29,15 +29,15 @@ const MoonPhaseIcon = ({ date }: MoonPhaseIconProps) => {
     }
 };
 
-interface CowGloriaIconProps {
+interface InnPaymentIconProps {
     date: CalendarDate
 }
-const CowGloriaIcon = ({ date }: CowGloriaIconProps) => {
-    if (getDayOfWeek(date.year, date.month, date.day) !== "Wednesday") {
+const InnPaymentIcon = ({ date }: InnPaymentIconProps) => {
+    if (getWeekEpoch(date.year, date.month, date.day) % 2 === 1 && getDayOfWeek(date.year, date.month, date.day) === "Monday") {
+        return <span title={"Inn Payment"}><MoneyIcon /></span>;
+    } else {
         return null;
     }
-
-    return <span title={"Cow Gloria"}><CowIcon /></span>
 }
 
 interface CalendarProps {
@@ -80,7 +80,7 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
             </div>
             <div className="dnd-calendar-status">
                 <MoonPhaseIcon date={date} />
-                <CowGloriaIcon date={date} />
+                <InnPaymentIcon date={date} />
             </div>
         </div>
     );
