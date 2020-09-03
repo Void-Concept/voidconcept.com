@@ -8,7 +8,7 @@ describe("util", () => {
             const month = 3;
             const day = 25;
 
-            const dayOfWeek = getDayOfWeek(year, month, day);
+            const dayOfWeek = getDayOfWeek({ year, month, day });
             expect(dayOfWeek).toEqual("Friday")
         });
 
@@ -18,7 +18,7 @@ describe("util", () => {
             const day = 28;
 
             [...Array(7)].map((_, index) => {
-                const dayOfWeek = getDayOfWeek(year, month, day + index);
+                const dayOfWeek = getDayOfWeek({ year, month, day: day + index });
                 expect(dayOfWeek).toEqual(daysOfWeek[index])
             });
         });

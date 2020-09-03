@@ -6,7 +6,7 @@ import MoonFullIcon from "mdi-react/MoonFullIcon";
 import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
 import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
-import MoneyIcon from "mdi-react/MoneyUsdIcon";
+import MoneyIcon from "mdi-react/HomeCurrencyUsdIcon";
 import { getDayOfWeek } from './util';
 import "./calendar.css"
 
@@ -33,7 +33,7 @@ interface InnPaymentIconProps {
     date: CalendarDate
 }
 const InnPaymentIcon = ({ date }: InnPaymentIconProps) => {
-    if (getWeekEpoch(date.year, date.month, date.day) % 2 === 1 && getDayOfWeek(date.year, date.month, date.day) === "Monday") {
+    if (getWeekEpoch(date) % 2 === 1 && getDayOfWeek(date) === "Monday") {
         return <span title={"Inn Payment"}><MoneyIcon /></span>;
     } else {
         return null;

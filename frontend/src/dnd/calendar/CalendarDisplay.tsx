@@ -11,7 +11,7 @@ export const CalendarDisplay = ({ day, month, year }: CalendarDisplayProps) => {
     const pad = (toPad: number) => toPad.toString().padStart(2, "0")
 
     const dateStr = `${year}-${pad(month)}-${pad(day)}`;
-    const dayOfWeek = getDayOfWeek(year, month, day)
+    const dayOfWeek = getDayOfWeek({ year, month, day })
 
     return (
         <div>

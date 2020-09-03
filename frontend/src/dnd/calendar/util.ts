@@ -10,7 +10,7 @@ export type DayOfWeek = ElementType<typeof daysOfWeek>
 export const DAYS_IN_MONTH = 30
 export const MONTHS_IN_YEAR = 12
 
-export const getDayOfWeek = (year: number, month: number, day: number): DayOfWeek => {
+export const getDayOfWeek = ({ year, month, day }: CalendarDate): DayOfWeek => {
     const index = ((year * MONTHS_IN_YEAR * DAYS_IN_MONTH) + (month * DAYS_IN_MONTH) + day + 1) % daysOfWeek.length;
 
     return daysOfWeek[index];
@@ -21,12 +21,12 @@ export const getDateAtOffset = (date: CalendarDate, offset: number = 1): Calenda
     return getEpochDate(epoch + offset);
 }
 
-export const getDateEpoch = (date: CalendarDate): number => {
-    return (date.year * MONTHS_IN_YEAR * DAYS_IN_MONTH) + ((date.month - 1) * DAYS_IN_MONTH) + (date.day - 1)
+export const getDateEpoch = ({ year, month, day }: CalendarDate): number => {
+    return (year * MONTHS_IN_YEAR * DAYS_IN_MONTH) + ((month - 1) * DAYS_IN_MONTH) + (day - 1)
 }
 
-export const getWeekEpoch = (year: number, month: number, day: number): number => {
-    const epoch = getDateEpoch({ year, month, day })
+export const getWeekEpoch = (date: CalendarDate): number => {
+    const epoch = getDateEpoch(date)
 
     return Math.floor(epoch / 7);
 }
