@@ -26,12 +26,6 @@ export class HostedZoneStack extends cdk.Stack {
             domainName: props.domainName
         });
 
-        new route53.CnameRecord(this, "OldGHPagesCname", {
-            recordName: "old",
-            domainName: "http://void-concept.github.io",
-            zone: this.hostedZone,
-        });
-
         props.cnames && props.cnames.forEach(cname => {
             new route53.CnameRecord(this, cname.id, {
                 recordName: cname.prefix,
