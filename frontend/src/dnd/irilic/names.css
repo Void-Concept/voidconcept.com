@@ -1,0 +1,13 @@
+.irilic-names-component {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 10px
+}
+
+.irlic-names-action-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
