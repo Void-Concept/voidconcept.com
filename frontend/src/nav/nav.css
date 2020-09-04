@@ -1,0 +1,50 @@
+.nav-header-container {
+    min-height: 48px;
+    background-color: rgb(96, 245, 170);
+    display: grid;
+    align-items: center;
+    grid-template-columns: 64px 1fr;
+}
+
+.nav-header-categories {
+    height: 100%;
+}
+
+.nav-header-categories > * {
+    height: 100%;
+    display: inline-block;
+    padding: 0px 8px 0px 8px;
+    cursor: pointer;
+}
+
+.nav-header-category {
+    font-weight: bold;
+}
+
+.nav-header-category:hover {
+    background-color: rgb(75, 190, 133);
+}
+
+.nav-header-route {
+    background-color: rgb(87, 224, 156);
+    border-right: 1px solid  rgb(77, 199, 138);
+}
+
+.nav-header-route:hover {
+    background-color: rgb(75, 190, 133);
+}
+
+.nav-header-centering {
+    height: 100%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr;
+}
+
+.nav-label {
+    height: 100%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: 1fr;
+}

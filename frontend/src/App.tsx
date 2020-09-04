@@ -7,6 +7,7 @@ import { LocalTimeComponent } from './time/local/LocalTimeComponent';
 import { Calendar as DndCalendar } from './dnd/calendar/Calendar';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
+import { NavComponent } from './nav';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -19,6 +20,25 @@ const getCalendarDao = () => {
 function App() {
     return (
         <Router history={createBrowserHistory()}>
+            <NavComponent routes={[{
+                name: "DnD",
+                routes: [{
+                    name: "Spellbook",
+                    destination: "/dnd/spellbook"
+                }, {
+                    name: "Calendar",
+                    destination: "/dnd/calendar"
+                }, {
+                    name: "Irilic Names",
+                    destination: "/dnd/irilic/names"
+                }]
+            }, {
+                name: "Time",
+                routes: [{
+                    name: "Local",
+                    destination: "/time/local"
+                }]
+            }]} />
             <Switch>
                 <Route path="/dnd">
                     <Route path="/dnd/spellbook">
@@ -33,9 +53,6 @@ function App() {
                 </Route>
                 <Route path="/time/local/" render={LocalTimeComponent} exact />
                 <Route path="/time/local/:epochTime" render={LocalTimeComponent} />
-                <Route>
-                    <Redirect to="/dnd/spellbook" />
-                </Route>
             </Switch>
         </Router>
     );
