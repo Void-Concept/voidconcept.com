@@ -1,5 +1,9 @@
 .time-local-container {
     margin: 8px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
 }
 
 .time-local-zone {

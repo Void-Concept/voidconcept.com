@@ -10,7 +10,7 @@
         "mdi-react": "^6.7.0",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.28",
-        "ramda": "^0.27.0",
+        "ramda": "^0.27.1",
         "react": "^16.13.0",
         "react-datepicker": "^2.14.0",
         "react-dom": "^16.13.0",

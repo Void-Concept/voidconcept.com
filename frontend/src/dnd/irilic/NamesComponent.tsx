@@ -8,11 +8,7 @@ const firstNames: FirstNames = require("./firstNames.json");
 type LastNames = string[]
 const lastNames: LastNames = require("./lastNames.json");
 
-interface NamesComponentProps {
-
-}
-
-export const NamesComponent = ({ }: NamesComponentProps) => {
+export const NamesComponent = () => {
     const [firstName, setFirstName] = useState("???")
     const [lastName, setLastName] = useState("???")
 

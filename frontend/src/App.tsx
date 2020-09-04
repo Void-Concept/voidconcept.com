@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Router, Route, Redirect, Switch } from 'react-router';
+import { Router, Route, Switch } from 'react-router';
 import { createBrowserHistory } from 'history';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
@@ -8,6 +8,7 @@ import { Calendar as DndCalendar } from './dnd/calendar/Calendar';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
 import { NavComponent } from './nav';
+import * as R from 'ramda';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -17,42 +18,73 @@ const getCalendarDao = () => {
     }
 }
 
+type RouteType = {
+    category: string,
+    name: string,
+    path: string,
+    render: () => React.ReactNode,
+    exact?: boolean,
+    showInNav?: boolean
+}
+
+const routes = [{
+    category: "DND",
+    name: "Spellbook",
+    path: "/dnd/spellbook",
+    render: () => <SpellbookComponent />
+}, {
+    category: "DND",
+    name: "Calendar",
+    path: "/dnd/calendar",
+    render: () => <DndCalendar calendarDao={getCalendarDao()} />
+}, {
+    category: "DND",
+    name: "Irilic Names",
+    path: "/dnd/irilic/names",
+    render: () => <NamesComponent />
+}, {
+    category: "Time",
+    name: "Local",
+    path: "/time/local",
+    render: () => <LocalTimeComponent />,
+    exact: true
+}, {
+    category: "Time",
+    name: "Local",
+    path: "/time/local/:epochTime",
+    render: () => <LocalTimeComponent />,
+    showInNav: false
+}]
+
+const routesInNav = routes
+    .filter(route => route.showInNav || route.showInNav === undefined)
+
+const navRoutes = R.pipe(
+    R.groupBy<RouteType>(route => route.category),
+    R.mapObjIndexed((value, key) => {
+        const routes = value.map(route => ({
+            name: route.name,
+            destination: route.path
+        }))
+
+        return {
+            name: key,
+            routes: routes
+        }
+    }),
+    R.values
+)(routesInNav)
+
 function App() {
     return (
         <Router history={createBrowserHistory()}>
-            <NavComponent routes={[{
-                name: "DnD",
-                routes: [{
-                    name: "Spellbook",
-                    destination: "/dnd/spellbook"
-                }, {
-                    name: "Calendar",
-                    destination: "/dnd/calendar"
-                }, {
-                    name: "Irilic Names",
-                    destination: "/dnd/irilic/names"
-                }]
-            }, {
-                name: "Time",
-                routes: [{
-                    name: "Local",
-                    destination: "/time/local"
-                }]
-            }]} />
+            <NavComponent routes={navRoutes} />
             <Switch>
-                <Route path="/dnd">
-                    <Route path="/dnd/spellbook">
-                        <SpellbookComponent />
+                {routes.map((route, index) =>
+                    <Route key={index} path={route.path} exact={route.exact}>
+                        {route.render()}
                     </Route>
-                    <Route path="/dnd/calendar">
-                        <DndCalendar calendarDao={getCalendarDao()} />
-                    </Route>
-                    <Route path="/dnd/irilic/names">
-                        <NamesComponent />
-                    </Route>
-                </Route>
-                <Route path="/time/local/" render={LocalTimeComponent} exact />
-                <Route path="/time/local/:epochTime" render={LocalTimeComponent} />
+                )}
             </Switch>
         </Router>
     );
