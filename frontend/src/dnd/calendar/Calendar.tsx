@@ -55,16 +55,14 @@ export const Calendar = ({ calendarDao }: CalendarProps) => {
     }, [calendarDao])
     if (!date) return <></>;
 
-    const nextDate = () => {
+    const nextDate = async () => {
         const nextDate = getDateAtOffset(date, 1);
-        setDate(nextDate)
-        calendarDao.setDate(nextDate)
+        setDate(await calendarDao.setDate(nextDate))
     }
 
-    const previousDate = () => {
+    const previousDate = async () => {
         const previousDate = getDateAtOffset(date, -1);
-        setDate(previousDate)
-        calendarDao.setDate(previousDate)
+        setDate(await calendarDao.setDate(previousDate))
     }
 
     return (

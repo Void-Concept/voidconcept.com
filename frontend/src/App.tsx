@@ -8,6 +8,7 @@ import { Calendar as DndCalendar } from './dnd/calendar/Calendar';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
 import { NavComponent } from './nav';
+import { OauthCallback } from './oauth';
 import * as R from 'ramda';
 
 const getCalendarDao = () => {
@@ -53,6 +54,12 @@ const routes = [{
     name: "Local",
     path: "/time/local/:epochTime",
     render: () => <LocalTimeComponent />,
+    showInNav: false
+}, {
+    category: "Oauth",
+    name: "callback",
+    path: "/oauth-callback",
+    render: () => <OauthCallback />,
     showInNav: false
 }]
 

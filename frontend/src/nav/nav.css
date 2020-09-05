@@ -3,7 +3,7 @@
     background-color: rgb(96, 245, 170);
     display: grid;
     align-items: center;
-    grid-template-columns: 64px 1fr;
+    grid-template-columns: 64px 1fr 64px;
 }
 
 .nav-header-categories {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./nav.css";
 import { useHistory } from 'react-router';
+import { clientOAuth2 } from '../oauth/oauthClient';
 
 type NavRoute = {
     name: string
@@ -61,6 +62,11 @@ interface NavHeaderRoutes {
 }
 
 const NavHeader = ({ routeCategories }: NavHeaderRoutes) => {
+    const loginButtonClick = () => {
+        const loginUri = clientOAuth2.token.getUri()
+        window.location.href = loginUri
+    }
+
     return (
         <div className="nav-header-container">
             <span className="nav-label">VC</span>
@@ -69,6 +75,7 @@ const NavHeader = ({ routeCategories }: NavHeaderRoutes) => {
                     return <NavHeaderCategory key={index} category={route} />
                 })}
             </div>
+            <button onClick={loginButtonClick}>Login</button>
         </div>
     )
 }

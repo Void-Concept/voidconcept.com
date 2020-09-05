@@ -1,4 +1,5 @@
 import { CalendarDate } from "./util";
+import { getToken } from "../../oauth/oauthClient";
 
 export interface CalendarDao {
     getDate: () => Promise<CalendarDate>
@@ -34,6 +35,9 @@ export class GenericStorageCalendarDao implements CalendarDao {
     async setDate(date: CalendarDate): Promise<CalendarDate> {
         const response = await fetch("https://globals.voidconcept.com/dnd/calendar", {
             method: "POST",
+            headers: {
+                Authorization: getToken()
+            },
             body: JSON.stringify(date)
         })
         return await response.json();
