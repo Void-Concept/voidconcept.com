@@ -20,6 +20,7 @@ export interface MxConfig {
 }
 
 export interface AppConfig {
+    domainPrefix: string
     domainName: string
     additionalDnsRecords: {
         cnames: CnameConfig[]
