@@ -1,9 +1,7 @@
 import * as cdk from '@aws-cdk/core';
-import { UserPool } from '@aws-cdk/aws-cognito';
+import * as cognito from '@aws-cdk/aws-cognito';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
 
 interface AuthStackProps extends cdk.StackProps {
     domainPrefix: string
@@ -12,10 +10,12 @@ interface AuthStackProps extends cdk.StackProps {
 }
 
 export class AuthStack extends cdk.Stack {
+    public userPool: cognito.UserPool
+
     constructor(scope: cdk.Construct, id: string, props: AuthStackProps) {
         super(scope, id, props);
 
-        const pool = new UserPool(this, 'UserPool', {
+        this.userPool = new cognito.UserPool(this, 'UserPool', {
             userPoolName: 'WebsiteUserPool',
             selfSignUpEnabled: true,
         });
@@ -26,7 +26,7 @@ export class AuthStack extends cdk.Stack {
             domainName: loginDomainName
         });
 
-        const domain = pool.addDomain("CognitoDomain", {
+        const domain = this.userPool.addDomain("CognitoDomain", {
             customDomain: {
                 domainName: loginDomainName,
                 certificate
@@ -44,7 +44,8 @@ export class AuthStack extends cdk.Stack {
             })
         })
 
-        const client = pool.addClient("app-client", {
+        //TODO export clientId and use elsewhere
+        const client = this.userPool.addClient("app-client", {
             authFlows: {
                 userPassword: true,
                 refreshToken: true

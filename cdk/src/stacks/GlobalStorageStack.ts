@@ -7,9 +7,11 @@ import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as route53Targets from '@aws-cdk/aws-route53-targets';
 import * as acm from '@aws-cdk/aws-certificatemanager';
+import * as cognito from '@aws-cdk/aws-cognito';
 
 interface GlobalStorageStackProps extends cdk.StackProps {
     hostedZone: route53.IHostedZone
+    cognitoUserPool: cognito.IUserPool
 }
 
 export class GlobalStorageStack extends cdk.Stack {
@@ -52,15 +54,38 @@ export class GlobalStorageStack extends cdk.Stack {
                 allowMethods: apigateway.Cors.ALL_METHODS,
             }
         });
+
+        const authorizer = new CognitoApiGatewayAuthorizer(this, "CognitoAuthorizer", {
+            name: "CognitoAuthorizer",
+            type: apigateway.AuthorizationType.COGNITO,
+            providerArns: [props.cognitoUserPool.userPoolArn],
+            identitySource: "method.request.header.Authorization",
+            restApiId: api.restApiId
+        })
+
         const dnd = api.root.addResource("dnd");
         const dndCalendar = dnd.addResource("calendar");
         dndCalendar.addMethod("GET");
-        dndCalendar.addMethod("POST");
+        dndCalendar.addMethod("POST", undefined, {
+            authorizationType: apigateway.AuthorizationType.COGNITO,
+            authorizationScopes: ["openid"],
+            authorizer
+        });
 
         new route53.ARecord(this, "StorageApiAlias", {
             zone: props.hostedZone,
             target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
             recordName: domainName
         })
+    }
+}
+
+export class CognitoApiGatewayAuthorizer extends apigateway.CfnAuthorizer implements apigateway.IAuthorizer {
+    public readonly authorizerId: string
+
+    constructor(scope: cdk.Construct, id: string, props: apigateway.CfnAuthorizerProps) {
+        super(scope, id, props)
+
+        this.authorizerId = this.ref
     }
 }

@@ -18,7 +18,7 @@ const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
     },
 })
 
-new AuthStack(app, "AuthStack", {
+const authStack = new AuthStack(app, "AuthStack", {
     domainPrefix: config.domainPrefix,
     domainName: config.domainName,
     hostedZone: hostedZoneStack.hostedZone,
@@ -37,6 +37,7 @@ new FrontendStack(app, 'FrontendStack', {
 
 new GlobalStorageStack(app, "GlobalStorageStack", {
     hostedZone: hostedZoneStack.hostedZone,
+    cognitoUserPool: authStack.userPool,
     env: {
         region: "us-east-1"
     },
