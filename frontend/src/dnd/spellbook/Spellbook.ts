@@ -132,20 +132,19 @@ export const spells: Spell[] = [
             "The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
         ],
     }, {
-        name: "Faerie Fire",
+        name: "Create or Destroy Water",
         level: "1st",
-        school: "Evocation",
+        school: "Transmutation",
         castTime: "1 Action",
-        range: "60 ft",
-        areaOfEffect: "20 ft cube",
-        components: "V",
-        duration: "Up to 1 minute",
-        concentration: true,
+        range: "30 ft",
+        components: "V, S, M",
+        materials: "A drop of water if creating water or a few grains of sand if destroying it",
+        duration: "Instantaneous",
         description: [
-            "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice). Any creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed dim light in a 10-foot radius.",
-            "Any attack roll against an affected creature or object has advantage if the attacker can see it, and the affected creature or object can’t benefit from being invisible."
+            "You either create or destroy water. Create Water. You create up to 10 gallons of clean water within range in an open container. Alternatively, the water falls as rain in a 30-foot cube within range, extinguishing exposed flames in the area. Destroy Water. You destroy up to 10 gallons of water in an open container within range. Alternatively, you destroy fog in a 30-foot cube within range.",
         ],
         alwaysPrepared: true,
+        higherLevel: "When you cast this spell using a spell slot of 2nd level or higher, you create or destroy 10 additional gallons of water, or the size of the cube increases by 5 feet, for each slot level above 1st.",
     }, {
         name: "Find Familiar",
         level: "1st",
@@ -397,6 +396,18 @@ export const spells: Spell[] = [
             "You send a short message of twenty-five words or less to a creature with which you are familiar. The creature hears the message in its mind, recognizes you as the sender if it knows you, and can answer in a like manner immediately. The spell enables creatures with Intelligence scores of at least 1 to understand the meaning of your message.",
             "You can send the message across any distance and even to other planes of existence, but if the target is on a different plane than you, there is a 5 percent chance that the message doesn’t arrive."
         ],
+    }, {
+        name: "Dispel Magic",
+        level: "3rd",
+        school: "Abjuration",
+        castTime: "1 action",
+        range: "120 ft",
+        components: "V, S",
+        duration: "Instantaneous",
+        description: [
+            "Choose one creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used.",
     }, {
         name: "Polymorph",
         level: "4th",

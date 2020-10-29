@@ -48,7 +48,6 @@ export class AuthStack extends cdk.Stack {
         const client = this.userPool.addClient("app-client", {
             authFlows: {
                 userPassword: true,
-                refreshToken: true
             },
             oAuth: {
                 flows: {
