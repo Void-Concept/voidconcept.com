@@ -104,6 +104,19 @@ export const spells: Spell[] = [
         ],
         higherLevel: "The spell’s damage increases by one die when you reach 5th level (2d8 or 2d12), 11th level (3d8 or 3d12), and 17th level (4d8 or 4d12)."
     }, {
+        name: "Mage Hand",
+        level: "Cantrip",
+        school: "Conjuration",
+        castTime: "1 Action",
+        range: "30 ft",
+        components: "V, S",
+        duration: "1 Minute",
+        description: [
+            "A spectral, floating hand appears at a point you choose within range.The hand lasts for the duration or until you dismiss it as an action.The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.",
+            "You can use your action to control the hand.You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.You can move the hand up to 30 feet each time you use it.",
+            "The hand can't attack, activate magic items, or carry more than 10 pounds.",
+        ]
+    }, {
         name: "Comprehend Languages",
         level: "1st",
         school: "Divination",
@@ -542,5 +555,33 @@ export const spells: Spell[] = [
             "Many major temples, guilds, and other important places have permanent teleportation circles inscribed somewhere within their confines. Each such circle includes a unique sigil sequence--a string of magical runes arranged in a particular pattern. When you first gain the ability to cast this spell, you learn the sigil sequences for two destinations on the Material Plane, determined by the GM. You can learn additional sigil sequences during your adventures. You can commit a new sigil sequence to memory after studying it for 1 minute.",
             "You can create a permanent teleportation circle by casting this spell in the same location every day for one year. You need not use the circle to teleport when you cast the spell in this way."
         ]
+    }, {
+        name: "Wall of Force",
+        level: "5th",
+        school: "Evocation",
+        castTime: "1 action",
+        range: "120 ft",
+        components: "V, S, M",
+        materials: "A pinch of powder made by crushing a clear gemstone",
+        duration: "1 round",
+        description: [
+            "An invisible wall of force springs into existence at a point you choose within range. The wall appears in any orientation you choose, as a horizontal or vertical barrier or at an angle. It can be free floating or resting on a solid surface. You can form it into a hemispherical dome or a sphere with a radius of up to 10 feet, or you can shape a flat surface made up of ten 10-foot-by-10-foot panels. Each panel must be contiguous with another panel. In any form, the wall is 1/4 inch thick. It lasts for the duration. If the wall cuts through a creature's space when it appears, the creature is pushed to one side of the wall (your choice which side).",
+            "Nothing can physically pass through the wall. It is immune to all damage and can't be dispelled by dispel magic. A disintegrate spell destroys the wall instantly, however. The wall also extends into the Ethereal Plane, blocking ethereal travel through the wall.",
+        ]
+    }, {
+        name: "Animate Objects",
+        level: "5th",
+        school: "Transmutation",
+        castTime: "1 action",
+        range: "120 ft",
+        components: "V, S",
+        duration: "1 Minute",
+        description: [
+            "Objects come to life at your command. Choose up to ten nonmagical objects within range that are not being worn or carried. Medium targets count as two objects, Large targets count as four objects, Huge targets count as eight objects. You can't animate any object larger than Huge. Each target animates and becomes a creature under your control until the spell ends or until reduced to 0 hit points.",
+            "As a bonus action, you can mentally command any creature you made with this spell if the creature is within 500 feet of you (if you control multiple creatures, you can command any or all of them at the same time, issuing the same command to each one). You decide what action the creature will take and where it will move during its next turn, or you can issue a general command, such as to guard a particular chamber or corridor. If you issue no commands, the creature only defends itself against hostile creatures. Once given an order, the creature continues to follow it until its task is complete.",
+            "An animated object is a construct with AC, hit points, attacks, Strength, and Dexterity determined by its size. Its Constitution is 10 and its Intelligence and Wisdom are 3, and its Charisma is 1. Its speed is 30 feet; if the object lacks legs or other appendages it can use for locomotion, it instead has a flying speed of 30 feet and can hover. If the object is securely attached to a surface or a larger object, such as a chain bolted to a wall, its speed is 0. It has blindsight with a radius of 30 feet and is blind beyond that distance. When the animated object drops to 0 hit points, it reverts to its original object form, and any remaining damage carries over to its original object form.",
+            "If you command an object to attack, it can make a single melee attack against a creature within 5 feet of it. It makes a slam attack with an attack bonus and bludgeoning damage determined by its size. The GM might rule that a specific object inflicts slashing or piercing damage based on its form."
+        ],
+        higherLevel: "If you cast this spell using a spell slot of 6th level or higher, you can animate two additional objects for each slot level above 5th."
     },
 ];
