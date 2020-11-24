@@ -342,6 +342,18 @@ export const spells: Spell[] = [
             "If you or any of your companions damage the target, the spell ends."
         ],
     }, {
+        name: "See Invisibility",
+        level: "2nd",
+        school: "Divination",
+        castTime: "1 action",
+        range: "Self",
+        components: "V, S, M",
+        materials: "A pinch of talc and a small sprinkling of powdered silver",
+        duration: "1 Hour",
+        description: [
+            "For the duration, you see invisible creatures and objects as if they were visible, and you can see into the Ethereal Plane. Ethereal creatures and objects appear ghostly and translucent."
+        ],
+    }, {
         name: "Counterspell",
         level: "3rd",
         school: "Abjuration",
