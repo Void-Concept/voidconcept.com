@@ -19,7 +19,7 @@ export type Spell = {
     alwaysPrepared?: boolean
 }
 
-export const MAX_PREPARED = 14;
+export const MAX_PREPARED = 15;
 
 export const spells: Spell[] = [
     {
