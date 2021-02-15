@@ -53,7 +53,10 @@ export class AuthStack extends cdk.Stack {
                 flows: {
                     implicitCodeGrant: true,
                 },
-                callbackUrls: [`https://${props.domainName}/oauth-callback`],
+                callbackUrls: [
+                    `https://${props.domainName}/oauth-callback`,
+                    `http://local.${props.domainName}/oauth-callback`,
+                ],
             }
         })
     }

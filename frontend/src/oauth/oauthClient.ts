@@ -1,5 +1,5 @@
 import ClientOAuth2, { Token } from 'client-oauth2';
-import appConfig from '../appConfig';
+import appConfig from '../environments/appConfig';
 
 export const clientOAuth2 = new ClientOAuth2({
     clientId: appConfig.clientId,
