@@ -82,7 +82,9 @@ const navRoutes = R.pipe(
     R.values
 )(routesInNav)
 
-function App() {
+
+
+const App = () => {
     return (
         <Router history={createBrowserHistory()}>
             <NavComponent routes={navRoutes} />

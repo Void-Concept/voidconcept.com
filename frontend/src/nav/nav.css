@@ -28,6 +28,8 @@
 .nav-header-route {
     background-color: rgb(87, 224, 156);
     border-right: 1px solid  rgb(77, 199, 138);
+    text-decoration: none;
+    color: black
 }
 
 .nav-header-route:hover {

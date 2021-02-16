@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import "./nav.css";
 import { useHistory } from 'react-router';
 import { clientOAuth2 } from '../oauth/oauthClient';
@@ -19,16 +19,17 @@ type NavHeaderRouteProps = {
 
 const NavHeaderRoute = ({ route }: NavHeaderRouteProps) => {
     const history = useHistory();
-    const goToRoute = () => {
+    const goToRoute: MouseEventHandler<HTMLAnchorElement> = (event) => {
+        event.preventDefault()
         history.push(route.destination)
     }
 
     return (
-        <div className="nav-header-route" onClick={goToRoute}>
+        <a className="nav-header-route" onClick={goToRoute} href={route.destination}>
             <div className="nav-header-centering">
                 <span>{route.name}</span>
             </div>
-        </div>
+        </a>
     )
 }
 
