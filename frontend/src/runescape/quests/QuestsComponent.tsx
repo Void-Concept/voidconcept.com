@@ -147,6 +147,14 @@ export const QuestsComponent = () => {
         setUsers(newUsers)
     }
 
+    const onIgnoreAll = () => {
+        const newUsers = users.map(oldUser => ({
+            ...oldUser,
+            ignore: true
+        }))
+        setUsers(newUsers)
+    }
+
     console.log(sortBy, sortDirection, users)
 
     useEffect(() => {
@@ -172,6 +180,9 @@ export const QuestsComponent = () => {
                 <div>
                     <label htmlFor="filter-complete-checkbox">Filter completed</label>
                     <input id="filter-complete-checkbox" type="checkbox" onChange={onFitlerComplete} checked={filterCompleted} />
+                </div>
+                <div>
+                    <button onClick={onIgnoreAll}>Ignore all</button>
                 </div>
             </div>
             <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} />
