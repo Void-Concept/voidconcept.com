@@ -25,7 +25,7 @@ type QuestResponse = {
 type QuestCell = {
     user: string
     title: string
-    status: string
+    status: QuestStatus
     difficulty: number
     members: boolean
     userEligible: boolean
@@ -61,17 +61,18 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
 type QuestTableProps = {
     users: string[]
     questTable: QuestTable
+    onSortChange: (user: string) => void
 }
-const QuestTableComponent = ({ users, questTable }: QuestTableProps) => {
+const QuestTableComponent = ({ users, questTable, onSortChange }: QuestTableProps) => {
     const rows = questTable.map((questRow, index) => <QuestTableRow questRow={questRow} key={index} />)
 
     return (
         <Table>
             <Row>
-                <Cell />
+                <Cell onClick={() => onSortChange("questName")} />
                 {users.map((user, index) => {
                     return (
-                        <Cell key={index}>
+                        <Cell key={index} onClick={() => onSortChange(user)}>
                             {user}
                         </Cell>
                     )
@@ -97,15 +98,23 @@ export const QuestsComponent = () => {
     ])
     const [questTable, setQuestTable] = useState<QuestRow[]>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
-    const [sortBy, setSortBy] = useState<string>("none")
+    const [sortBy, setSortBy] = useState<string>("questName")
+    const [sortDirection, setSortDirection] = useState<boolean>(true)
 
     const onFitlerComplete: ChangeEventHandler<HTMLInputElement> = (event) => {
         setFilterCompleted(event.target.checked)
     }
 
-    const onSortByChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-        setSortBy(event.target.value)
+    const onSortChange = (user: string) => {
+        if (sortBy === user) {
+            setSortDirection(!sortDirection)
+        } else {
+            setSortBy(user)
+            setSortDirection(true)
+        }
     }
+
+    console.log(sortBy, sortDirection)
 
     useEffect(() => {
         const doFetch = async () => {
@@ -120,9 +129,9 @@ export const QuestsComponent = () => {
 
     const displayTable = useMemo(() => {
         const filteredTable = filterTable(filterCompleted, questTable)
-        const sortedTable = sortTable(sortBy, filteredTable)
+        const sortedTable = sortTable(sortBy, sortDirection, filteredTable)
         return sortedTable
-    }, [questTable, filterCompleted, sortBy])
+    }, [questTable, filterCompleted, sortBy, sortDirection])
 
     return (
         <>
@@ -131,15 +140,8 @@ export const QuestsComponent = () => {
                     <label htmlFor="filter-complete-checkbox">Filter completed</label>
                     <input id="filter-complete-checkbox" type="checkbox" onChange={onFitlerComplete} checked={filterCompleted} />
                 </div>
-                <div>
-                    <label htmlFor="sort-by-select">Sort by</label>
-                    <select id="sort-by-select" onChange={onSortByChange} value={sortBy}>
-                        <option value="none">None</option>
-                        <option value="questName">Quest Name</option>
-                    </select>
-                </div>
             </div>
-            <QuestTableComponent users={users} questTable={displayTable} />
+            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} />
         </>
     );
 }
@@ -150,16 +152,58 @@ const filterTable = (shouldFilter: boolean, questTable: QuestTable) => {
     return questTable.filter(questRow => !questRow.find(questCell => questCell.status === QuestStatus.Completed))
 }
 
-const sortTable = (sortBy: string, questTable: QuestTable) => {
+const sortTable = (sortBy: string, sortDirection: boolean, questTable: QuestTable) => {
     if (sortBy === "none") return questTable
     return [...questTable].sort((a, b) => {
         if (sortBy === "questName") {
-            return a[0].title > b[0].title ? 1 : a[0].title === b[0].title ? 0 : -1;
+            const compareDirection = compareStrings(a[0].title, b[0].title)
+            return sortDirection ? compareDirection : -compareDirection
         } else {
-            return 0
+            const leftElement = a.find(e => e.user === sortBy)
+            const rightElement = b.find(e => e.user === sortBy)
+            const compareDirection = compareElements(leftElement, rightElement)
+
+            return sortDirection ? compareDirection : -compareDirection
         }
     })
 }
+
+const compareElements = (leftElement?: QuestCell, rightElement?: QuestCell) => {
+    const byStatus = compareStatus(leftElement?.status, rightElement?.status)
+    if (byStatus !== 0) return byStatus
+
+    const byCanComplete = compareEligible(leftElement?.userEligible, rightElement?.userEligible)
+
+    return byCanComplete
+}
+
+const compareEligible = (a?: boolean, b?: boolean) => {
+    if (a && !b) {
+        return -1
+    } else if (!a && b) {
+        return 1
+    } else {
+        return 0
+    }
+
+    // return a && !b ? -1 : !a && b ? 1 : 0
+}
+const getStatusValue = (status?: QuestStatus) => {
+    switch (status) {
+        case QuestStatus.Completed:
+            return 2;
+        case QuestStatus.Started:
+            return 1;
+        case QuestStatus.NotStarted:
+            return 0;
+        default:
+            return 0;
+    }
+}
+const compareStatus = (a?: QuestStatus, b?: QuestStatus) => {
+    return getStatusValue(b) - getStatusValue(a)
+}
+const compareStrings = (a: string, b: string) => a > b ? 1 : a === b ? 0 : -1
 
 const fetchUserData = async (user: string): Promise<QuestCell[]> => {
     const response = await fetch(`https://runescape.voidconcept.com/runemetrics/quests?user=${user}`, {

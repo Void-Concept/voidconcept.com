@@ -26,10 +26,11 @@ export const Row = ({ children }: RowProps) => {
 type CellProps = {
     children?: React.ReactNode
     className?: string
+    [key: string]: any
 }
-export const Cell = ({ children, className }: CellProps) => {
+export const Cell = ({ children, className, ...otherProps }: CellProps) => {
     return (
-        <div className={`vc-table-cell ${className || ''}`}>
+        <div className={`vc-table-cell ${className || ''}`} {...otherProps}>
             {children}
         </div>
     )
