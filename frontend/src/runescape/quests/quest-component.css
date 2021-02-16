@@ -1,0 +1,11 @@
+.vc-status-green {
+    background-color: lightgreen;
+}
+
+.vc-status-yellow {
+    background-color: lightyellow;
+}
+
+.vc-status-red {
+    background-color: lightcoral;
+}

@@ -9,7 +9,7 @@ import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
 import { NavComponent } from './nav';
 import { OauthCallback } from './oauth';
-import { QuestsComponent } from './runescape/quests/scratch'
+import { QuestsComponent } from './runescape/quests/QuestsComponent'
 import * as R from 'ramda';
 
 const getCalendarDao = () => {

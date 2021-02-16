@@ -7,7 +7,7 @@
         "@testing-library/react": "^11.2.5",
         "@testing-library/user-event": "^12.7.1",
         "client-oauth2": "^4.3.3",
-        "history": "^5.0.0",
+        "history": "^4.9.0",
         "mdi-react": "^7.4.0",
         "moment": "^2.29.1",
         "moment-timezone": "^0.5.33",
