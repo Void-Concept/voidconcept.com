@@ -1,5 +1,5 @@
 {
     "clientId": "9ianb9n2pehfs1lce8278i0n",
     "authorizationUri": "https://login.voidconcept.com/login",
-    "redirectUri": "http://local.voidconcept.com/oauth-callback"
+    "redirectUri": "http://localhost:3000/oauth-callback"
 }

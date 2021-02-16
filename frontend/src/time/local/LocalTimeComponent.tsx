@@ -10,7 +10,7 @@ export type LocalTimeComponentParams = {
 }
 
 const getEpochTime = (time?: string) => {
-    return (time && parseInt(time)) || parseInt(moment().format('x'))
+    return (time && parseInt(time)) || parseInt(moment().startOf("minute").format('x'))
 }
 
 export const LocalTimeComponent = () => {
@@ -27,7 +27,7 @@ export const LocalTimeComponent = () => {
                     selected={time.toDate()}
                     onChange={(newDate) => {
                         if (newDate) {
-                            const newEpochTime = newDate.getTime()
+                            const newEpochTime = newDate.valueOf()
                             history.push(`/time/local/${newEpochTime}`)
                         }
                     }}

@@ -36,7 +36,7 @@ export const dependencyInjectedHandler = async (
     }
 }
 
-const withCors = (origin: string, response: APIGatewayProxyResult) => {
+const withCors = (origin: string | undefined, response: APIGatewayProxyResult) => {
     return Object.assign({
         headers: Object.assign({
             "Access-Control-Allow-Origin": "*"

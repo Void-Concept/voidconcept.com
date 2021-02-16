@@ -55,7 +55,7 @@ export class AuthStack extends cdk.Stack {
                 },
                 callbackUrls: [
                     `https://${props.domainName}/oauth-callback`,
-                    `http://local.${props.domainName}/oauth-callback`,
+                    `http://localhost:3000/oauth-callback`,
                 ],
             }
         })
