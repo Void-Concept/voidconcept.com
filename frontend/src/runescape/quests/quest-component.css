@@ -3,9 +3,13 @@
 }
 
 .vc-status-yellow {
-    background-color: lightyellow;
+    background-color: yellow;
+}
+
+.vc-status-orange {
+    background-color: lightcoral;
 }
 
 .vc-status-red {
-    background-color: lightcoral;
+    background-color: red;
 }
