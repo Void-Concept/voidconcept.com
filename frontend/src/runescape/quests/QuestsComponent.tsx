@@ -155,8 +155,6 @@ export const QuestsComponent = () => {
         setUsers(newUsers)
     }
 
-    console.log(sortBy, sortDirection, users)
-
     useEffect(() => {
         const doFetch = async () => {
             const questPromises = users.map(fetchUserData)
