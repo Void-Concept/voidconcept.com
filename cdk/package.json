@@ -6,7 +6,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "build-deps": "yarn --cwd '../globalStorageLambda' bundle",
+        "build-deps": "yarn --cwd '../globalStorageLambda' bundle && yarn --cwd '../runescapeProxyLambda' bundle",
         "watch": "tsc -w",
         "test": "jest",
         "cdk": "cdk",

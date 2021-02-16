@@ -7,6 +7,7 @@ import { HostedZoneStack } from './stacks/HostedZoneStack';
 import config from './config';
 import { GlobalStorageStack } from './stacks/GlobalStorageStack';
 import { AuthStack } from './stacks/AuthStack';
+import { RunescapeProxyStack } from './stacks/RunescapeProxyStack';
 
 const app = new cdk.App();
 
@@ -41,4 +42,11 @@ new GlobalStorageStack(app, "GlobalStorageStack", {
     env: {
         region: "us-east-1"
     },
+})
+
+new RunescapeProxyStack(app, "RunescapeProxyStack", {
+    hostedZone: hostedZoneStack.hostedZone,
+    env: {
+        region: "us-east-1"
+    }
 })
