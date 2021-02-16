@@ -59,11 +59,12 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
 }
 
 type QuestTableProps = {
-    users: string[]
+    users: User[]
     questTable: QuestTable
     onSortChange: (user: string) => void
+    onIgnorePlayerClicked: (user: string) => void
 }
-const QuestTableComponent = ({ users, questTable, onSortChange }: QuestTableProps) => {
+const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerClicked }: QuestTableProps) => {
     const rows = questTable.map((questRow, index) => <QuestTableRow questRow={questRow} key={index} />)
 
     return (
@@ -72,8 +73,15 @@ const QuestTableComponent = ({ users, questTable, onSortChange }: QuestTableProp
                 <Cell onClick={() => onSortChange("questName")} />
                 {users.map((user, index) => {
                     return (
-                        <Cell key={index} onClick={() => onSortChange(user)}>
-                            {user}
+                        <Cell key={index} onClick={() => onSortChange(user.name)}>
+                            {user.name}
+                            <div onClick={(event) => {
+                                event.stopPropagation()
+                                onIgnorePlayerClicked(user.name)
+                            }}  >
+                                <label htmlFor={`name-ignore-${user.name}`}>Ignore</label>
+                                <input type="checkbox" checked={user.ignore} onChange={() => onIgnorePlayerClicked(user.name)} />
+                            </div>
                         </Cell>
                     )
                 })}
@@ -83,19 +91,31 @@ const QuestTableComponent = ({ users, questTable, onSortChange }: QuestTableProp
     )
 }
 
+type User = {
+    name: string
+    ignore: boolean
+}
+
 export const QuestsComponent = () => {
-    const [users, setUsers] = useState<string[]>([
-        'Void Cosmos',
-        'Sapphisms',
-        'Issybelle',
-        'Amibelle',
-        'Aimasu',
-        'Madidle',
-        'LXIXKrimson',
-        'IKayla',
-        'E-Psycho',
-        'Lythrisal',
-    ])
+    const initialUsers = useMemo(() => {
+        return [
+            'Void Cosmos',
+            'Sapphisms',
+            'Issybelle',
+            'Amibelle',
+            'Aimasu',
+            'Madidle',
+            'LXIXKrimson',
+            'IKayla',
+            'E-Psycho',
+            'Lythrisal',
+        ]
+    }, [])
+
+    const [users, setUsers] = useState<User[]>(initialUsers.map(user => ({
+        name: user,
+        ignore: false
+    })))
     const [questTable, setQuestTable] = useState<QuestRow[]>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<string>("questName")
@@ -114,7 +134,20 @@ export const QuestsComponent = () => {
         }
     }
 
-    console.log(sortBy, sortDirection)
+    const onIgnorePlayerClicked = (user: string) => {
+        const newUsers = users.map(oldUser => {
+            if (oldUser.name === user) {
+                return {
+                    ...oldUser,
+                    ignore: !oldUser.ignore,
+                }
+            }
+            return oldUser
+        })
+        setUsers(newUsers)
+    }
+
+    console.log(sortBy, sortDirection, users)
 
     useEffect(() => {
         const doFetch = async () => {
@@ -125,13 +158,13 @@ export const QuestsComponent = () => {
             setQuestTable(questsByQuest)
         }
         doFetch().catch(console.error)
-    }, [users])
+    }, [initialUsers])
 
     const displayTable = useMemo(() => {
-        const filteredTable = filterTable(filterCompleted, questTable)
+        const filteredTable = filterTable(filterCompleted, users, questTable)
         const sortedTable = sortTable(sortBy, sortDirection, filteredTable)
         return sortedTable
-    }, [questTable, filterCompleted, sortBy, sortDirection])
+    }, [questTable, filterCompleted, sortBy, sortDirection, users])
 
     return (
         <>
@@ -141,15 +174,18 @@ export const QuestsComponent = () => {
                     <input id="filter-complete-checkbox" type="checkbox" onChange={onFitlerComplete} checked={filterCompleted} />
                 </div>
             </div>
-            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} />
+            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} />
         </>
     );
 }
 
-const filterTable = (shouldFilter: boolean, questTable: QuestTable) => {
+const filterTable = (shouldFilter: boolean, users: User[], questTable: QuestTable) => {
     if (!shouldFilter) return questTable
 
-    return questTable.filter(questRow => !questRow.find(questCell => questCell.status === QuestStatus.Completed))
+    return questTable.filter(questRow => !questRow.find(questCell => {
+        const matchingUser = users.find(u => u.name === questCell.user)
+        return !matchingUser?.ignore && questCell.status === QuestStatus.Completed
+    }))
 }
 
 const sortTable = (sortBy: string, sortDirection: boolean, questTable: QuestTable) => {
@@ -161,6 +197,8 @@ const sortTable = (sortBy: string, sortDirection: boolean, questTable: QuestTabl
         } else {
             const leftElement = a.find(e => e.user === sortBy)
             const rightElement = b.find(e => e.user === sortBy)
+            if (!leftElement || !rightElement) return 0
+
             const compareDirection = compareElements(leftElement, rightElement)
 
             return sortDirection ? compareDirection : -compareDirection
@@ -168,25 +206,20 @@ const sortTable = (sortBy: string, sortDirection: boolean, questTable: QuestTabl
     })
 }
 
-const compareElements = (leftElement?: QuestCell, rightElement?: QuestCell) => {
+const compareElements = (leftElement: QuestCell, rightElement: QuestCell) => {
     const byStatus = compareStatus(leftElement?.status, rightElement?.status)
     if (byStatus !== 0) return byStatus
 
     const byCanComplete = compareEligible(leftElement?.userEligible, rightElement?.userEligible)
+    if (byCanComplete !== 0) return byCanComplete
 
-    return byCanComplete
+    const byName = compareStrings(leftElement?.title, rightElement?.title)
+
+    return byName
 }
 
-const compareEligible = (a?: boolean, b?: boolean) => {
-    if (a && !b) {
-        return -1
-    } else if (!a && b) {
-        return 1
-    } else {
-        return 0
-    }
-
-    // return a && !b ? -1 : !a && b ? 1 : 0
+const compareEligible = (a: boolean, b: boolean) => {
+    return a && !b ? -1 : !a && b ? 1 : 0
 }
 const getStatusValue = (status?: QuestStatus) => {
     switch (status) {
@@ -200,18 +233,18 @@ const getStatusValue = (status?: QuestStatus) => {
             return 0;
     }
 }
-const compareStatus = (a?: QuestStatus, b?: QuestStatus) => {
+const compareStatus = (a: QuestStatus, b: QuestStatus) => {
     return getStatusValue(b) - getStatusValue(a)
 }
 const compareStrings = (a: string, b: string) => a > b ? 1 : a === b ? 0 : -1
 
-const fetchUserData = async (user: string): Promise<QuestCell[]> => {
-    const response = await fetch(`https://runescape.voidconcept.com/runemetrics/quests?user=${user}`, {
+const fetchUserData = async (user: User): Promise<QuestCell[]> => {
+    const response = await fetch(`https://runescape.voidconcept.com/runemetrics/quests?user=${user.name}`, {
         mode: "cors"
     })
     const responseJson: QuestResponse = await response.json()
     return responseJson.quests.map(quest => ({
-        user,
+        user: user.name,
         ...quest
     }))
 }
