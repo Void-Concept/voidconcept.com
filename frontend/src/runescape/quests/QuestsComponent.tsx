@@ -120,6 +120,7 @@ export const QuestsComponent = () => {
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<string>("questName")
     const [sortDirection, setSortDirection] = useState<boolean>(true)
+    const [search, setSearch] = useState<string>("")
 
     const onFitlerComplete: ChangeEventHandler<HTMLInputElement> = (event) => {
         setFilterCompleted(event.target.checked)
@@ -155,6 +156,10 @@ export const QuestsComponent = () => {
         setUsers(newUsers)
     }
 
+    const onSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+        setSearch(event.target.value)
+    }
+
     useEffect(() => {
         const doFetch = async () => {
             const questPromises = users.map(fetchUserData)
@@ -166,11 +171,19 @@ export const QuestsComponent = () => {
         doFetch().catch(console.error)
     }, [initialUsers])
 
-    const displayTable = useMemo(() => {
-        const filteredTable = filterTable(filterCompleted, users, questTable)
-        const sortedTable = sortTable(sortBy, sortDirection, filteredTable)
-        return sortedTable
-    }, [questTable, filterCompleted, sortBy, sortDirection, users])
+    const filteredTable = useMemo(() => {
+        return filterTable(filterCompleted, users, questTable)
+    }, [questTable, filterCompleted, users])
+
+    const sortedTable = useMemo(() => {
+        return sortTable(sortBy, sortDirection, filteredTable)
+    }, [filteredTable, sortBy, sortDirection])
+
+    const searchedTable = useMemo(() => {
+        return searchTable(search, sortedTable)
+    }, [search, sortedTable])
+
+    const displayTable = searchedTable
 
     return (
         <>
@@ -182,14 +195,27 @@ export const QuestsComponent = () => {
                 <div>
                     <button onClick={onIgnoreAll}>Ignore all</button>
                 </div>
+                <div>
+                    <input id="search" value={search} onChange={onSearchChange} placeholder="Search" />
+                </div>
             </div>
             <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} />
         </>
     );
 }
 
-const filterTable = (shouldFilter: boolean, users: User[], questTable: QuestTable) => {
-    if (!shouldFilter) return questTable
+const searchTable = (search: string, questTable: QuestTable): QuestTable => {
+    if (search.length === 0) return questTable
+
+    return questTable.filter(questRow =>
+        questRow.find(questCell => {
+            return questCell.title.toLowerCase().search(search.toLowerCase()) != -1
+        })
+    )
+}
+
+const filterTable = (shouldFilterCompleted: boolean, users: User[], questTable: QuestTable): QuestTable => {
+    if (!shouldFilterCompleted) return questTable
 
     return questTable.filter(questRow => !questRow.find(questCell => {
         const matchingUser = users.find(u => u.name === questCell.user)
