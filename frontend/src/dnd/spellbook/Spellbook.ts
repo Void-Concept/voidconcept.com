@@ -434,6 +434,18 @@ export const spells: Spell[] = [
         ],
         higherLevel: "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used.",
     }, {
+        name: "Water Breathing",
+        level: "3rd",
+        school: "Transmutation",
+        castTime: "1 action",
+        range: "30 ft",
+        components: "V, S, M",
+        materials: "A short reed or piece of straw",
+        duration: "24 hours",
+        description: [
+            "This spell grants up to ten willing creatures you can see within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration.",
+        ],
+    }, {
         name: "Polymorph",
         level: "4th",
         school: "Transmutation",
@@ -575,7 +587,7 @@ export const spells: Spell[] = [
         range: "120 ft",
         components: "V, S, M",
         materials: "A pinch of powder made by crushing a clear gemstone",
-        duration: "1 round",
+        duration: "10 minutes",
         concentration: true,
         description: [
             "An invisible wall of force springs into existence at a point you choose within range. The wall appears in any orientation you choose, as a horizontal or vertical barrier or at an angle. It can be free floating or resting on a solid surface. You can form it into a hemispherical dome or a sphere with a radius of up to 10 feet, or you can shape a flat surface made up of ten 10-foot-by-10-foot panels. Each panel must be contiguous with another panel. In any form, the wall is 1/4 inch thick. It lasts for the duration. If the wall cuts through a creature's space when it appears, the creature is pushed to one side of the wall (your choice which side).",
