@@ -100,7 +100,7 @@ export const QuestsComponent = () => {
     const initialUsers = useMemo(() => {
         return [
             'Void Cosmos',
-            'Sapphisms',
+            'Phroag',
             'Issybelle',
             'Amibelle',
             'Aimasu',
