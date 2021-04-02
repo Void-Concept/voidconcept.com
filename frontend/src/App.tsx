@@ -10,6 +10,7 @@ import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/C
 import { NavComponent } from './nav';
 import { OauthCallback } from './oauth';
 import { QuestsComponent } from './runescape/quests/QuestsComponent'
+import { CitadelComponent } from './runescape/citadel/CitadelComponent'
 import * as R from 'ramda';
 
 const getCalendarDao = () => {
@@ -67,6 +68,11 @@ const routes = [{
     name: "quests",
     path: "/rs/quests",
     render: () => <QuestsComponent />
+}, {
+    category: "RS",
+    name: "citadel",
+    path: "/rs/citadel",
+    render: () => <CitadelComponent />
 }]
 
 const routesInNav = routes
