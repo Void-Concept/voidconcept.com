@@ -1,30 +1,53 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './citadel.css';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 
 const seed = 1617851520000
 
 export const CitadelComponent = () => {
-    const seedMoment = moment(seed)
-    const now = moment()
 
-    const resetTime = useMemo(() => {
-        const seedMoment = moment(seed)
-        const now = moment()
+    const [resetTime, setResetTime] = useState(calculateResetTime());
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(resetTime));
 
-        const resetTime = seedMoment
-        while (resetTime.isBefore(now)) {
-            resetTime.add(7, 'days')
+    useEffect(() => {
+        if (moment().isAfter(resetTime)) {
+            setResetTime(calculateResetTime())
         }
 
-        return resetTime
-    }, [seed])
-
+        setTimeout(() => {
+            setTimeLeft(calculateTimeLeft(resetTime))
+        }, 1000)
+    }, [resetTime, timeLeft])
 
     return (
         <div className="citadel-container">
             <h1>Clan Citadel</h1>
-            <span>Next reset: {resetTime.toLocaleString()}</span>
+            <div>Next reset: {resetTime.toLocaleString()}</div>
+            <div>Next reset in: {timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes, {timeLeft.seconds} second</div>
         </div>
     )
+}
+
+const calculateTimeLeft = (resetTime: Moment) => {
+    const now = moment()
+    const timeTilReset = resetTime.diff(now)
+
+    return {
+        days: Math.floor(timeTilReset / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((timeTilReset / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((timeTilReset / (1000 * 60)) % 60),
+        seconds: Math.floor((timeTilReset / 1000) % 60)
+    }
+}
+
+const calculateResetTime = () => {
+    const seedMoment = moment(seed)
+    const now = moment()
+
+    const resetTime = seedMoment
+    while (resetTime.isBefore(now)) {
+        resetTime.add(7, 'days')
+    }
+
+    return resetTime
 }
