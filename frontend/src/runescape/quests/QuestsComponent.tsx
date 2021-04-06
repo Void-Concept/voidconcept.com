@@ -46,11 +46,10 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
                 <a href={`https://runescape.wiki/?search=${questName}`}>{questName}</a>
             </Cell>
             {questRow.map((questCell, index) => {
-                const className = getStatusClass(questCell.status, questCell.userEligible)
-                const canComplete = questCell.userEligible ? "Can complete" : "Cannot complete"
+                const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
                 return (
                     <Cell className={className} key={index}>
-                        {canComplete}
+                        {text}
                     </Cell>
                 )
             })}
@@ -118,12 +117,17 @@ export const QuestsComponent = () => {
     })))
     const [questTable, setQuestTable] = useState<QuestRow[]>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
+    const [filterUnCompletable, setFilterUncompletable] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<string>("questName")
     const [sortDirection, setSortDirection] = useState<boolean>(true)
     const [search, setSearch] = useState<string>("")
 
     const onFitlerComplete: ChangeEventHandler<HTMLInputElement> = (event) => {
         setFilterCompleted(event.target.checked)
+    }
+
+    const onFitlerUncomplete: ChangeEventHandler<HTMLInputElement> = (event) => {
+        setFilterUncompletable(event.target.checked)
     }
 
     const onSortChange = (user: string) => {
@@ -172,8 +176,8 @@ export const QuestsComponent = () => {
     }, [initialUsers])
 
     const filteredTable = useMemo(() => {
-        return filterTable(filterCompleted, users, questTable)
-    }, [questTable, filterCompleted, users])
+        return filterTable(filterCompleted, filterUnCompletable, users, questTable)
+    }, [questTable, filterCompleted, filterUnCompletable, users])
 
     const sortedTable = useMemo(() => {
         return sortTable(sortBy, sortDirection, filteredTable)
@@ -191,6 +195,10 @@ export const QuestsComponent = () => {
                 <div>
                     <label htmlFor="filter-complete-checkbox">Filter completed</label>
                     <input id="filter-complete-checkbox" type="checkbox" onChange={onFitlerComplete} checked={filterCompleted} />
+                </div>
+                <div>
+                    <label htmlFor="filter-uncomplete-checkbox">Filter uncompletable</label>
+                    <input id="filter-uncomplete-checkbox" type="checkbox" onChange={onFitlerUncomplete} checked={filterUnCompletable} />
                 </div>
                 <div>
                     <button onClick={onIgnoreAll}>Ignore all</button>
@@ -214,12 +222,12 @@ const searchTable = (search: string, questTable: QuestTable): QuestTable => {
     )
 }
 
-const filterTable = (shouldFilterCompleted: boolean, users: User[], questTable: QuestTable): QuestTable => {
-    if (!shouldFilterCompleted) return questTable
+const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: User[], questTable: QuestTable): QuestTable => {
+    if (!shouldFilterCompleted && !filterUncompletable) return questTable
 
     return questTable.filter(questRow => !questRow.find(questCell => {
         const matchingUser = users.find(u => u.name === questCell.user)
-        return !matchingUser?.ignore && questCell.status === QuestStatus.Completed
+        return !matchingUser?.ignore && ((shouldFilterCompleted && questCell.status === QuestStatus.Completed) || (filterUncompletable && !questCell.userEligible))
     }))
 }
 
@@ -303,12 +311,24 @@ const groupByQuest = (questsPerUser: QuestCell[][]): QuestRow[] => {
 
 const getStatusClass = (status: string, canComplete: boolean) => {
     if (status === QuestStatus.Completed) {
-        return 'vc-status-green'
+        return {
+            className: 'vc-status-green',
+            text: "Completed"
+        }
     } else if (status === QuestStatus.Started) {
-        return 'vc-status-yellow'
+        return {
+            className: 'vc-status-yellow',
+            text: "Started"
+        }
     } else if (status === QuestStatus.NotStarted && canComplete) {
-        return 'vc-status-orange'
+        return {
+            className: 'vc-status-orange',
+            text: "Not started"
+        }
     } else {
-        return 'vc-status-red'
+        return {
+            className: 'vc-status-red',
+            text: "Cannot complete"
+        }
     }
 }
