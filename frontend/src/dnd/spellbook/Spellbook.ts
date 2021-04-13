@@ -19,7 +19,7 @@ export type Spell = {
     alwaysPrepared?: boolean
 }
 
-export const MAX_PREPARED = 15;
+export const MAX_PREPARED = 16;
 
 export const spells: Spell[] = [
     {
@@ -610,5 +610,28 @@ export const spells: Spell[] = [
             "If you command an object to attack, it can make a single melee attack against a creature within 5 feet of it. It makes a slam attack with an attack bonus and bludgeoning damage determined by its size. The GM might rule that a specific object inflicts slashing or piercing damage based on its form."
         ],
         higherLevel: "If you cast this spell using a spell slot of 6th level or higher, you can animate two additional objects for each slot level above 5th."
+    }, {
+        name: "Scatter",
+        level: "6th",
+        school: "Conjuration",
+        castTime: "1 action",
+        range: "30 ft",
+        components: "V",
+        duration: "Instant",
+        description: [
+            "The air quivers around up to five creatures of your choice that you can see within range. An unwilling creature must succeed on a Wisdom saving throw to resist this spell. You teleport each affected target to an unoccupied space that you can see within 120 feet of you. That space must be on the ground or on a floor.",
+        ],
+    }, {
+        name: "Mental Prison",
+        level: "6th",
+        school: "Illusion",
+        castTime: "1 action",
+        range: "60 ft",
+        components: "S",
+        duration: "1 Minute",
+        concentration: true,
+        description: [
+            "You attempt to bind a creature within an illusory cell that only it perceives. One creature you can see within range must make an Intelligence saving throw. The target succeeds automatically if it is immune to being charmed. On a successful save, the target takes 5d10 psychic damage, and the spell ends. On a failed save, the target takes 5d10 psychic damage, and you make the area immediately around the target’s space appear dangerous to it in some way. You might cause the target to perceive itself as being surrounded by fire, floating razors, or hideous maws filled with dripping teeth. Whatever form the illusion takes, the target can’t see or hear anything beyond it and is restrained for the spell’s duration. If the target is moved out of the illusion, makes a melee attack through it, or reaches any part of its body through it, the target takes 10d10 psychic damage, and the spell ends.",
+        ],
     },
 ];
