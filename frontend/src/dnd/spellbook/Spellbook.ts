@@ -39,7 +39,7 @@ export const spells: Spell[] = [
         level: "Cantrip",
         school: "Illusion",
         castTime: "1 Action",
-        range: "30 ft",
+        range: "30 ft (*2)",
         components: "S, M",
         materials: "A bit of fleece",
         duration: "1 Minute",
@@ -54,7 +54,7 @@ export const spells: Spell[] = [
         level: "Cantrip",
         school: "Transmutation",
         castTime: "1 Action",
-        range: "10 ft",
+        range: "10 ft (*2)",
         components: "V, S",
         duration: "Up to 1 hour",
         description: [
@@ -72,7 +72,7 @@ export const spells: Spell[] = [
         level: "Cantrip",
         school: "Evocation",
         castTime: "1 Action",
-        range: "60 ft",
+        range: "60 ft (*2)",
         components: "V, S",
         duration: "Instant",
         description: [
@@ -96,25 +96,37 @@ export const spells: Spell[] = [
         level: "Cantrip",
         school: "Evocation",
         castTime: "1 Action",
-        range: "60 ft",
+        range: "60 ft (*2)",
         components: "V, S",
         duration: "Instant",
         description: [
             "You point at one creature you can see within range, and the sound of a dolorous bell fills the air around it for a moment. The target must succeed on a Wisdom saving throw or take 1d8 necrotic damage. If the target is missing any of its hit points, it instead takes 1d12 necrotic damage."
         ],
         higherLevel: "The spell’s damage increases by one die when you reach 5th level (2d8 or 2d12), 11th level (3d8 or 3d12), and 17th level (4d8 or 4d12)."
+        // }, {
+        //     name: "Mage Hand",
+        //     level: "Cantrip",
+        //     school: "Conjuration",
+        //     castTime: "1 Action",
+        //     range: "30 ft (*2)",
+        //     components: "V, S",
+        //     duration: "1 Minute",
+        //     description: [
+        //         "A spectral, floating hand appears at a point you choose within range.The hand lasts for the duration or until you dismiss it as an action.The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.",
+        //         "You can use your action to control the hand.You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.You can move the hand up to 30 feet each time you use it.",
+        //         "The hand can't attack, activate magic items, or carry more than 10 pounds.",
+        //     ]
     }, {
-        name: "Mage Hand",
+        name: "Light",
         level: "Cantrip",
-        school: "Conjuration",
+        school: "Evocation",
         castTime: "1 Action",
-        range: "30 ft",
-        components: "V, S",
-        duration: "1 Minute",
+        range: "Touch",
+        components: "V, M",
+        duration: "1 Hour",
         description: [
-            "A spectral, floating hand appears at a point you choose within range.The hand lasts for the duration or until you dismiss it as an action.The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.",
-            "You can use your action to control the hand.You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.You can move the hand up to 30 feet each time you use it.",
-            "The hand can't attack, activate magic items, or carry more than 10 pounds.",
+            "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.",
+            "If you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to avoid the spell.",
         ]
     }, {
         name: "Comprehend Languages",
