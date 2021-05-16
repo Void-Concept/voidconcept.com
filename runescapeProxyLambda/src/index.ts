@@ -7,20 +7,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     return response
 }
 
+type RouteProxy = {
+    [key: string]: string | undefined
+}
+const routeProxy: RouteProxy = {
+    "/userQuests": "https://apps.runescape.com/runemetrics/quests",
+    "/clanMembers": "http://services.runescape.com/m=clan-hiscores/members_lite.ws"
+}
+
 export const dependencyInjectedHandler = async (
     event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-    if (event.httpMethod === "GET") {
+    const proxy = routeProxy[event.path]
+
+    console.log(event.path, proxy)
+
+    if (event.httpMethod === "GET" && proxy) {
         console.log(JSON.stringify(event))
         const queryParams = stringifyParameters(event.multiValueQueryStringParameters)
-        const requestPath = `https://apps.runescape.com${event.path}${queryParams}`
+        const requestPath = `${proxy}${queryParams}`
 
         const response = await fetch(requestPath)
-        const body = await response.json()
+        const body = await response.text()
 
         return {
             statusCode: response.status,
-            body: JSON.stringify(body)
+            body
         };
     } else {
         return {

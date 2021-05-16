@@ -115,6 +115,7 @@ export const QuestsComponent = () => {
         name: user,
         ignore: false
     })))
+
     const [questTable, setQuestTable] = useState<QuestRow[]>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
     const [filterUnCompletable, setFilterUncompletable] = useState<boolean>(false);
@@ -163,6 +164,14 @@ export const QuestsComponent = () => {
     const onSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         setSearch(event.target.value)
     }
+
+
+    useEffect(() => {
+        const doFetch = async () => {
+            return fetchClanMembers()
+        }
+        doFetch().catch(console.error)
+    }, [])
 
     useEffect(() => {
         const doFetch = async () => {
@@ -282,7 +291,7 @@ const compareStatus = (a: QuestStatus, b: QuestStatus) => {
 const compareStrings = (a: string, b: string) => a > b ? 1 : a === b ? 0 : -1
 
 const fetchUserData = async (user: User): Promise<QuestCell[]> => {
-    const response = await fetch(`https://runescape.voidconcept.com/runemetrics/quests?user=${user.name}`, {
+    const response = await fetch(`https://runescape.voidconcept.com/userQuests?user=${user.name}`, {
         mode: "cors"
     })
     const responseJson: QuestResponse = await response.json()
@@ -290,6 +299,23 @@ const fetchUserData = async (user: User): Promise<QuestCell[]> => {
         user: user.name,
         ...quest
     }))
+}
+
+type ClanRank = string //TODO: make enum
+type ClanMember = {
+    name: string
+    rank: ClanRank
+    totalXp: number
+    kills: number
+}
+const fetchClanMembers = async (): Promise<ClanMember[]> => {
+    const url = "https://runescape.voidconcept.com/clanMembers?clanName=Beach+Peaches"
+    const response = await fetch(url, {
+        mode: "cors"
+    })
+    const csv = await response.text()
+    console.log(csv)
+    return []
 }
 
 type QuestGroupReduceResults = {
