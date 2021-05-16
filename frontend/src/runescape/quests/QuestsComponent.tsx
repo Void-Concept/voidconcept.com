@@ -3,6 +3,17 @@ import { useState, useEffect } from 'react';
 import { Table, Row, Cell } from '../../components';
 import './quest-component.css';
 
+type ClanRank = string //TODO: make enum
+type ClanMember = {
+    name: string
+    rank: ClanRank
+    totalXp: number
+    kills: number
+}
+type ClanMemberIgnored = ClanMember & {
+    ignore: boolean
+}
+
 enum QuestStatus {
     Completed = "COMPLETED",
     Started = "STARTED",
@@ -58,7 +69,7 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
 }
 
 type QuestTableProps = {
-    users: User[]
+    users: ClanMemberIgnored[]
     questTable: QuestTable
     onSortChange: (user: string) => void
     onIgnorePlayerClicked: (user: string) => void
@@ -90,31 +101,8 @@ const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerCl
     )
 }
 
-type User = {
-    name: string
-    ignore: boolean
-}
-
 export const QuestsComponent = () => {
-    const initialUsers = useMemo(() => {
-        return [
-            'Void Cosmos',
-            'Evil Bornie',
-            'Issybelle',
-            'Amibelle',
-            'Aimasu',
-            'Madidle',
-            'LXIXKrimson',
-            'IKayla',
-            'E-Psycho',
-            'Lythrisal',
-        ]
-    }, [])
-
-    const [users, setUsers] = useState<User[]>(initialUsers.map(user => ({
-        name: user,
-        ignore: false
-    })))
+    const [users, setUsers] = useState<ClanMemberIgnored[]>([])
 
     const [questTable, setQuestTable] = useState<QuestRow[]>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
@@ -168,7 +156,12 @@ export const QuestsComponent = () => {
 
     useEffect(() => {
         const doFetch = async () => {
-            return fetchClanMembers()
+            const clanMembers = await fetchClanMembers()
+            const clanMembersIgnored = clanMembers.map(member => ({
+                ignore: false,
+                ...member
+            })).sort((a, b) => b.name.localeCompare(a.name))
+            setUsers(clanMembersIgnored)
         }
         doFetch().catch(console.error)
     }, [])
@@ -182,7 +175,7 @@ export const QuestsComponent = () => {
             setQuestTable(questsByQuest)
         }
         doFetch().catch(console.error)
-    }, [initialUsers])
+    }, [users])
 
     const filteredTable = useMemo(() => {
         return filterTable(filterCompleted, filterUnCompletable, users, questTable)
@@ -231,7 +224,7 @@ const searchTable = (search: string, questTable: QuestTable): QuestTable => {
     )
 }
 
-const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: User[], questTable: QuestTable): QuestTable => {
+const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: ClanMemberIgnored[], questTable: QuestTable): QuestTable => {
     if (!shouldFilterCompleted && !filterUncompletable) return questTable
 
     return questTable.filter(questRow => !questRow.find(questCell => {
@@ -290,7 +283,7 @@ const compareStatus = (a: QuestStatus, b: QuestStatus) => {
 }
 const compareStrings = (a: string, b: string) => a > b ? 1 : a === b ? 0 : -1
 
-const fetchUserData = async (user: User): Promise<QuestCell[]> => {
+const fetchUserData = async (user: ClanMemberIgnored): Promise<QuestCell[]> => {
     const response = await fetch(`https://runescape.voidconcept.com/userQuests?user=${user.name}`, {
         mode: "cors"
     })
@@ -301,21 +294,21 @@ const fetchUserData = async (user: User): Promise<QuestCell[]> => {
     }))
 }
 
-type ClanRank = string //TODO: make enum
-type ClanMember = {
-    name: string
-    rank: ClanRank
-    totalXp: number
-    kills: number
-}
 const fetchClanMembers = async (): Promise<ClanMember[]> => {
     const url = "https://runescape.voidconcept.com/clanMembers?clanName=Beach+Peaches"
     const response = await fetch(url, {
         mode: "cors"
     })
     const csv = await response.text()
-    console.log(csv)
-    return []
+    const csvRows = csv.split("\n")
+    const tableOnlyMembers = csvRows.filter(row => row.length !== 0).map(row => row.split(",")).splice(1)
+    const clanMembers: ClanMember[] = tableOnlyMembers.map(row => ({
+        name: row[0].replace("�", " "),
+        rank: row[1],
+        totalXp: parseInt(row[2]),
+        kills: parseInt(row[3]),
+    }))
+    return clanMembers
 }
 
 type QuestGroupReduceResults = {
