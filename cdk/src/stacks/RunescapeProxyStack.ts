@@ -41,9 +41,11 @@ export class RunescapeProxyStack extends cdk.Stack {
             }
         });
 
-        const runeMetrics = api.root.addResource("runemetrics");
-        const quests = runeMetrics.addResource("quests");
-        quests.addMethod("GET");
+        const userQuests = api.root.addResource("userQuests");
+        userQuests.addMethod("GET");
+
+        const clanMembers = api.root.addResource("clanMembers");
+        clanMembers.addMethod("GET");
 
         new route53.ARecord(this, "RunescapeProxyAlias", {
             zone: props.hostedZone,
