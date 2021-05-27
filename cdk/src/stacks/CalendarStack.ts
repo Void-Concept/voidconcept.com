@@ -10,20 +10,20 @@ import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as cognito from '@aws-cdk/aws-cognito';
 import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuthorizer';
 
-interface GlobalStorageStackProps extends cdk.StackProps {
+interface CalendarStackProps extends cdk.StackProps {
     hostedZone: route53.IHostedZone
     cognitoUserPool: cognito.IUserPool
+    genericStorageTable: dynamodb.Table
 }
 
-export class GlobalStorageStack extends cdk.Stack {
-    genericStorageTable: dynamodb.Table;
-
-    constructor(scope: cdk.Construct, id: string, props: GlobalStorageStackProps) {
+export class CalendarStack extends cdk.Stack {
+    constructor(scope: cdk.Construct, id: string, props: CalendarStackProps) {
         super(scope, id, props);
+        const { hostedZone, cognitoUserPool, genericStorageTable } = props
 
-        const domainName = `globals.${props.hostedZone.zoneName}`
+        const domainName = `calendar.${hostedZone.zoneName}`
 
-        this.genericStorageTable = new dynamodb.Table(this, "GenericStorage", {
+        const calendarTable = new dynamodb.Table(this, "CalendarStorage", {
             partitionKey: {
                 name: "name",
                 type: dynamodb.AttributeType.STRING
@@ -31,21 +31,23 @@ export class GlobalStorageStack extends cdk.Stack {
         });
 
         const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
-            domainName: domainName
+            hostedZone,
+            domainName
         });
 
-        const endpoint = new lambda.Function(this, "StorageApiEndpoint", {
+        const endpoint = new lambda.Function(this, "CalendarApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../globalStorageLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../calendarLambda/build")),
             environment: {
-                tableName: this.genericStorageTable.tableName
+                calendarTableName: calendarTable.tableName,
+                genericStorageTableName: genericStorageTable.tableName,
             }
         });
-        this.genericStorageTable.grantReadWriteData(endpoint);
+        calendarTable.grantReadWriteData(endpoint);
+        genericStorageTable.grantReadWriteData(endpoint);
 
-        const api = new apigateway.RestApi(this, "StorageApiGateway", {
+        const api = new apigateway.RestApi(this, "CalendarApiGateway", {
             domainName: {
                 domainName: domainName,
                 endpointType: apigateway.EndpointType.REGIONAL,
@@ -61,7 +63,7 @@ export class GlobalStorageStack extends cdk.Stack {
         const authorizer = new CognitoApiGatewayAuthorizer(this, "CognitoAuthorizer", {
             name: "CognitoAuthorizer",
             type: apigateway.AuthorizationType.COGNITO,
-            providerArns: [props.cognitoUserPool.userPoolArn],
+            providerArns: [cognitoUserPool.userPoolArn],
             identitySource: "method.request.header.Authorization",
             restApiId: api.restApiId
         })
@@ -75,8 +77,8 @@ export class GlobalStorageStack extends cdk.Stack {
             authorizer
         });
 
-        new route53.ARecord(this, "StorageApiAlias", {
-            zone: props.hostedZone,
+        new route53.ARecord(this, "CalendarApiAlias", {
+            zone: hostedZone,
             target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
             recordName: domainName
         })

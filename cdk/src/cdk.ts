@@ -8,6 +8,7 @@ import config from './config';
 import { GlobalStorageStack } from './stacks/GlobalStorageStack';
 import { AuthStack } from './stacks/AuthStack';
 import { RunescapeProxyStack } from './stacks/RunescapeProxyStack';
+import { CalendarStack } from './stacks/CalendarStack';
 
 const app = new cdk.App();
 
@@ -36,7 +37,7 @@ new FrontendStack(app, 'FrontendStack', {
     },
 });
 
-new GlobalStorageStack(app, "GlobalStorageStack", {
+const globalStorageStack = new GlobalStorageStack(app, "GlobalStorageStack", {
     hostedZone: hostedZoneStack.hostedZone,
     cognitoUserPool: authStack.userPool,
     env: {
@@ -49,4 +50,13 @@ new RunescapeProxyStack(app, "RunescapeProxyStack", {
     env: {
         region: "us-east-1"
     }
+})
+
+new CalendarStack(app, "CalendarStack", {
+    hostedZone: hostedZoneStack.hostedZone,
+    cognitoUserPool: authStack.userPool,
+    genericStorageTable: globalStorageStack.genericStorageTable,
+    env: {
+        region: "us-east-1"
+    },
 })
