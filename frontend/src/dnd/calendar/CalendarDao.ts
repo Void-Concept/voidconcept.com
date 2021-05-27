@@ -25,15 +25,17 @@ export class InMemoryCalendarDao implements CalendarDao {
 }
 
 export class GenericStorageCalendarDao implements CalendarDao {
+    private calendarUrl = "https://calendar.voidconcept.com/dnd/calendar"
+
     async getDate() {
-        const response = await fetch("https://globals.voidconcept.com/dnd/calendar", {
+        const response = await fetch(this.calendarUrl, {
             method: "GET"
         })
         return await response.json();
     }
 
     async setDate(date: CalendarDate): Promise<CalendarDate> {
-        const response = await fetch("https://globals.voidconcept.com/dnd/calendar", {
+        const response = await fetch(this.calendarUrl, {
             method: "POST",
             headers: {
                 Authorization: getToken()

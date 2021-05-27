@@ -5,6 +5,7 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const genericStorageTableName = process.env.genericStorageTableName as string;
     const calendarTableName = process.env.calendarTableName as string;
+    console.log(process.env)
     const dynamoDb = new DynamoDB();
     const dynamoHelper = new DynamoHelper(dynamoDb, genericStorageTableName, calendarTableName);
 
