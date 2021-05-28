@@ -330,6 +330,26 @@
     "@aws-cdk/cx-api" "1.89.0"
     constructs "^3.2.0"
 
+"@aws-cdk/aws-sam@1.89.0":
+  version "1.89.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-sam/-/aws-sam-1.89.0.tgz#50ee47b78b49434c03d1835b4acc38569b3a27cc"
+  dependencies:
+    "@aws-cdk/core" "1.89.0"
+    constructs "^3.2.0"
+
+"@aws-cdk/aws-secretsmanager@1.89.0":
+  version "1.89.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-secretsmanager/-/aws-secretsmanager-1.89.0.tgz#124707b2d55c6521f220b0e6488eb4fb8fc627d6"
+  dependencies:
+    "@aws-cdk/aws-ec2" "1.89.0"
+    "@aws-cdk/aws-iam" "1.89.0"
+    "@aws-cdk/aws-kms" "1.89.0"
+    "@aws-cdk/aws-lambda" "1.89.0"
+    "@aws-cdk/aws-sam" "1.89.0"
+    "@aws-cdk/core" "1.89.0"
+    "@aws-cdk/cx-api" "1.89.0"
+    constructs "^3.2.0"
+
 "@aws-cdk/aws-sns@1.89.0":
   version "1.89.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-sns/-/aws-sns-1.89.0.tgz#53907bf7f9909bc16d74f2ef8ad8286d566f7c99"

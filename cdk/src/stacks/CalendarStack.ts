@@ -8,6 +8,7 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as route53Targets from '@aws-cdk/aws-route53-targets';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as cognito from '@aws-cdk/aws-cognito';
+import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
 import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuthorizer';
 
 interface CalendarStackProps extends cdk.StackProps {
@@ -30,6 +31,10 @@ export class CalendarStack extends cdk.Stack {
             }
         });
 
+        const discordApiKeySecret = new secretsmanager.Secret(this, "Secret", {
+            secretName: "discord-api-key"
+        })
+
         const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
             hostedZone,
             domainName
@@ -46,6 +51,7 @@ export class CalendarStack extends cdk.Stack {
         });
         calendarTable.grantReadWriteData(endpoint);
         genericStorageTable.grantReadWriteData(endpoint);
+        discordApiKeySecret.grantRead(endpoint);
 
         const api = new apigateway.RestApi(this, "CalendarApiGateway", {
             domainName: {

@@ -25,18 +25,41 @@ interface DynamoDndCalendar extends DynamoDB.AttributeMap {
     }
 }
 
-export class DynamoHelper {
-    private dynamoDb: DynamoDB;
-    private tableName: string;
+interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
+    name: {
+        S: "DndCalendarNotificationChannels"
+    },
+    value: {
+        L: {
+            S: string
+        }[]
+    }
+}
 
-    constructor(dynamodb: DynamoDB, genericStorageTableName: string, calendarTableName: string) {
-        this.dynamoDb = dynamodb
-        this.tableName = genericStorageTableName
+export class DynamoHelper {
+
+    constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
+    }
+
+    getNotificationChannels = async (): Promise<string[]> => {
+        const response = await this.dynamoDb.getItem({
+            TableName: this.genericStorageTableName,
+            Key: {
+                name: {
+                    S: "DndCalendarNotificationChannels"
+                },
+            }
+        }).promise();
+        if (!response.Item) {
+            throw new Error("Could not find DnD calendar notification channels")
+        }
+        const notificationChannels = response.Item as DynamoDndCalendarNotificationChannels;
+        return notificationChannels.value.L.map(list => list.S)
     }
 
     getDndCalendar = async (): Promise<DndCalendar> => {
         const response = await this.dynamoDb.getItem({
-            TableName: this.tableName,
+            TableName: this.genericStorageTableName,
             Key: {
                 name: {
                     S: "DndCalendar"
@@ -76,7 +99,7 @@ export class DynamoHelper {
 
         const response = await this.dynamoDb.batchWriteItem({
             RequestItems: {
-                [this.tableName]: [{
+                [this.genericStorageTableName]: [{
                     PutRequest: {
                         Item: request
                     }
