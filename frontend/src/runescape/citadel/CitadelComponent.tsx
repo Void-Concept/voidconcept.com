@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import './citadel.css';
 import moment, { Moment } from 'moment-timezone';
 
-const seed = 1617851520000
+const seed = 1622251625000
 
 export const CitadelComponent = () => {
 
