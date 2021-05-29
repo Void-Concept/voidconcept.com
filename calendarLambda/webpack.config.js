@@ -21,11 +21,4 @@ module.exports = {
         path: path.resolve(__dirname, "build"),
         filename: "index.js"
     },
-    externals: {
-        'erlpack': 'erlpack',
-        'zlib-sync': 'zlib-sync',
-        'bufferutil': 'bufferutil',
-        'utf-8-validate': 'utf-8-validate',
-        'ffmpeg-static': 'ffmpeg-static',
-    }
 };
