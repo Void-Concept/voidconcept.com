@@ -31,17 +31,28 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
     },
     value: {
         L: {
-            S: string
+            M: {
+                id: {
+                    S: string
+                },
+                roleId: {
+                    S: string
+                }
+            }
         }[]
     }
 }
 
+interface NotificationChannel {
+    id: string
+    roleId: string
+}
 export class DynamoHelper {
 
     constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
     }
 
-    getNotificationChannels = async (): Promise<string[]> => {
+    getNotificationChannels = async (): Promise<NotificationChannel[]> => {
         const response = await this.dynamoDb.getItem({
             TableName: this.genericStorageTableName,
             Key: {
@@ -54,7 +65,11 @@ export class DynamoHelper {
             throw new Error("Could not find DnD calendar notification channels")
         }
         const notificationChannels = response.Item as DynamoDndCalendarNotificationChannels;
-        return notificationChannels.value.L.map(list => list.S)
+        notificationChannels.value.L.map(list => list.M.id)
+        return notificationChannels.value.L.map(list => ({
+            id: list.M.id.S,
+            roleId: list.M.roleId.S,
+        }))
     }
 
     getDndCalendar = async (): Promise<DndCalendar> => {

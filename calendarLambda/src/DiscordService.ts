@@ -12,7 +12,7 @@ export class DiscordService {
 
         const promises = channelsToNotify.map(channel => {
             console.log(`Notifying channel ${channel}`)
-            return this.discordApi.sendMessage(channel, `Calendar changed by ${daysOffset} days; remember to subtract gold`)
+            return this.discordApi.sendMessage(channel.id, `<@&${channel.roleId}> Calendar changed by ${daysOffset} days; remember to subtract gold`)
         })
 
         await Promise.all(promises)
