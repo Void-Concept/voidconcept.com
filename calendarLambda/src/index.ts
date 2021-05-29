@@ -5,7 +5,7 @@ import * as SecretsManager from 'aws-sdk/clients/secretsmanager';
 import { DiscordService } from "./DiscordService";
 import { SecretsManagerService } from "./SecretManagerService";
 import { doGetFactory, doPostFactory } from "./calendarDateResolver";
-import * as discord from 'discord.js'
+import { DiscordApi } from "./DiscordApi";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const genericStorageTableName = process.env.genericStorageTableName as string;
@@ -18,14 +18,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const secretsManagerService = new SecretsManagerService(secretsManager)
     const discordApiKey = await secretsManagerService.getDiscordApiKey()
 
-    const discordClient = new discord.Client()
-    await discordClient.login(discordApiKey)
-    const discordService = new DiscordService(discordClient, dynamoHelper)
+    const discordApi = new DiscordApi(discordApiKey)
+    const discordService = new DiscordService(discordApi, dynamoHelper)
 
     const response = withCors(event.headers.Origin, await withErrorHandling(dependencyInjectedHandler(event, dynamoHelper, discordService)));
     console.log("responding with", response);
-
-    discordClient.destroy()
 
     return response
 }
