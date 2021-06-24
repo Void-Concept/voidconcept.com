@@ -19,7 +19,7 @@ export class QuestListStack extends cdk.Stack {
         const questTable = new dynamodb.Table(this, "QuestListStorage", {
             tableName: "QuestListStorage",
             partitionKey: {
-                name: "name",
+                name: "id",
                 type: dynamodb.AttributeType.STRING
             }
         });

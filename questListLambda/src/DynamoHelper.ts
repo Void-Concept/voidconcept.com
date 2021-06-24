@@ -3,7 +3,8 @@ import { DynamoDB } from "aws-sdk";
 
 export type ChildQuest = {
     name: string
-    href: string | null
+    id: string | undefined
+    href: string | undefined
 }
 
 export type ChildQuestList = ChildQuest[]
@@ -14,6 +15,7 @@ export type QuestDifficulty = 'Novice' | 'Intermediate' | 'Experienced' | 'Maste
 export type QuestAge = 'Fifth Age' | 'Sixth Age' | 'Ambiguous'
 
 export type Quest = {
+    id: string
     name: string
     href: string
     members: boolean
@@ -26,6 +28,9 @@ export type Quest = {
 }
 
 interface DynamoQuest extends DynamoDB.AttributeMap {
+    id: {
+        S: string
+    },
     name: {
         S: string
     },
@@ -56,8 +61,11 @@ interface DynamoQuest extends DynamoDB.AttributeMap {
                 name: {
                     S: string
                 },
+                id: {
+                    S?: string
+                },
                 href: {
-                    S: string
+                    S?: string
                 }
             }
         }[]
@@ -68,20 +76,21 @@ export class DynamoHelper {
     constructor(private dynamoDb: DynamoDB, private questTableName: string) {
     }
 
-    getQuest = async (href: string): Promise<Quest> => {
+    getQuest = async (id: string): Promise<Quest | null> => {
         const response = await this.dynamoDb.getItem({
             TableName: this.questTableName,
             Key: {
-                href: {
-                    S: href
+                id: {
+                    S: id.toLowerCase()
                 },
             }
         }).promise();
         if (!response.Item) {
-            throw new Error("Could not find quest")
+            return null
         }
         const dynamoQuest = response.Item as DynamoQuest;
         return {
+            id: dynamoQuest.id.S,
             name: dynamoQuest.name.S,
             href: dynamoQuest.href.S,
             members: dynamoQuest.members.BOOL,
@@ -92,7 +101,8 @@ export class DynamoHelper {
             series: dynamoQuest.series.S,
             questRequirements: dynamoQuest.questRequirements.L.map(req => ({
                 name: req.M.name.S,
-                href: req.M.href.S
+                id: req.M.id?.S,
+                href: req.M.href?.S
             }))
         };
     }

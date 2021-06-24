@@ -19,20 +19,6 @@ export const dependencyInjectedHandler = async (
     event: APIGatewayProxyEvent,
     dynamoHelper: DynamoHelper,
 ): Promise<APIGatewayProxyResult> => {
-    if (event.path === "quest") {
-        return handleCalendarEvent(event, dynamoHelper)
-    } else {
-        return {
-            statusCode: 404,
-            body: JSON.stringify("Operation not found")
-        }
-    }
-}
-
-export const handleCalendarEvent = async (
-    event: APIGatewayProxyEvent,
-    dynamoHelper: DynamoHelper,
-): Promise<APIGatewayProxyResult> => {
     if (event.httpMethod === "GET") {
         return doGetFactory(dynamoHelper)(event)
     } else {
