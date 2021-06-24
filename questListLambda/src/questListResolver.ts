@@ -1,15 +1,18 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { DndCalendar, DynamoHelper } from "./DynamoHelper";
+import { DynamoHelper } from "./DynamoHelper";
 
 export const doGetFactory = (dynamoHelper: DynamoHelper) => async (event: APIGatewayProxyEvent) => {
-    const calendar = await dynamoHelper.getQuest("???");
+    const questName = event.queryStringParameters?.questName
+    event.pathParameters
+    if (!questName) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify("Missing questName parameter")
+        }
+    }
+    const calendar = await dynamoHelper.getQuest(questName);
     return {
         statusCode: 200,
         body: JSON.stringify(calendar)
     };
 }
-
-const parseEventBody = (event: APIGatewayProxyEvent): DndCalendar => {
-    if (!event.body) throw new Error("Invalid calendar payload")
-    return JSON.parse(event.body.toString());
-};

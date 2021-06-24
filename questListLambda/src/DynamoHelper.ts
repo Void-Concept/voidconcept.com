@@ -1,11 +1,5 @@
 import { DynamoDB } from "aws-sdk";
 
-export interface DndCalendar {
-    year: number
-    month: number
-    day: number
-}
-
 
 export type ChildQuest = {
     name: string

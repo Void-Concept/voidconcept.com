@@ -17,8 +17,9 @@ export class QuestListStack extends cdk.Stack {
         super(scope, id, props);
 
         const questTable = new dynamodb.Table(this, "QuestListStorage", {
+            tableName: "QuestListStorage",
             partitionKey: {
-                name: "href",
+                name: "name",
                 type: dynamodb.AttributeType.STRING
             }
         });
@@ -34,6 +35,9 @@ export class QuestListStack extends cdk.Stack {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
             code: lambda.Code.fromAsset(path.join(process.cwd(), "../questListLambda/build")),
+            environment: {
+                tableName: questTable.tableName
+            }
         });
         questTable.grantReadData(endpoint)
 

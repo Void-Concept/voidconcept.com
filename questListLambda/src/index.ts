@@ -4,7 +4,7 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import { doGetFactory } from "./questListResolver";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const questTableName = process.env.questTableName as string;
+    const questTableName = process.env.tableName as string;
 
     const dynamoDb = new DynamoDB();
     const dynamoHelper = new DynamoHelper(dynamoDb, questTableName);
@@ -19,7 +19,7 @@ export const dependencyInjectedHandler = async (
     event: APIGatewayProxyEvent,
     dynamoHelper: DynamoHelper,
 ): Promise<APIGatewayProxyResult> => {
-    if (event.path === "/dnd/calendar") {
+    if (event.path === "quest") {
         return handleCalendarEvent(event, dynamoHelper)
     } else {
         return {
