@@ -46,25 +46,96 @@ type QuestCell = {
 type QuestRow = QuestCell[]
 type QuestTable = QuestRow[]
 
+
+
+export type APIChildQuest = {
+    name: string
+    id: string | undefined
+    href: string | undefined
+}
+
+export type APIChildQuestList = APIChildQuest[]
+
+export type QuestDifficulty = 'Novice' | 'Intermediate' | 'Experienced' | 'Master' | 'Grandmaster' | 'Special'
+
+export type QuestAge = 'Fifth Age' | 'Sixth Age' | 'Ambiguous'
+
+export type APIQuest = {
+    id: string
+    name: string
+    href: string
+    members: boolean
+    difficulty: QuestDifficulty
+    length: string
+    age: QuestAge
+    questPoints: number
+    series: string
+    questRequirements: APIChildQuestList
+}
+
+type QuestRequirementComponentProps = {
+    quest: APIQuest
+}
+const QuestRequirementComponent = ({ quest }: QuestRequirementComponentProps) => {
+    return (
+        <>
+            {quest.questRequirements.map((requirement, index) => {
+                return (
+                    <div>
+                        {requirement.href ?
+                            <a key={index} href={`https://runescape.wiki/${requirement.href}`} target="_blank">{requirement.name}</a>
+                            :
+                            requirement.name
+                        }
+
+                    </div>
+                )
+            })}
+        </>
+    )
+}
+
 type QuestTableRowProps = {
     questRow: QuestRow
 }
 const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
     const questName = questRow[0]?.title
+    const [showSubquest, setShowSubquests] = useState(false)
+    const [subQuests, setSubquests] = useState<APIQuest | undefined>(undefined)
+
+    useEffect(() => {
+        const run = async () => {
+            if (!subQuests && showSubquest) {
+                const questId = encodeURIComponent(questRow[1].title.toLowerCase().replaceAll(" ", "_").replaceAll("%20", "_").replace("_(miniquest)", "").replace("_(saga)", ""))
+                const response = await fetch(`https://quests.voidconcept.com/quest?questId=${questId}`)
+                if (response.status === 200) {
+                    const questResponse = await response.json()
+                    setSubquests(questResponse)
+                } else {
+                    console.log(`No quest found for ${questId}`)
+                }
+            }
+        }
+        run().catch(console.error)
+    }, [showSubquest])
+
     return (
-        <Row key={questName}>
-            <Cell>
-                <a href={`https://runescape.wiki/?search=${questName}`}>{questName}</a>
-            </Cell>
-            {questRow.map((questCell, index) => {
-                const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
-                return (
-                    <Cell className={className} key={index}>
-                        {text}
-                    </Cell>
-                )
-            })}
-        </Row>
+        <>
+            <Row key={questName}>
+                <Cell onClick={() => { setShowSubquests(!showSubquest) }}>
+                    <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{questName}</a>
+                </Cell>
+                {questRow.map((questCell, index) => {
+                    const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
+                    return (
+                        <Cell className={className} key={index}>
+                            {text}
+                        </Cell>
+                    )
+                })}
+            </Row>
+            {showSubquest && subQuests && <QuestRequirementComponent quest={subQuests} />}
+        </>
     )
 }
 
