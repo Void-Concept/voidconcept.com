@@ -19,7 +19,7 @@ export const doPostFactory = (dynamoHelper: DynamoHelper, discordService: Discor
 
     const daysChanged = totalDays - oldTotalDays
     if (daysChanged !== 0) {
-        await discordService.notifyCalendarUpdate(daysChanged)
+        await discordService.notifyCalendarUpdate(daysChanged, calendar)
     }
 
     return {

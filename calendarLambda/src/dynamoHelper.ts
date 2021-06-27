@@ -37,6 +37,9 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
                 },
                 roleId: {
                     S: string
+                },
+                disabled: {
+                    B: boolean
                 }
             }
         }[]
@@ -46,6 +49,7 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
 interface NotificationChannel {
     id: string
     roleId: string
+    disabled: boolean
 }
 export class DynamoHelper {
 
@@ -65,11 +69,11 @@ export class DynamoHelper {
             throw new Error("Could not find DnD calendar notification channels")
         }
         const notificationChannels = response.Item as DynamoDndCalendarNotificationChannels;
-        notificationChannels.value.L.map(list => list.M.id)
         return notificationChannels.value.L.map(list => ({
             id: list.M.id.S,
             roleId: list.M.roleId.S,
-        }))
+            disabled: !!list.M.disabled?.B
+        })).filter(list => !list.disabled)
     }
 
     getDndCalendar = async (): Promise<DndCalendar> => {
