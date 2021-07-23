@@ -246,6 +246,7 @@ export const QuestsComponent = () => {
                 return {
                     ...oldUser,
                     hide: !oldUser.hide,
+                    ignore: !oldUser.hide || oldUser.ignore
                 }
             }
             return oldUser
