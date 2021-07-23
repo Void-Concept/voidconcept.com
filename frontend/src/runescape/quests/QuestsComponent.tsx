@@ -137,6 +137,7 @@ const QuestTableRow = ({ questRow, tabLevel, onFetchQuestOverview }: QuestTableR
                     )
                 })}
             </Row>
+            {showSubquest && !questRow.overview && "Fetching..."}
             {showSubquest && questRow.overview && <QuestOverviewComponent overview={questRow.overview} tabLevel={numSpaces + 1} onFetchQuestOverview={onFetchQuestOverview} />}
         </>
     )
@@ -180,11 +181,12 @@ type QuestTableViewProps = {
     tabLevel?: number
 }
 const QuestTableView = ({ questTable, tabLevel, onFetchQuestOverview }: QuestTableViewProps) => {
-    const rows = questTable.map((questRow, index) => <QuestTableRow questRow={questRow} tabLevel={tabLevel} key={index} onFetchQuestOverview={onFetchQuestOverview} />)
+    const rows = questTable.map((questRow) => <QuestTableRow questRow={questRow} tabLevel={tabLevel} key={questRow.questName + tabLevel} onFetchQuestOverview={onFetchQuestOverview} />)
     return <>{rows}</>
 }
 
 export const QuestsComponent = () => {
+    const [clanMembers, setClanMembers] = useState<ClanMember[]>([])
     const [users, setUsers] = useState<ClanMemberIgnored[]>([])
 
     const [questTable, setQuestTable] = useState<QuestTable>([]);
@@ -263,7 +265,6 @@ export const QuestsComponent = () => {
         run().catch(console.error)
     }
 
-
     useEffect(() => {
         const doFetch = async () => {
             const clanMembers = await fetchClanMembers()
@@ -271,21 +272,30 @@ export const QuestsComponent = () => {
                 ignore: false,
                 ...member
             })).sort((a, b) => b.name.localeCompare(a.name))
-            setUsers(clanMembersIgnored)
+            console.log('setting clan members')
+            setClanMembers(clanMembersIgnored)
         }
         doFetch().catch(console.error)
     }, [])
 
     useEffect(() => {
+        setUsers(clanMembers.map(member => ({
+            ...member,
+            ignore: false
+        })))
+    }, [clanMembers])
+
+    useEffect(() => {
         const doFetch = async () => {
-            const questPromises = users.map(fetchUserData)
+            console.log('fetching user data', clanMembers)
+            const questPromises = clanMembers.map(fetchUserData)
             const questsPerUser = await Promise.all(questPromises)
             const questsByQuest = groupByQuest(questsPerUser)
 
             setQuestTable(questsByQuest)
         }
         doFetch().catch(console.error)
-    }, [users])
+    }, [clanMembers])
 
     const filteredTable = useMemo(() => {
         return filterTable(filterCompleted, filterUnCompletable, users, questTable)
@@ -391,7 +401,7 @@ const compareStatus = (a: QuestStatus, b: QuestStatus) => {
 }
 const compareStrings = (a: string, b: string) => a > b ? 1 : a === b ? 0 : -1
 
-const fetchUserData = async (user: ClanMemberIgnored): Promise<QuestCell[]> => {
+const fetchUserData = async (user: ClanMember): Promise<QuestCell[]> => {
     const response = await fetch(`https://runescape.voidconcept.com/userQuests?user=${user.name}`, {
         mode: "cors"
     })
@@ -476,7 +486,7 @@ const copyRequirements = (questTable: QuestTable, questName: string, overview: Q
             return {
                 ...row,
                 overview: {
-                    ...overview,
+                    ...row.overview,
                     questRequirements: newQuestReqs
                 }
             }
