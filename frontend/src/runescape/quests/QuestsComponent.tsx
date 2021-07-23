@@ -113,7 +113,7 @@ const QuestTableRow = ({ questRow, tabLevel, onFetchQuestOverview }: QuestTableR
     const questName = questRow.questName
     const [showSubquest, setShowSubquests] = useState(false)
 
-    const onCellClicked = () => {
+    const onRowClicked = () => {
         if (!questRow.overview) {
             onFetchQuestOverview(questName)
             setShowSubquests(true)
@@ -124,8 +124,8 @@ const QuestTableRow = ({ questRow, tabLevel, onFetchQuestOverview }: QuestTableR
 
     return (
         <>
-            <Row key={questName}>
-                <Cell onClick={onCellClicked}>
+            <Row onClick={onRowClicked} key={questName}>
+                <Cell>
                     <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{spaces}{questName}</a>
                 </Cell>
                 {questRow.userProgress.map((questCell, index) => {

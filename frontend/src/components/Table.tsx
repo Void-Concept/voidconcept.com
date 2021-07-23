@@ -14,10 +14,11 @@ export const Table = ({ children }: TableProps) => {
 
 type RowProps = {
     children?: React.ReactNode
+    [otherProps: string]: any
 }
-export const Row = ({ children }: RowProps) => {
+export const Row = ({ children, ...restProps }: RowProps) => {
     return (
-        <div className="vc-table-row">
+        <div className="vc-table-row" {...restProps}>
             {children}
         </div>
     )
