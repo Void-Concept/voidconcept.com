@@ -43,7 +43,11 @@ type QuestCell = {
     questPoints: number
 }
 
-type QuestRow = QuestCell[]
+type QuestRow = {
+    quests: QuestCell[]
+    requirements?: APIQuest
+    showRequirements: boolean
+}
 type QuestTable = QuestRow[]
 
 
@@ -74,12 +78,12 @@ export type APIQuest = {
 }
 
 type QuestRequirementComponentProps = {
-    quest: APIQuest
+    requirements: APIQuest
 }
-const QuestRequirementComponent = ({ quest }: QuestRequirementComponentProps) => {
+const QuestRequirementComponent = ({ requirements }: QuestRequirementComponentProps) => {
     return (
         <>
-            {quest.questRequirements.map((requirement, index) => {
+            {requirements.questRequirements.map((requirement, index) => {
                 return (
                     <div>
                         {requirement.href ?
@@ -97,35 +101,51 @@ const QuestRequirementComponent = ({ quest }: QuestRequirementComponentProps) =>
 
 type QuestTableRowProps = {
     questRow: QuestRow
+    onUpdateSubquests: (row: QuestRow) => void
 }
-const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
-    const questName = questRow[0]?.title
-    const [showSubquest, setShowSubquests] = useState(false)
-    const [subQuests, setSubquests] = useState<APIQuest | undefined>(undefined)
+const QuestTableRow = ({ questRow, onUpdateSubquests }: QuestTableRowProps) => {
+    const { quests, requirements, showRequirements } = questRow
+    const questName = quests[0]?.title
+    const [fetchSubquest, setFetchSubquest] = useState(false)
 
     useEffect(() => {
         const run = async () => {
-            if (!subQuests && showSubquest) {
-                const questId = encodeURIComponent(questRow[1].title.toLowerCase().replaceAll(" ", "_").replaceAll("%20", "_").replace("_(miniquest)", "").replace("_(saga)", ""))
+            if (!requirements && fetchSubquest) {
+                const questId = encodeURIComponent(quests[1].title.toLowerCase().replaceAll(" ", "_").replaceAll("%20", "_").replace("_(miniquest)", "").replace("_(saga)", ""))
                 const response = await fetch(`https://quests.voidconcept.com/quest?questId=${questId}`)
                 if (response.status === 200) {
                     const questResponse = await response.json()
-                    setSubquests(questResponse)
+                    onUpdateSubquests({
+                        ...questRow,
+                        showRequirements: true,
+                        requirements: questResponse
+                    })
                 } else {
                     console.log(`No quest found for ${questId}`)
                 }
             }
         }
         run().catch(console.error)
-    }, [showSubquest])
+    }, [fetchSubquest])
+
+    const onCellClicked = () => {
+        if (!requirements) {
+            setFetchSubquest(true)
+        } else {
+            onUpdateSubquests({
+                ...questRow,
+                showRequirements: !questRow.showRequirements
+            })
+        }
+    }
 
     return (
         <>
             <Row key={questName}>
-                <Cell onClick={() => { setShowSubquests(!showSubquest) }}>
+                <Cell onClick={onCellClicked}>
                     <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{questName}</a>
                 </Cell>
-                {questRow.map((questCell, index) => {
+                {quests.map((questCell, index) => {
                     const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
                     return (
                         <Cell className={className} key={index}>
@@ -134,7 +154,7 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
                     )
                 })}
             </Row>
-            {showSubquest && subQuests && <QuestRequirementComponent quest={subQuests} />}
+            {showRequirements && requirements && <QuestRequirementComponent requirements={requirements} />}
         </>
     )
 }
@@ -144,9 +164,10 @@ type QuestTableProps = {
     questTable: QuestTable
     onSortChange: (user: string) => void
     onIgnorePlayerClicked: (user: string) => void
+    onUpdateSubquests: (row: QuestRow) => void
 }
-const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerClicked }: QuestTableProps) => {
-    const rows = questTable.map((questRow, index) => <QuestTableRow questRow={questRow} key={index} />)
+const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerClicked, onUpdateSubquests }: QuestTableProps) => {
+    const rows = questTable.map((questRow, index) => <QuestTableRow questRow={questRow} key={index} onUpdateSubquests={onUpdateSubquests} />)
 
     return (
         <Table>
@@ -224,6 +245,14 @@ export const QuestsComponent = () => {
         setSearch(event.target.value)
     }
 
+    const onUpdateSubquests = (row: QuestRow) => {
+        const rowIndex = questTable.findIndex(tableRow => tableRow.quests[0] === row.quests[0])
+        if (rowIndex === -1) return
+
+        const newQuestTable = questTable.splice(rowIndex, 1, row)
+        setQuestTable(newQuestTable)
+    }
+
 
     useEffect(() => {
         const doFetch = async () => {
@@ -280,7 +309,7 @@ export const QuestsComponent = () => {
                     <input id="search" value={search} onChange={onSearchChange} placeholder="Search" />
                 </div>
             </div>
-            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} />
+            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} onUpdateSubquests={onUpdateSubquests} />
         </>
     );
 }
