@@ -10,8 +10,9 @@ type ClanMember = {
     totalXp: number
     kills: number
 }
-type ClanMemberIgnored = ClanMember & {
+type ClanMemberFiltered = ClanMember & {
     ignore: boolean
+    hide: boolean
 }
 
 enum QuestStatus {
@@ -90,24 +91,26 @@ export type APIQuest = {
 type OnFetchQuestOverview = (questName: string) => void
 
 type QuestOverviewComponentProps = {
+    users: ClanMemberFiltered[]
     overview: QuestOverview
     onFetchQuestOverview: OnFetchQuestOverview
     tabLevel: number
 }
-const QuestOverviewComponent = ({ overview, tabLevel, onFetchQuestOverview }: QuestOverviewComponentProps) => {
+const QuestOverviewComponent = ({ users, overview, tabLevel, onFetchQuestOverview }: QuestOverviewComponentProps) => {
     return (
         <div>
-            <QuestTableView questTable={overview.questRequirements} tabLevel={tabLevel} onFetchQuestOverview={onFetchQuestOverview} />
+            <QuestTableView users={users} questTable={overview.questRequirements} tabLevel={tabLevel} onFetchQuestOverview={onFetchQuestOverview} />
         </div>
     )
 }
 
 type QuestTableRowProps = {
+    users: ClanMemberFiltered[]
     questRow: QuestRow
     onFetchQuestOverview: OnFetchQuestOverview
     tabLevel?: number
 }
-const QuestTableRow = ({ questRow, tabLevel, onFetchQuestOverview }: QuestTableRowProps) => {
+const QuestTableRow = ({ users, questRow, tabLevel, onFetchQuestOverview }: QuestTableRowProps) => {
     const numSpaces = tabLevel || 0
     const spaces = new Array(numSpaces).fill("-")
     const questName = questRow.questName
@@ -128,34 +131,38 @@ const QuestTableRow = ({ questRow, tabLevel, onFetchQuestOverview }: QuestTableR
                 <Cell>
                     <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{spaces}{questName}</a>
                 </Cell>
-                {questRow.userProgress.map((questCell, index) => {
-                    const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
-                    return (
-                        <Cell className={className} key={index}>
-                            {text}
-                        </Cell>
-                    )
-                })}
+                {questRow.userProgress
+                    .filter(prog => !users.find(user => prog.user === user.name)?.hide)
+                    .map((questCell, index) => {
+                        const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
+                        return (
+                            <Cell className={className} key={index}>
+                                {text}
+                            </Cell>
+                        )
+                    })
+                }
             </Row>
             {showSubquest && !questRow.overview && "Fetching..."}
-            {showSubquest && questRow.overview && <QuestOverviewComponent overview={questRow.overview} tabLevel={numSpaces + 1} onFetchQuestOverview={onFetchQuestOverview} />}
+            {showSubquest && questRow.overview && <QuestOverviewComponent users={users} overview={questRow.overview} tabLevel={numSpaces + 1} onFetchQuestOverview={onFetchQuestOverview} />}
         </>
     )
 }
 
 type QuestTableProps = {
-    users: ClanMemberIgnored[]
+    users: ClanMemberFiltered[]
     questTable: QuestTable
     onSortChange: (user: string) => void
     onIgnorePlayerClicked: (user: string) => void
+    onHidePlayerClicked: (user: string) => void
     onFetchQuestOverview: OnFetchQuestOverview
 }
-const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerClicked, onFetchQuestOverview }: QuestTableProps) => {
+const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerClicked, onHidePlayerClicked, onFetchQuestOverview }: QuestTableProps) => {
     return (
         <Table>
             <Row>
                 <Cell onClick={() => onSortChange("questName")} />
-                {users.map((user, index) => {
+                {users.filter(user => !user.hide).map((user, index) => {
                     return (
                         <Cell key={index} onClick={() => onSortChange(user.name)}>
                             {user.name}
@@ -164,30 +171,37 @@ const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerCl
                                 onIgnorePlayerClicked(user.name)
                             }}  >
                                 <label htmlFor={`name-ignore-${user.name}`}>Ignore</label>
-                                <input type="checkbox" checked={user.ignore} onChange={() => onIgnorePlayerClicked(user.name)} />
+                                <input id={`name-ignore-${user.name}`} type="checkbox" checked={user.ignore} onChange={() => onIgnorePlayerClicked(user.name)} />
+                            </div>
+                            <div onClick={(event) => {
+                                event.stopPropagation()
+                                onHidePlayerClicked(user.name)
+                            }}  >
+                                <button onClick={() => onHidePlayerClicked(user.name)}>Hide</button>
                             </div>
                         </Cell>
                     )
                 })}
             </Row>
-            <QuestTableView questTable={questTable} onFetchQuestOverview={onFetchQuestOverview} />
+            <QuestTableView users={users} questTable={questTable} onFetchQuestOverview={onFetchQuestOverview} />
         </Table >
     )
 }
 
 type QuestTableViewProps = {
+    users: ClanMemberFiltered[]
     questTable: QuestTable
     onFetchQuestOverview: OnFetchQuestOverview
     tabLevel?: number
 }
-const QuestTableView = ({ questTable, tabLevel, onFetchQuestOverview }: QuestTableViewProps) => {
-    const rows = questTable.map((questRow) => <QuestTableRow questRow={questRow} tabLevel={tabLevel} key={questRow.questName + tabLevel} onFetchQuestOverview={onFetchQuestOverview} />)
+const QuestTableView = ({ users, questTable, tabLevel, onFetchQuestOverview }: QuestTableViewProps) => {
+    const rows = questTable.map((questRow) => <QuestTableRow users={users} questRow={questRow} tabLevel={tabLevel} key={questRow.questName + tabLevel} onFetchQuestOverview={onFetchQuestOverview} />)
     return <>{rows}</>
 }
 
 export const QuestsComponent = () => {
     const [clanMembers, setClanMembers] = useState<ClanMember[]>([])
-    const [users, setUsers] = useState<ClanMemberIgnored[]>([])
+    const [users, setUsers] = useState<ClanMemberFiltered[]>([])
 
     const [questTable, setQuestTable] = useState<QuestTable>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
@@ -226,10 +240,31 @@ export const QuestsComponent = () => {
         setUsers(newUsers)
     }
 
+    const onHidePlayerClicked = (user: string) => {
+        const newUsers = users.map(oldUser => {
+            if (oldUser.name === user) {
+                return {
+                    ...oldUser,
+                    hide: !oldUser.hide,
+                }
+            }
+            return oldUser
+        })
+        setUsers(newUsers)
+    }
+
     const onIgnoreAll = () => {
         const newUsers = users.map(oldUser => ({
             ...oldUser,
             ignore: true
+        }))
+        setUsers(newUsers)
+    }
+
+    const onUnhideAll = () => {
+        const newUsers = users.map(oldUser => ({
+            ...oldUser,
+            hide: false
         }))
         setUsers(newUsers)
     }
@@ -281,7 +316,8 @@ export const QuestsComponent = () => {
     useEffect(() => {
         setUsers(clanMembers.map(member => ({
             ...member,
-            ignore: false
+            ignore: false,
+            hide: false
         })))
     }, [clanMembers])
 
@@ -326,10 +362,13 @@ export const QuestsComponent = () => {
                     <button onClick={onIgnoreAll}>Ignore all</button>
                 </div>
                 <div>
+                    <button onClick={onUnhideAll}>Unhide all</button>
+                </div>
+                <div>
                     <input id="search" value={search} onChange={onSearchChange} placeholder="Search" />
                 </div>
             </div>
-            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} onFetchQuestOverview={onFetchQuestOverview} />
+            <QuestTableComponent users={users} questTable={displayTable} onSortChange={onSortChange} onIgnorePlayerClicked={onIgnorePlayerClicked} onHidePlayerClicked={onHidePlayerClicked} onFetchQuestOverview={onFetchQuestOverview} />
         </>
     );
 }
@@ -342,7 +381,7 @@ const searchTable = (search: string, questTable: QuestTable): QuestTable => {
     )
 }
 
-const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: ClanMemberIgnored[], questTable: QuestTable): QuestTable => {
+const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: ClanMemberFiltered[], questTable: QuestTable): QuestTable => {
     if (!shouldFilterCompleted && !filterUncompletable) return questTable
 
     return questTable.filter(questRow => !questRow.userProgress.find(questCell => {
