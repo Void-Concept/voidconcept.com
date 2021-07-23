@@ -43,7 +43,22 @@ type QuestCell = {
     questPoints: number
 }
 
-type QuestRow = QuestCell[]
+type QuestOverview = {
+    href: string
+    members: boolean
+    difficulty: QuestDifficulty
+    length: string
+    age: QuestAge
+    questPoints: number
+    series: string
+    questRequirements: QuestRow
+}
+
+type QuestRow = {
+    questName: string
+    userProgress: QuestCell[]
+    requirements?: QuestOverview
+}
 type QuestTable = QuestRow[]
 
 
@@ -99,14 +114,14 @@ type QuestTableRowProps = {
     questRow: QuestRow
 }
 const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
-    const questName = questRow[0]?.title
+    const questName = questRow.questName
     const [showSubquest, setShowSubquests] = useState(false)
     const [subQuests, setSubquests] = useState<APIQuest | undefined>(undefined)
 
     useEffect(() => {
         const run = async () => {
             if (!subQuests && showSubquest) {
-                const questId = encodeURIComponent(questRow[1].title.toLowerCase().replaceAll(" ", "_").replaceAll("%20", "_").replace("_(miniquest)", "").replace("_(saga)", ""))
+                const questId = encodeURIComponent(questRow.questName.toLowerCase().replaceAll(" ", "_").replaceAll("%20", "_").replace("_(miniquest)", "").replace("_(saga)", ""))
                 const response = await fetch(`https://quests.voidconcept.com/quest?questId=${questId}`)
                 if (response.status === 200) {
                     const questResponse = await response.json()
@@ -125,7 +140,7 @@ const QuestTableRow = ({ questRow }: QuestTableRowProps) => {
                 <Cell onClick={() => { setShowSubquests(!showSubquest) }}>
                     <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{questName}</a>
                 </Cell>
-                {questRow.map((questCell, index) => {
+                {questRow.userProgress.map((questCell, index) => {
                     const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
                     return (
                         <Cell className={className} key={index}>
@@ -175,7 +190,7 @@ const QuestTableComponent = ({ users, questTable, onSortChange, onIgnorePlayerCl
 export const QuestsComponent = () => {
     const [users, setUsers] = useState<ClanMemberIgnored[]>([])
 
-    const [questTable, setQuestTable] = useState<QuestRow[]>([]);
+    const [questTable, setQuestTable] = useState<QuestTable>([]);
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
     const [filterUnCompletable, setFilterUncompletable] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<string>("questName")
@@ -289,16 +304,14 @@ const searchTable = (search: string, questTable: QuestTable): QuestTable => {
     if (search.length === 0) return questTable
 
     return questTable.filter(questRow =>
-        questRow.find(questCell => {
-            return questCell.title.toLowerCase().search(search.toLowerCase()) != -1
-        })
+        questRow.questName.toLowerCase().search(search.toLowerCase()) != -1
     )
 }
 
 const filterTable = (shouldFilterCompleted: boolean, filterUncompletable: boolean, users: ClanMemberIgnored[], questTable: QuestTable): QuestTable => {
     if (!shouldFilterCompleted && !filterUncompletable) return questTable
 
-    return questTable.filter(questRow => !questRow.find(questCell => {
+    return questTable.filter(questRow => !questRow.userProgress.find(questCell => {
         const matchingUser = users.find(u => u.name === questCell.user)
         return !matchingUser?.ignore && ((shouldFilterCompleted && questCell.status === QuestStatus.Completed) || (filterUncompletable && !questCell.userEligible))
     }))
@@ -308,11 +321,11 @@ const sortTable = (sortBy: string, sortDirection: boolean, questTable: QuestTabl
     if (sortBy === "none") return questTable
     return [...questTable].sort((a, b) => {
         if (sortBy === "questName") {
-            const compareDirection = compareStrings(a[0].title, b[0].title)
+            const compareDirection = compareStrings(a.questName, b.questName)
             return sortDirection ? compareDirection : -compareDirection
         } else {
-            const leftElement = a.find(e => e.user === sortBy)
-            const rightElement = b.find(e => e.user === sortBy)
+            const leftElement = a.userProgress.find(e => e.user === sortBy)
+            const rightElement = b.userProgress.find(e => e.user === sortBy)
             if (!leftElement || !rightElement) return 0
 
             const compareDirection = compareElements(leftElement, rightElement)
@@ -383,15 +396,19 @@ const fetchClanMembers = async (): Promise<ClanMember[]> => {
 }
 
 type QuestGroupReduceResults = {
-    [questName: string]: QuestCell[]
+    [questName: string]: QuestRow
 }
 const groupByQuest = (questsPerUser: QuestCell[][]): QuestRow[] => {
     const groupedQuests = questsPerUser.flat().reduce<QuestGroupReduceResults>((previous, current) => {
         const key = current.title
-        const oldValue = previous[key] || []
+        const oldValue = previous[key]
+        const previousProgress = oldValue?.userProgress || []
         return {
             ...previous,
-            [key]: [...oldValue, current]
+            [key]: {
+                questName: key,
+                userProgress: [...previousProgress || [], current],
+            }
         }
     }, {})
 
