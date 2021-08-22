@@ -8,10 +8,9 @@ export class DiscordService {
 
     notifyCalendarUpdate = async (daysOffset: number, calendar: DndCalendar) => {
         const channelsToNotify = await this.dynamoHelper.getNotificationChannels()
-        console.log(`Got ${channelsToNotify} channels to notify`)
 
         const promises = channelsToNotify.map(channel => {
-            console.log(`Notifying channel ${channel}`)
+            console.log(`Notifying channel ${JSON.stringify(channel)}`)
             return this.discordApi.sendMessage(channel.id, `<@&${channel.roleId}> Calendar changed by ${daysOffset} days. Subtract ${daysOffset * 5} gold. Current day: ${calendar.year}-${calendar.month}-${calendar.day}`)
         })
 

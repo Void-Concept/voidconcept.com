@@ -32,6 +32,9 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
     value: {
         L: {
             M: {
+                name: {
+                    S: string
+                }
                 id: {
                     S: string
                 },
@@ -39,7 +42,7 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
                     S: string
                 },
                 disabled: {
-                    B: boolean
+                    BOOL: boolean
                 }
             }
         }[]
@@ -47,6 +50,7 @@ interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
 }
 
 interface NotificationChannel {
+    name: string
     id: string
     roleId: string
     disabled: boolean
@@ -69,10 +73,11 @@ export class DynamoHelper {
             throw new Error("Could not find DnD calendar notification channels")
         }
         const notificationChannels = response.Item as DynamoDndCalendarNotificationChannels;
-        return notificationChannels.value.L.map(list => ({
-            id: list.M.id.S,
-            roleId: list.M.roleId.S,
-            disabled: !!list.M.disabled?.B
+        return notificationChannels.value.L.map(channel => ({
+            name: channel.M.name.S,
+            id: channel.M.id.S,
+            roleId: channel.M.roleId.S,
+            disabled: !!channel.M.disabled?.BOOL
         })).filter(list => !list.disabled)
     }
 
