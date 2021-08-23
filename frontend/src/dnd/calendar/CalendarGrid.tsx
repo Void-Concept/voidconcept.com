@@ -3,9 +3,9 @@ import { Calendar, CalendarDate } from './calendar';
 import "./calendarGrid.css"
 import ChevronUpIcon from "mdi-react/ChevronUpIcon";
 import ChevronDownIcon from "mdi-react/ChevronDownIcon";
+import { useCalendar } from './CalendarContext';
 
 interface CalendarGridProps {
-    calendar: Calendar
     year: number
     month: number
     currentDay: CalendarDate
@@ -13,7 +13,8 @@ interface CalendarGridProps {
     onNextMonth?: () => void
 }
 
-export const CalendarGrid = ({ calendar, year, month, currentDay, onPreviousMonth, onNextMonth }: CalendarGridProps) => {
+export const CalendarGrid = ({ year, month, currentDay, onPreviousMonth, onNextMonth }: CalendarGridProps) => {
+    const calendar = useCalendar();
     const rows = Math.ceil(calendar.daysInMonth / calendar.weekDays.length) + 1
     return (
         <div>
@@ -28,7 +29,7 @@ export const CalendarGrid = ({ calendar, year, month, currentDay, onPreviousMont
                 <CalendarHeader calendar={calendar} />
                 <tbody>
                     {new Array(rows).fill(0).map((z, index) => (
-                        <CalendarRow key={index} calendar={calendar} row={index} currentDay={currentDay} year={year} month={month} />
+                        <CalendarRow key={index} row={index} currentDay={currentDay} year={year} month={month} />
                     ))}
                 </tbody>
             </table>
@@ -54,31 +55,32 @@ const CalendarHeader = ({ calendar }: CalendarHeaderProps) => {
 }
 
 interface CalendarRowProps {
-    calendar: Calendar
     row: number
     currentDay: CalendarDate
     year: number
     month: number
 }
-const CalendarRow = ({ calendar, row, currentDay, month, year }: CalendarRowProps) => {
+const CalendarRow = ({ row, currentDay, month, year }: CalendarRowProps) => {
+    const calendar = useCalendar()
     return (
         <tr>
             {calendar.weekDays.map((_, column) => (
-                <CalendarCell key={column} calendar={calendar} row={row} column={column} currentDay={currentDay} year={year} month={month} />
+                <CalendarCell key={column} row={row} column={column} currentDay={currentDay} year={year} month={month} />
             ))}
         </tr>
     )
 }
 
 interface CalendarCellProps {
-    calendar: Calendar
     row: number
     column: number
     currentDay: CalendarDate
     year: number
     month: number
 }
-const CalendarCell = ({ calendar, row, column, currentDay, month, year }: CalendarCellProps) => {
+const CalendarCell = ({ row, column, currentDay, month, year }: CalendarCellProps) => {
+    const calendar = useCalendar()
+
     const startDayOfWeek = calendar.getDayOfWeekIndex({ year, month, day: 1 })
     const day = (calendar.weekDays.length * row) + column - startDayOfWeek;
     const cellDate = calendar.getEpochDate(calendar.getDateEpoch({ year, month: month, day: day + 1 }))

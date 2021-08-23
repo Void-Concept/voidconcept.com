@@ -119,7 +119,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
                 <MoonPhaseIcon date={date} />
                 <InnPaymentIcon date={date} />
             </div>
-            <CalendarGrid calendar={calendar} year={displayDate.year} month={displayDate.month} currentDay={date} onPreviousMonth={onPreviousMonth} onNextMonth={onNextMonth} />
+            <CalendarGrid year={displayDate.year} month={displayDate.month} currentDay={date} onPreviousMonth={onPreviousMonth} onNextMonth={onNextMonth} />
         </div>
     );
 };
