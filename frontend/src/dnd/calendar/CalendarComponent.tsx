@@ -72,11 +72,19 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     const nextDate = async () => {
         const nextDate = getDateAtOffset(date, 1);
         setDate(await calendarDao.setDate(nextDate))
+        setDisplayDate({
+            year: nextDate.year,
+            month: nextDate.month
+        })
     }
 
     const previousDate = async () => {
         const previousDate = getDateAtOffset(date, -1);
         setDate(await calendarDao.setDate(previousDate))
+        setDisplayDate({
+            year: previousDate.year,
+            month: previousDate.month
+        })
     }
 
     const onPreviousMonth = () => {
