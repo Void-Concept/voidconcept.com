@@ -46,18 +46,28 @@ interface CalendarProps {
     calendarDao: CalendarDao
 }
 
+type DisplayDate = {
+    year: number
+    month: number
+}
+
 export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     const calendar = useCalendar();
 
     const [date, setDate] = useState<CalendarDate | undefined>()
+    const [displayDate, setDisplayDate] = useState<DisplayDate>()
     useEffect(() => {
         const fetchDate = async () => {
             const savedDate = await calendarDao.getDate()
             setDate(savedDate)
+            setDisplayDate({
+                year: savedDate.year,
+                month: savedDate.month
+            })
         }
         fetchDate();
     }, [calendarDao])
-    if (!date) return <>Loading...</>;
+    if (!date || !displayDate) return <>Loading...</>;
 
     const nextDate = async () => {
         const nextDate = getDateAtOffset(date, 1);
@@ -69,6 +79,31 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
         setDate(await calendarDao.setDate(previousDate))
     }
 
+    const onPreviousMonth = () => {
+        let newYear = displayDate.year
+        let newMonth = displayDate.month - 1
+        if (newMonth < 0) {
+            newMonth = calendar.months.length - 1
+            newYear -= 1
+        }
+        setDisplayDate({
+            year: newYear,
+            month: newMonth
+        })
+    }
+
+    const onNextMonth = () => {
+        let newYear = displayDate.year
+        let newMonth = displayDate.month + 1
+        if (newMonth >= calendar.months.length) {
+            newMonth = 0
+            newYear += 1
+        }
+        setDisplayDate({
+            year: newYear,
+            month: newMonth
+        })
+    }
     return (
         <div className="dnd-calendar-container">
             <div className="dnd-calendar-button-display">
@@ -84,7 +119,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
                 <MoonPhaseIcon date={date} />
                 <InnPaymentIcon date={date} />
             </div>
-            <CalendarGrid calendar={calendar} year={date.year} month={date.month} />
+            <CalendarGrid calendar={calendar} year={displayDate.year} month={displayDate.month} currentDay={date} onPreviousMonth={onPreviousMonth} onNextMonth={onNextMonth} />
         </div>
     );
 };

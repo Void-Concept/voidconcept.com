@@ -17,17 +17,36 @@
     vertical-align: top;
     width: 5rem;
     height: 5rem;
-    /* font-weight: bold; */
 }
 
 .calendar-cell-gray {
     color: lightgray;
-    /* font-weight: normal; */
+}
+
+.calendar-cell-highlight {
+    border: 1px solid red;
 }
 
 .calendar-title {
     white-space: nowrap;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
     margin-bottom: 8px;
+}
+
+.calendar-title-text {
+    margin-left: 8px;
+}
+
+.calendar-title-buttons {
+    float: right;
+    margin-right: 8px;
+}
+
+.calendar-month-button {
+    user-select: none;
+}
+
+.calendar-month-button:hover {
+    fill: gray;
 }
