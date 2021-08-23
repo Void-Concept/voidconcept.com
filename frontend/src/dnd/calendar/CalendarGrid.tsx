@@ -85,7 +85,7 @@ const CalendarCell = ({ row, column, currentDay, month, year }: CalendarCellProp
     const day = (calendar.weekDays.length * row) + column - startDayOfWeek;
     const cellDate = calendar.getEpochDate(calendar.getDateEpoch({ year, month: month, day: day + 1 }))
 
-    const maybeGrayStyle = cellDate.month === month ? "" : "calendar-cell-gray";
+    const maybeGrayStyle = cellDate.month % calendar.months.length === month ? "" : "calendar-cell-gray";
     const maybeCurrentDay = currentDay.month === cellDate.month && currentDay.year === cellDate.year && currentDay.day === cellDate.day ? "calendar-cell-highlight" : "";
 
     return (
