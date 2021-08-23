@@ -1,11 +1,11 @@
 import React from 'react';
-import { Calendar } from './Calendar';
+import { CalendarComponent } from './CalendarComponent';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
 import { CalendarDao } from './CalendarDao';
 import { CalendarDate } from './util';
 import { act } from 'react-dom/test-utils';
 
-describe("Calendar", () => {
+describe("CalendarComponent", () => {
     interface RenderContainerProps {
         calendarDao: CalendarDao
     }
@@ -14,7 +14,7 @@ describe("Calendar", () => {
         let wrapper: RenderResult;
         await act(async () => {
             wrapper = render(
-                <Calendar calendarDao={calendarDao} />
+                <CalendarComponent calendarDao={calendarDao} />
             );
         })
         return wrapper!;
@@ -33,7 +33,7 @@ describe("Calendar", () => {
         } as CalendarDao;
 
         const wrapper = render(
-            <Calendar calendarDao={calendarDao} />
+            <CalendarComponent calendarDao={calendarDao} />
         );
 
         expect(await wrapper.findByText("Friday 4067-03-25"));
@@ -52,7 +52,7 @@ describe("Calendar", () => {
         } as CalendarDao;
 
         const wrapper = render(
-            <Calendar calendarDao={calendarDao} />
+            <CalendarComponent calendarDao={calendarDao} />
         );
 
         const nextButton = await wrapper.findByText("Next") as HTMLButtonElement;
@@ -79,7 +79,7 @@ describe("Calendar", () => {
         } as CalendarDao;
 
         const wrapper = render(
-            <Calendar calendarDao={calendarDao} />
+            <CalendarComponent calendarDao={calendarDao} />
         );
 
         const previousButton = await wrapper.findByText("Previous") as HTMLButtonElement;
@@ -107,7 +107,7 @@ describe("Calendar", () => {
             } as CalendarDao;
 
             const wrapper = render(
-                <Calendar calendarDao={calendarDao} />
+                <CalendarComponent calendarDao={calendarDao} />
             );
 
             expect(await wrapper.findByTitle("Full Moon")).toBeDefined();
@@ -126,7 +126,7 @@ describe("Calendar", () => {
             } as CalendarDao;
 
             const wrapper = render(
-                <Calendar calendarDao={calendarDao} />
+                <CalendarComponent calendarDao={calendarDao} />
             );
 
             expect(await wrapper.findByTitle("New Moon")).toBeDefined();
@@ -145,7 +145,7 @@ describe("Calendar", () => {
             } as CalendarDao;
 
             const wrapper = render(
-                <Calendar calendarDao={calendarDao} />
+                <CalendarComponent calendarDao={calendarDao} />
             );
 
             expect(await wrapper.findByTitle("Waning Half Moon")).toBeDefined();
@@ -164,7 +164,7 @@ describe("Calendar", () => {
             } as CalendarDao;
 
             const wrapper = render(
-                <Calendar calendarDao={calendarDao} />
+                <CalendarComponent calendarDao={calendarDao} />
             );
 
             expect(await wrapper.findByTitle("Waxing Half Moon")).toBeDefined();

@@ -4,7 +4,7 @@ import { Router, Route, Switch } from 'react-router';
 import { createBrowserHistory } from 'history';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
-import { Calendar as DndCalendar } from './dnd/calendar/Calendar';
+import { CalendarComponent as DndCalendar } from './dnd/calendar/CalendarComponent';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
 import { NavComponent } from './nav';

@@ -44,7 +44,7 @@ interface CalendarProps {
     calendarDao: CalendarDao
 }
 
-export const Calendar = ({ calendarDao }: CalendarProps) => {
+export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     const [date, setDate] = useState<CalendarDate | undefined>()
     useEffect(() => {
         const fetchDate = async () => {
