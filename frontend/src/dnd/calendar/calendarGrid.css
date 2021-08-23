@@ -1,0 +1,33 @@
+.calendar-table {
+    border: 1px solid black;
+    border-spacing: 0;
+}
+
+.calendar-header-cell {
+    border: 1px solid black;
+    padding: 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.calendar-cell {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    width: 5rem;
+    height: 5rem;
+    /* font-weight: bold; */
+}
+
+.calendar-cell-gray {
+    color: lightgray;
+    /* font-weight: normal; */
+}
+
+.calendar-title {
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 8px;
+}

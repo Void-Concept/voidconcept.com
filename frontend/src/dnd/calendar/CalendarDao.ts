@@ -8,9 +8,9 @@ export interface CalendarDao {
 
 export class InMemoryCalendarDao implements CalendarDao {
     date: CalendarDate = {
-        year: 4067,
-        month: 6,
-        day: 1
+        year: 4068,
+        month: 8,
+        day: 7
     };
 
 

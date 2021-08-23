@@ -7,7 +7,8 @@ import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
 import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
 import MoneyIcon from "mdi-react/HomeCurrencyUsdIcon";
-import { getDayOfWeek } from './util';
+import { useCalendar } from './CalendarContext'
+import { CalendarGrid } from './CalendarGrid'
 import "./calendar.css"
 
 interface MoonPhaseIconProps {
@@ -33,7 +34,8 @@ interface InnPaymentIconProps {
     date: CalendarDate
 }
 const InnPaymentIcon = ({ date }: InnPaymentIconProps) => {
-    if (getWeekEpoch(date) % 2 === 1 && getDayOfWeek(date) === "Monday") {
+    const calendar = useCalendar()
+    if (calendar.getWeekEpoch(date) % 2 === 1 && calendar.getDayOfWeek(date) === "Monday") {
         return <span title={"Inn Payment"}><MoneyIcon /></span>;
     } else {
         return null;
@@ -45,6 +47,8 @@ interface CalendarProps {
 }
 
 export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
+    const calendar = useCalendar();
+
     const [date, setDate] = useState<CalendarDate | undefined>()
     useEffect(() => {
         const fetchDate = async () => {
@@ -53,7 +57,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
         }
         fetchDate();
     }, [calendarDao])
-    if (!date) return <></>;
+    if (!date) return <>Loading...</>;
 
     const nextDate = async () => {
         const nextDate = getDateAtOffset(date, 1);
@@ -80,6 +84,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
                 <MoonPhaseIcon date={date} />
                 <InnPaymentIcon date={date} />
             </div>
+            <CalendarGrid calendar={calendar} year={date.year} month={date.month} />
         </div>
     );
 };

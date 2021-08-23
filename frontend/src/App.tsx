@@ -12,6 +12,8 @@ import { OauthCallback } from './oauth';
 import { QuestsComponent } from './runescape/quests/QuestsComponent'
 import { CitadelComponent } from './runescape/citadel/CitadelComponent'
 import * as R from 'ramda';
+import { CalendarProvider } from './dnd/calendar/CalendarContext';
+import { atagothCalendar } from './dnd/calendar/calendar';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -39,7 +41,11 @@ const routes = [{
     category: "DND",
     name: "Calendar",
     path: "/dnd/calendar",
-    render: () => <DndCalendar calendarDao={getCalendarDao()} />
+    render: () => (
+        <CalendarProvider value={atagothCalendar}>
+            <DndCalendar calendarDao={getCalendarDao()} />
+        </CalendarProvider>
+    )
 }, {
     category: "DND",
     name: "Irilic Names",
