@@ -19,7 +19,7 @@ export const CalendarGrid = ({ year, month, currentDay, onPreviousMonth, onNextM
     return (
         <div>
             <div className="calendar-title">
-                <span className="calendar-title-text">{`${calendar.months[month - 1]} ${year}`}</span>
+                <span className="calendar-title-text">{`${calendar.months[(month - 1 + calendar.months.length) % calendar.months.length]} ${year}`}</span>
                 <span className="calendar-title-buttons">
                     <ChevronUpIcon className="calendar-month-button" onClick={onPreviousMonth} />
                     <ChevronDownIcon className="calendar-month-button" onClick={onNextMonth} />
