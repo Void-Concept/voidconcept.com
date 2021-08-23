@@ -112,6 +112,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
                     year={date.year}
                     month={date.month}
                     day={date.day}
+                    className="dnd-calendar-display"
                 />
                 <button onClick={nextDate}>Next</button>
             </div>

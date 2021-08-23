@@ -15,4 +15,17 @@
 
 .dnd-calendar-status {
     margin-top: 8px;
+    height: 28px
+}
+
+.dnd-calendar-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+}
+
+.dnd-calendar-display {
+    width: 175px;
+    text-align: center;
 }
