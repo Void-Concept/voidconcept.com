@@ -26,7 +26,7 @@ export const CalendarGrid = ({ year, month, currentDay, onPreviousMonth, onNextM
                 </span>
             </div>
             <table className="calendar-table">
-                <CalendarHeader calendar={calendar} />
+                <CalendarHeader />
                 <tbody>
                     {new Array(rows).fill(0).map((z, index) => (
                         <CalendarRow key={index} row={index} currentDay={currentDay} year={year} month={month} />
@@ -38,9 +38,10 @@ export const CalendarGrid = ({ year, month, currentDay, onPreviousMonth, onNextM
 }
 
 interface CalendarHeaderProps {
-    calendar: Calendar
+
 }
-const CalendarHeader = ({ calendar }: CalendarHeaderProps) => {
+const CalendarHeader = ({ }: CalendarHeaderProps) => {
+    const calendar = useCalendar();
     return (
         <thead>
             <tr>

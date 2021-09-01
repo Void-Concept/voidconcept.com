@@ -1,5 +1,5 @@
-import { CalendarDate } from "./util";
 import { getToken } from "../../oauth/oauthClient";
+import { CalendarDate } from "./calendar";
 
 export interface CalendarDao {
     getDate: () => Promise<CalendarDate>

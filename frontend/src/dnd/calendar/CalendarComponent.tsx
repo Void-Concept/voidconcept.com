@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
-import { CalendarDate, getDateAtOffset, getWeekEpoch } from './util';
 import MoonFullIcon from "mdi-react/MoonFullIcon";
 import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
@@ -10,6 +9,7 @@ import MoneyIcon from "mdi-react/HomeCurrencyUsdIcon";
 import { useCalendar } from './CalendarContext'
 import { CalendarGrid } from './CalendarGrid'
 import "./calendar.css"
+import { CalendarDate } from './calendar';
 
 interface MoonPhaseIconProps {
     date: CalendarDate
@@ -70,7 +70,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     if (!date || !displayDate) return <>Loading...</>;
 
     const nextDate = async () => {
-        const nextDate = getDateAtOffset(date, 1);
+        const nextDate = calendar.getDateAtOffset(date, 1);
         setDate(await calendarDao.setDate(nextDate))
         setDisplayDate({
             year: nextDate.year,
@@ -79,7 +79,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     }
 
     const previousDate = async () => {
-        const previousDate = getDateAtOffset(date, -1);
+        const previousDate = calendar.getDateAtOffset(date, -1);
         setDate(await calendarDao.setDate(previousDate))
         setDisplayDate({
             year: previousDate.year,

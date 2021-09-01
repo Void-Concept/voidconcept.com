@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Router, Route, Switch } from 'react-router';
+import { Router, Route, Switch, Redirect } from 'react-router';
 import { createBrowserHistory } from 'history';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
@@ -13,7 +13,7 @@ import { QuestsComponent } from './runescape/quests/QuestsComponent'
 import { CitadelComponent } from './runescape/citadel/CitadelComponent'
 import * as R from 'ramda';
 import { CalendarProvider } from './dnd/calendar/CalendarContext';
-import { atagothCalendar } from './dnd/calendar/calendar';
+import { atagothCalendar, unnamedCalendar } from './dnd/calendar/calendar';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -41,8 +41,27 @@ const routes = [{
     category: "DND",
     name: "Calendar",
     path: "/dnd/calendar",
+    exact: true,
+    render: () => (
+        <Redirect to="/dnd/calendar/atagoth" />
+    )
+}, {
+    category: "DND",
+    name: "Atagoth Calendar",
+    path: "/dnd/calendar/atagoth",
+    showInNav: false,
     render: () => (
         <CalendarProvider value={atagothCalendar}>
+            <DndCalendar calendarDao={getCalendarDao()} />
+        </CalendarProvider>
+    )
+}, {
+    category: "DND",
+    name: "Campaign 2 Calendar",
+    path: "/dnd/calendar/campaign2",
+    showInNav: false,
+    render: () => (
+        <CalendarProvider value={unnamedCalendar}>
             <DndCalendar calendarDao={getCalendarDao()} />
         </CalendarProvider>
     )
@@ -108,6 +127,7 @@ const App = () => {
                 {routes.map((route, index) =>
                     <Route key={index} path={route.path} exact={route.exact}>
                         {route.render()}
+                        {console.log("Rendering", route.path)}
                     </Route>
                 )}
             </Switch>
