@@ -40,7 +40,7 @@ const routes = [{
     render: () => <SpellbookComponent />
 }, {
     category: "DND",
-    name: "Calendar",
+    name: "Calendars",
     path: "/dnd/calendars",
     exact: true,
     render: () => (
@@ -48,21 +48,11 @@ const routes = [{
     )
 }, {
     category: "DND",
-    name: "Atagoth Calendar",
+    name: "Calendar",
     path: "/dnd/calendar/:calendarName",
     showInNav: false,
     render: () => (
         <DndCalendar calendarDao={getCalendarDao()} />
-    )
-}, {
-    category: "DND",
-    name: "Campaign 2 Calendar",
-    path: "/dnd/calendar/campaign2",
-    showInNav: false,
-    render: () => (
-        <CalendarProvider value={unnamedCalendar}>
-            <CalendarComponent calendarDao={getCalendarDao()} />
-        </CalendarProvider>
     )
 }, {
     category: "DND",
