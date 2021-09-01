@@ -6,10 +6,11 @@ import MoonNewIcon from "mdi-react/MoonNewIcon";
 import MoonLastQuarterIcon from "mdi-react/MoonLastQuarterIcon";
 import MoonFirstQuarterIcon from "mdi-react/MoonFirstQuarterIcon";
 import MoneyIcon from "mdi-react/HomeCurrencyUsdIcon";
-import { useCalendar } from './CalendarContext'
+import { CalendarProvider, useCalendar } from './CalendarContext'
 import { CalendarGrid } from './CalendarGrid'
 import "./calendar.css"
-import { CalendarDate } from './calendar';
+import { Calendar, CalendarDate } from './calendar';
+import { useRouteMatch } from 'react-router';
 
 interface MoonPhaseIconProps {
     date: CalendarDate
@@ -132,3 +133,39 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
         </div>
     );
 };
+
+interface DndCalendarParams {
+    calendarName: string
+}
+interface DndCalendarProps {
+    calendarDao: CalendarDao
+}
+export const DndCalendar = ({ calendarDao }: DndCalendarProps) => {
+    const match = useRouteMatch<DndCalendarParams>();
+    const calendarName = match.params.calendarName
+    const [calendar, setCalendar] = useState<Calendar | undefined>();
+    const [fetching, setFetching] = useState<boolean>(true);
+
+    useEffect(() => {
+        const getCalendar = async () => {
+            const fetchedCalendar = await calendarDao.getCalendar(match.params.calendarName)
+            setCalendar(fetchedCalendar)
+            setFetching(false)
+        }
+        getCalendar().catch(console.error)
+    }, [calendarName])
+
+    if (!calendar) {
+        if (fetching) {
+            return <>Loading...</>
+        } else {
+            return <>No calendar named {calendarName} found</>
+        }
+    }
+
+    return (
+        <CalendarProvider value={calendar}>
+            <CalendarComponent calendarDao={calendarDao} />
+        </CalendarProvider>
+    )
+}

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './App.css';
 import { Router, Route, Switch, Redirect } from 'react-router';
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, History } from 'history';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
-import { CalendarComponent as DndCalendar } from './dnd/calendar/CalendarComponent';
+import { CalendarComponent, DndCalendar } from './dnd/calendar/CalendarComponent';
+import { CalendarList } from './dnd/calendar/CalendarList';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
 import { NavComponent } from './nav';
@@ -40,20 +41,18 @@ const routes = [{
 }, {
     category: "DND",
     name: "Calendar",
-    path: "/dnd/calendar",
+    path: "/dnd/calendars",
     exact: true,
     render: () => (
-        <Redirect to="/dnd/calendar/atagoth" />
+        <CalendarList calendarDao={getCalendarDao()} />
     )
 }, {
     category: "DND",
     name: "Atagoth Calendar",
-    path: "/dnd/calendar/atagoth",
+    path: "/dnd/calendar/:calendarName",
     showInNav: false,
     render: () => (
-        <CalendarProvider value={atagothCalendar}>
-            <DndCalendar calendarDao={getCalendarDao()} />
-        </CalendarProvider>
+        <DndCalendar calendarDao={getCalendarDao()} />
     )
 }, {
     category: "DND",
@@ -62,7 +61,7 @@ const routes = [{
     showInNav: false,
     render: () => (
         <CalendarProvider value={unnamedCalendar}>
-            <DndCalendar calendarDao={getCalendarDao()} />
+            <CalendarComponent calendarDao={getCalendarDao()} />
         </CalendarProvider>
     )
 }, {
@@ -119,15 +118,17 @@ const navRoutes = R.pipe(
     R.values
 )(routesInNav)
 
-const App = () => {
+interface AppProps {
+    history: History
+}
+const App = ({ history }: AppProps) => {
     return (
-        <Router history={createBrowserHistory()}>
+        <Router history={history}>
             <NavComponent routes={navRoutes} />
             <Switch>
                 {routes.map((route, index) =>
                     <Route key={index} path={route.path} exact={route.exact}>
                         {route.render()}
-                        {console.log("Rendering", route.path)}
                     </Route>
                 )}
             </Switch>

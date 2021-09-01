@@ -1,10 +1,17 @@
 import { getToken } from "../../oauth/oauthClient";
-import { CalendarDate } from "./calendar";
+import { atagothCalendar, Calendar, CalendarDate, unnamedCalendar } from "./calendar";
 
 export interface CalendarDao {
+    getCalendar: (calendarName: string) => Promise<Calendar | undefined>
+    getCalendarNames: () => Promise<string[]>
     getDate: () => Promise<CalendarDate>
     setDate: (date: CalendarDate) => Promise<CalendarDate>
 }
+
+const calendars: { [key: string]: Calendar | undefined } = {
+    "atagoth": atagothCalendar,
+    "campaign2": unnamedCalendar
+};
 
 export class InMemoryCalendarDao implements CalendarDao {
     date: CalendarDate = {
@@ -13,6 +20,13 @@ export class InMemoryCalendarDao implements CalendarDao {
         day: 1
     };
 
+    async getCalendar(calendarName: string): Promise<Calendar | undefined> {
+        return calendars[calendarName]
+    }
+
+    async getCalendarNames(): Promise<string[]> {
+        return Object.keys(calendars)
+    }
 
     async getDate(): Promise<CalendarDate> {
         return this.date;
@@ -26,6 +40,14 @@ export class InMemoryCalendarDao implements CalendarDao {
 
 export class GenericStorageCalendarDao implements CalendarDao {
     private calendarUrl = "https://calendar.voidconcept.com/dnd/calendar"
+
+    async getCalendar(calendarName: string): Promise<Calendar | undefined> {
+        return calendars[calendarName]
+    }
+
+    async getCalendarNames(): Promise<string[]> {
+        return Object.keys(calendars)
+    }
 
     async getDate() {
         const response = await fetch(this.calendarUrl, {
