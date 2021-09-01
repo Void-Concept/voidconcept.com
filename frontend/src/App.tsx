@@ -33,7 +33,7 @@ type RouteType = {
     showInNav?: boolean
 }
 
-const routes = [{
+const routes: RouteType[] = [{
     category: "DND",
     name: "Spellbook",
     path: "/dnd/spellbook",
