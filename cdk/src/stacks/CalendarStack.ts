@@ -75,9 +75,17 @@ export class CalendarStack extends cdk.Stack {
         })
 
         const dnd = api.root.addResource("dnd");
-        const dndCalendar = dnd.addResource("calendar");
+        const dndCalendars = dnd.addResource("calendars");
+        dndCalendars.addMethod("GET");
+        dndCalendars.addMethod("POST", undefined, {
+            authorizationType: apigateway.AuthorizationType.COGNITO,
+            authorizationScopes: ["openid"],
+            authorizer
+        });
+
+        const dndCalendar = dnd.addResource("{calendarName}")
         dndCalendar.addMethod("GET");
-        dndCalendar.addMethod("POST", undefined, {
+        dndCalendars.addMethod("POST", undefined, {
             authorizationType: apigateway.AuthorizationType.COGNITO,
             authorizationScopes: ["openid"],
             authorizer

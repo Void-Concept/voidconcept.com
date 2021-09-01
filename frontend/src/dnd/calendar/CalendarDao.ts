@@ -39,7 +39,7 @@ export class InMemoryCalendarDao implements CalendarDao {
 }
 
 export class GenericStorageCalendarDao implements CalendarDao {
-    private calendarUrl = "https://calendar.voidconcept.com/dnd/calendar"
+    private calendarUrl = "https://calendar.voidconcept.com/dnd/calendars"
 
     async getCalendar(calendarName: string): Promise<Calendar | undefined> {
         return calendars[calendarName]

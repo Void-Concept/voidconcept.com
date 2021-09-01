@@ -32,6 +32,7 @@ export const dependencyInjectedHandler = async (
     dynamoHelper: DynamoHelper,
     discordService: DiscordService,
 ): Promise<APIGatewayProxyResult> => {
+    //TODO: handle path params
     if (event.path === "/dnd/calendar") {
         return handleCalendarEvent(event, dynamoHelper, discordService)
     } else {

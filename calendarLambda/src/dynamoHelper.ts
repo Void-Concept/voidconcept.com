@@ -1,6 +1,24 @@
 import { DynamoDB } from "aws-sdk";
 
-export interface DndCalendar {
+interface DndCalendarEvent {
+    name: string
+    date: DndCalendarDate
+    repeat?: "yearly" | "monthly" | "weekly" | "daily" //TODO: is this all that's needed?
+}
+
+//TODO: use this interface
+interface DndCalendar {
+    months: string[]
+    weekDays: string[]
+    daysInMonth: number
+    epochOffset: number
+
+    currentDate: DndCalendarDate //TODO: should just store epoch?
+    notificationChannels: NotificationChannel[]
+    events: DndCalendarEvent[]
+}
+
+export interface DndCalendarDate {
     year: number
     month: number
     day: number
@@ -60,6 +78,8 @@ export class DynamoHelper {
     constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
     }
 
+    //TODO: take a calendarName parameter
+    //TODO: use calendar dynamoDb table
     getNotificationChannels = async (): Promise<NotificationChannel[]> => {
         const response = await this.dynamoDb.getItem({
             TableName: this.genericStorageTableName,
@@ -81,7 +101,9 @@ export class DynamoHelper {
         })).filter(list => !list.disabled)
     }
 
-    getDndCalendar = async (): Promise<DndCalendar> => {
+    //TODO: take a calendarName parameter
+    //TODO: use calendar dynamoDb table
+    getDndCalendar = async (): Promise<DndCalendarDate> => {
         const response = await this.dynamoDb.getItem({
             TableName: this.genericStorageTableName,
             Key: {
@@ -101,7 +123,9 @@ export class DynamoHelper {
         };
     }
 
-    postDndCalendar = async (calendar: DndCalendar): Promise<DndCalendar> => {
+    //TODO: take a calendarName parameter
+    //TODO: use calendar dynamoDb table
+    postDndCalendar = async (calendar: DndCalendarDate): Promise<DndCalendarDate> => {
         const request: DynamoDndCalendar = {
             name: {
                 S: "DndCalendar"

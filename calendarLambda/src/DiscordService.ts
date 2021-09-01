@@ -1,12 +1,12 @@
 import { DiscordApi } from './DiscordApi';
-import { DndCalendar, DynamoHelper } from './DynamoHelper';
+import { DndCalendarDate, DynamoHelper } from './DynamoHelper';
 
 export class DiscordService {
     constructor(private discordApi: DiscordApi, private dynamoHelper: DynamoHelper) {
 
     }
 
-    notifyCalendarUpdate = async (daysOffset: number, calendar: DndCalendar) => {
+    notifyCalendarUpdate = async (daysOffset: number, calendar: DndCalendarDate) => {
         const channelsToNotify = await this.dynamoHelper.getNotificationChannels()
 
         const promises = channelsToNotify.map(channel => {

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { DiscordService } from "./DiscordService";
-import { DndCalendar, DynamoHelper } from "./DynamoHelper";
+import { DndCalendarDate, DynamoHelper } from "./DynamoHelper";
 
 export const doGetFactory = (dynamoHelper: DynamoHelper) => async (event: APIGatewayProxyEvent) => {
     const calendar = await dynamoHelper.getDndCalendar();
@@ -28,7 +28,7 @@ export const doPostFactory = (dynamoHelper: DynamoHelper, discordService: Discor
     };
 }
 
-const parseEventBody = (event: APIGatewayProxyEvent): DndCalendar => {
+const parseEventBody = (event: APIGatewayProxyEvent): DndCalendarDate => {
     if (!event.body) throw new Error("Invalid calendar payload")
     return JSON.parse(event.body.toString());
 };
