@@ -2,8 +2,9 @@ import React from 'react';
 import { CalendarComponent } from './CalendarComponent';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
 import { CalendarDao } from './CalendarDao';
-import { CalendarDate } from './util';
 import { act } from 'react-dom/test-utils';
+import { atagothCalendar, CalendarDate } from './calendar';
+import { CalendarProvider } from './CalendarContext';
 
 describe("CalendarComponent", () => {
     interface RenderContainerProps {
@@ -12,11 +13,13 @@ describe("CalendarComponent", () => {
 
     const renderContainer = async ({ calendarDao }: RenderContainerProps): Promise<RenderResult> => {
         let wrapper: RenderResult;
-        await act(async () => {
-            wrapper = render(
-                <CalendarComponent calendarDao={calendarDao} />
+        await act(async () => await act(async () => {
+            wrapper = await render(
+                <CalendarProvider value={atagothCalendar}>
+                    <CalendarComponent calendarDao={calendarDao} />
+                </CalendarProvider>
             );
-        })
+        }))
         return wrapper!;
     }
 
@@ -29,12 +32,12 @@ describe("CalendarComponent", () => {
             }),
             setDate: jest.fn().mockImplementation((nextDate: CalendarDate) => {
                 return Promise.resolve(nextDate);
-            })
+            }),
+            getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+            getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
         } as CalendarDao;
 
-        const wrapper = render(
-            <CalendarComponent calendarDao={calendarDao} />
-        );
+        const wrapper = await renderContainer({ calendarDao });
 
         expect(await wrapper.findByText("Friday 4067-03-25"));
     });
@@ -48,12 +51,12 @@ describe("CalendarComponent", () => {
             }),
             setDate: jest.fn().mockImplementation((nextDate: CalendarDate) => {
                 return Promise.resolve(nextDate);
-            })
+            }),
+            getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+            getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
         } as CalendarDao;
 
-        const wrapper = render(
-            <CalendarComponent calendarDao={calendarDao} />
-        );
+        const wrapper = await renderContainer({ calendarDao });
 
         const nextButton = await wrapper.findByText("Next") as HTMLButtonElement;
         await fireEvent.click(nextButton)
@@ -75,12 +78,12 @@ describe("CalendarComponent", () => {
             }),
             setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                 return Promise.resolve(newDate);
-            })
+            }),
+            getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+            getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
         } as CalendarDao;
 
-        const wrapper = render(
-            <CalendarComponent calendarDao={calendarDao} />
-        );
+        const wrapper = await renderContainer({ calendarDao });
 
         const previousButton = await wrapper.findByText("Previous") as HTMLButtonElement;
         await fireEvent.click(previousButton)
@@ -103,12 +106,12 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
-            const wrapper = render(
-                <CalendarComponent calendarDao={calendarDao} />
-            );
+            const wrapper = await renderContainer({ calendarDao });
 
             expect(await wrapper.findByTitle("Full Moon")).toBeDefined();
         });
@@ -122,12 +125,12 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
-            const wrapper = render(
-                <CalendarComponent calendarDao={calendarDao} />
-            );
+            const wrapper = await renderContainer({ calendarDao });
 
             expect(await wrapper.findByTitle("New Moon")).toBeDefined();
         });
@@ -141,12 +144,12 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
-            const wrapper = render(
-                <CalendarComponent calendarDao={calendarDao} />
-            );
+            const wrapper = await renderContainer({ calendarDao });
 
             expect(await wrapper.findByTitle("Waning Half Moon")).toBeDefined();
         });
@@ -160,12 +163,12 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
-            const wrapper = render(
-                <CalendarComponent calendarDao={calendarDao} />
-            );
+            const wrapper = await renderContainer({ calendarDao });
 
             expect(await wrapper.findByTitle("Waxing Half Moon")).toBeDefined();
         });
@@ -181,7 +184,9 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
             const wrapper = await renderContainer({ calendarDao });
@@ -198,7 +203,9 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
             const wrapper = await renderContainer({ calendarDao });
@@ -215,7 +222,9 @@ describe("CalendarComponent", () => {
                 }),
                 setDate: jest.fn().mockImplementation((newDate: CalendarDate) => {
                     return Promise.resolve(newDate);
-                })
+                }),
+                getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
+                getCalendarNames: jest.fn().mockResolvedValue(["atagoth"])
             } as CalendarDao;
 
             const wrapper = await renderContainer({ calendarDao });
