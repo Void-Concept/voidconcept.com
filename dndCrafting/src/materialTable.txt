@@ -1,0 +1,78 @@
+Leather & Hide
+Materials Rarity Used For Price
+Hide Scraps Trivial Leatherworking 1 sp
+Leather Scraps Trivial Leatherworking 1 sp
+Boiled Leather Common Leatherworking 3 gp
+Hide Common Leatherworking 2 gp
+Rawhide Leather Common Leatherworking 2 gp
+Scales Common Leatherworking 1 gp
+Tanned Leather Common Leatherworking 3 gp
+Medium Carapace Common Leatherworking 4 gp
+Large Carapace Common Leatherworking 30 gp
+Tough Hide Uncommon Leatherworking 500 gp
+Resistant Hide Uncommon Leatherworking 500 gp
+Tough Leather Uncommon Leatherworking 600 gp
+Resistant Leather Uncommon Leatherworking 600 gp
+Cooking
+Materials Rarity Used For Price
+Supplies (Salt, Staples, etc) Trivial Cooking 1 gp
+Uncommon Supplies (Uncommon spices, oils, rare seeds, etc) Common Cooking 10 gp
+Rare Supplies (Hard to luxury goods) Uncommon Cooking 100 gp
+Metals
+Materials Rarity Used For Price
+Metal Scraps Trivial Tinkering, Blacksmithing 1 sp
+Silver Scraps Trivial Jewelcrafting 1 sp
+Gold Scraps Common Jewelcrafting 1 gp
+Iron Ingot Common Blacksmthing 1 gp
+Steel Chain (2 ft) Common Blacksmthing, Tinkering 1 gp
+Steel Ingot Common Blacksmithing 2 gp
+Mithril Ingot Uncommon Blacksmithing 30 gp
+Adamant Ingot Uncommon Blacksmithing 40 gp
+Adamantine Ingot Uncommon Blacksmithing 60 gp
+Wood
+Materials Rarity Used For Price
+Firewood Trivial Cooking, Wood Working 1 cp
+Wood Scraps Trivial Tinkering, Wood Working 2 cp
+Quality Branch Common Wand Whittling, Wood Working 2 gp
+Wooden Branch Common Wand Whittling, Wood Working 1 sp
+Wooden Stock Common Tinkering 5 sp
+Short Haft Common Blacksmithing 1 sp
+Uncommon Branch Uncommon Wand Whittling 25 gp
+Rare Branch Rare Wand Whittling 80 gp
+Very Rare Branch Very Rare Wand Whittling 800 gp
+Legendary Branch Legendary Wand Whittling 2,000 gp
+Magical Materials
+Materials Rarity Used For Price
+Common Reagent Common Alchemy, Poisoncraft 15 gp
+Glass Vial Common Alchemy, Poisoncraft 1 gp
+Glass Flask Common Alchemy, Poisoncraft 1 gp
+Crystal Vial Common Alchemy 10 gp
+Normal Ink Common -- 5 gp
+Parchment Common Scroll Scribing 1 sp
+Common Essence Common Alchemy, Enchanting, Scroll Scribing, Wand Whittling 45 gp
+Common Magical Ink Common Scroll Scribing 15 gp
+Uncommon Reagent Uncommon Alchemy, Poisoncraft 40 gp
+Uncommon Essence Uncommon Alchemy, Enchanting, Scroll Scribing, Wand Whittling 150 gp
+Uncommon Magical Ink Uncommon Scroll Scribing 40 gp
+Uncommon Parchment Uncommon Scroll Scribing 40 gp
+Rare Reagent Rare Alchemy, Poisoncraft 200 gp
+Rare Essence Rare Alchemy, Enchanting, Scroll Scribing, Wand Whittling 700 gp
+Rare Magical Ink Rare Scroll Scribing 200 gp
+Rare Parchment Rare Scroll Scribing 200 gp
+Very Rare Reagent Very Rare Alchemy, Poisoncraft 2,000 gp
+Very Rare Essence Very Rare Alchemy, Enchanting, Scroll Scribing, Wand Whittling 7,000 gp
+Very Rare Magical Ink Very Rare Scroll Scribing 2,000 gp
+Very Rare Parchment Very Rare Scroll Scribing 2,000 gp
+Legendary Reagent Legendary Alchemy, Poisoncraft 5,000 gp
+Legendary Essence Legendary Alchemy, Enchanting, Scroll Scribing, Wand Whittling 25,000 gp
+Legendary Magical Ink Legendary Scroll Scribing 5,000 gp
+Legendary Parchment Legendary Scroll Scribing 5,000 gp
+Misc
+Materials Rarity Used For Price
+Buckle Trivial Leatherworking 2 sp
+Fletching Trivial Wood Working 5 cp
+Length of String Trivial Wood Working 5 cp
+Armor Pading Common Blacksmithing, Leatherworking 5 gp
+Parts Common Tinkering 2 gp
+Fancy Parts Common Tinkering 10 gp
+Esoteric Parts Uncommon Tinkering 100 gp
