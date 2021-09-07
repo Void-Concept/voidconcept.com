@@ -4,7 +4,7 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import * as SecretsManager from 'aws-sdk/clients/secretsmanager';
 import { DiscordService } from "./DiscordService";
 import { SecretsManagerService } from "./SecretManagerService";
-import { doGetFactory, doPostFactory } from "./calendarDateResolver";
+import { doGet, doLegacyGet, doLegacyPost, doPost } from "./calendarDateResolver";
 import { DiscordApi } from "./DiscordApi";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -32,9 +32,27 @@ export const dependencyInjectedHandler = async (
     dynamoHelper: DynamoHelper,
     discordService: DiscordService,
 ): Promise<APIGatewayProxyResult> => {
-    //TODO: handle path params
     if (event.path === "/dnd/calendar") {
+        return handleCalendarListEvent(event, dynamoHelper, discordService)
+    } else if (event.path.startsWith("/dnd/calendar/")) {
         return handleCalendarEvent(event, dynamoHelper, discordService)
+    } else {
+        return {
+            statusCode: 404,
+            body: JSON.stringify("Operation not found")
+        }
+    }
+}
+
+export const handleCalendarListEvent = async (
+    event: APIGatewayProxyEvent,
+    dynamoHelper: DynamoHelper,
+    discordService: DiscordService,
+): Promise<APIGatewayProxyResult> => {
+    if (event.httpMethod === "GET") {
+        return doLegacyGet(dynamoHelper)(event)
+    } else if (event.httpMethod === "POST") {
+        return doLegacyPost(dynamoHelper, discordService)(event)
     } else {
         return {
             statusCode: 404,
@@ -49,9 +67,9 @@ export const handleCalendarEvent = async (
     discordService: DiscordService,
 ): Promise<APIGatewayProxyResult> => {
     if (event.httpMethod === "GET") {
-        return doGetFactory(dynamoHelper)(event)
+        return doGet(dynamoHelper)(event)
     } else if (event.httpMethod === "POST") {
-        return doPostFactory(dynamoHelper, discordService)(event)
+        return doPost(dynamoHelper, discordService)(event)
     } else {
         return {
             statusCode: 404,
