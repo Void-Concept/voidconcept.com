@@ -6,12 +6,6 @@ export class DiscordService {
 
     }
 
-    legacyNotifyCalendarUpdate = async (daysOffset: number, calendarDate: DndCalendarDate) => {
-        const channelsToNotify = await this.dynamoHelper.legacyGetNotificationChannels()
-
-        return this.notifyCalendarUpdate(channelsToNotify, daysOffset, calendarDate)
-    }
-
     notifyCalendarUpdate = async (channelsToNotify: NotificationChannel[], daysOffset: number, calendarDate: DndCalendarDate) => {
         const promises = channelsToNotify
             .filter(channel => !channel.disabled)

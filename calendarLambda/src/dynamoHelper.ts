@@ -27,49 +27,6 @@ export interface DndCalendarDate {
     day: number
 }
 
-interface DynamoDndCalendarDate extends DynamoDB.AttributeMap {
-    name: {
-        S: string
-    },
-    value: {
-        M: {
-            year: {
-                N: string
-            },
-            month: {
-                N: string
-            },
-            day: {
-                N: string
-            }
-        }
-    }
-}
-
-interface DynamoDndCalendarNotificationChannels extends DynamoDB.AttributeMap {
-    name: {
-        S: "DndCalendarNotificationChannels"
-    },
-    value: {
-        L: {
-            M: {
-                name: {
-                    S: string
-                }
-                id: {
-                    S: string
-                },
-                roleId: {
-                    S: string
-                },
-                disabled: {
-                    BOOL: boolean
-                }
-            }
-        }[]
-    }
-}
-
 export interface NotificationChannel {
     name: string
     id: string
@@ -78,86 +35,6 @@ export interface NotificationChannel {
 }
 export class DynamoHelper {
     constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
-    }
-
-    //TODO: remove
-    legacyGetNotificationChannels = async (): Promise<NotificationChannel[]> => {
-        const response = await this.dynamoDb.getItem({
-            TableName: this.genericStorageTableName,
-            Key: {
-                name: {
-                    S: "DndCalendarNotificationChannels"
-                },
-            }
-        }).promise();
-        if (!response.Item) {
-            throw new Error("Could not find DnD calendar notification channels")
-        }
-        const notificationChannels = response.Item as DynamoDndCalendarNotificationChannels;
-        return notificationChannels.value.L.map(channel => ({
-            name: channel.M.name.S,
-            id: channel.M.id.S,
-            roleId: channel.M.roleId.S,
-            disabled: !!channel.M.disabled?.BOOL
-        })).filter(list => !list.disabled)
-    }
-
-    //TODO: remove
-    legacyGetDndCalendar = async (): Promise<DndCalendarDate> => {
-        const response = await this.dynamoDb.getItem({
-            TableName: this.genericStorageTableName,
-            Key: {
-                name: {
-                    S: "DndCalendar"
-                },
-            }
-        }).promise();
-        if (!response.Item) {
-            throw new Error("Could not find DnD calendar")
-        }
-        const dynamoCalendar = response.Item as DynamoDndCalendarDate;
-        return {
-            day: parseInt(dynamoCalendar.value.M.day.N),
-            month: parseInt(dynamoCalendar.value.M.month.N),
-            year: parseInt(dynamoCalendar.value.M.year.N),
-        };
-    }
-
-    //TODO: remove
-    legacyPostDndCalendar = async (calendar: DndCalendarDate): Promise<DndCalendarDate> => {
-        const request: DynamoDndCalendarDate = {
-            name: {
-                S: "DndCalendar"
-            },
-            value: {
-                M: {
-                    day: {
-                        N: calendar.day.toString()
-                    },
-                    month: {
-                        N: calendar.month.toString()
-                    },
-                    year: {
-                        N: calendar.year.toString()
-                    }
-                }
-            }
-        };
-
-        const response = await this.dynamoDb.batchWriteItem({
-            RequestItems: {
-                [this.genericStorageTableName]: [{
-                    PutRequest: {
-                        Item: request
-                    }
-                }]
-            }
-        }).promise()
-
-        if (response.UnprocessedItems && Object.keys(response.UnprocessedItems).length > 0) {
-            throw new Error("Could not write Dnd calendar")
-        }
-        return this.legacyGetDndCalendar();
     }
 
     getDndCalendar = async (calendarName: string): Promise<DndCalendar> => {

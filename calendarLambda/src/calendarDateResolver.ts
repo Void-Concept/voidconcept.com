@@ -2,32 +2,6 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { DiscordService } from "./DiscordService";
 import { DndCalendarDate, DynamoHelper } from "./DynamoHelper";
 
-export const doLegacyGet = (dynamoHelper: DynamoHelper) => async (event: APIGatewayProxyEvent) => {
-    const calendar = await dynamoHelper.legacyGetDndCalendar();
-    return {
-        statusCode: 200,
-        body: JSON.stringify(calendar)
-    };
-}
-
-export const doLegacyPost = (dynamoHelper: DynamoHelper, discordService: DiscordService) => async (event: APIGatewayProxyEvent) => {
-    const oldCalendar = await dynamoHelper.legacyGetDndCalendar();
-    const calendar = await dynamoHelper.legacyPostDndCalendar(parseEventBody(event))
-
-    const totalDays = calendar.year * 12 * 30 + calendar.month * 30 + calendar.day
-    const oldTotalDays = oldCalendar.year * 12 * 30 + oldCalendar.month * 30 + oldCalendar.day
-
-    const daysChanged = totalDays - oldTotalDays
-    if (daysChanged !== 0) {
-        await discordService.legacyNotifyCalendarUpdate(daysChanged, calendar)
-    }
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify(calendar)
-    };
-}
-
 export const doGet = (dynamoHelper: DynamoHelper) => async (event: APIGatewayProxyEvent) => {
     const calendarName = getCalendarName(event)
     const calendar = await dynamoHelper.getDndCalendar(calendarName);

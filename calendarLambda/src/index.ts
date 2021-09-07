@@ -4,7 +4,7 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import * as SecretsManager from 'aws-sdk/clients/secretsmanager';
 import { DiscordService } from "./DiscordService";
 import { SecretsManagerService } from "./SecretManagerService";
-import { doGet, doLegacyGet, doLegacyPost, doPost } from "./calendarDateResolver";
+import { doGet, doPost } from "./calendarDateResolver";
 import { DiscordApi } from "./DiscordApi";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -50,9 +50,15 @@ export const handleCalendarListEvent = async (
     discordService: DiscordService,
 ): Promise<APIGatewayProxyResult> => {
     if (event.httpMethod === "GET") {
-        return doLegacyGet(dynamoHelper)(event)
+        return {
+            statusCode: 501,
+            body: JSON.stringify("Operation not yet implemented")
+        }
     } else if (event.httpMethod === "POST") {
-        return doLegacyPost(dynamoHelper, discordService)(event)
+        return {
+            statusCode: 501,
+            body: JSON.stringify("Operation not yet implemented")
+        }
     } else {
         return {
             statusCode: 404,
