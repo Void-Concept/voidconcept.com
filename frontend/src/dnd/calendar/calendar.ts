@@ -5,6 +5,7 @@ export type CalendarDate = {
 }
 
 export interface Calendar {
+    name: string
     getDayOfWeek({ year, month, day }: CalendarDate): string
     getDayOfWeekIndex({ year, month, day }: CalendarDate): number
     getDateAtOffset(date: CalendarDate, offset: number): CalendarDate
@@ -19,7 +20,7 @@ export interface Calendar {
 export class CalendarImpl implements Calendar {
     private daysInYear: number
 
-    constructor(public weekDays: string[], public months: string[], public daysInMonth: number, public epochOffset: number) {
+    constructor(public name: string, public weekDays: string[], public months: string[], public daysInMonth: number, public epochOffset: number) {
         this.daysInYear = months.length * daysInMonth
     }
 
@@ -80,7 +81,7 @@ export const atagothMonths = [
     "November",
     "December"
 ]
-export const atagothCalendar = new CalendarImpl(atagothWeekDays, atagothMonths, 30, 4)
+export const atagothCalendar = new CalendarImpl("atagoth", atagothWeekDays, atagothMonths, 30, 4)
 
 export const unnamedWeekDays = standardWeekDays;
 export const unnamedMonths = [
@@ -100,4 +101,4 @@ export const unnamedMonths = [
     "Levaldreda",
     "Veraldreda"
 ]
-export const unnamedCalendar = new CalendarImpl(unnamedWeekDays, unnamedMonths, 26, 2)
+export const unnamedCalendar = new CalendarImpl("campaign2", unnamedWeekDays, unnamedMonths, 26, 2)

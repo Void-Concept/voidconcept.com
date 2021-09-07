@@ -59,7 +59,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     const [displayDate, setDisplayDate] = useState<DisplayDate>()
     useEffect(() => {
         const fetchDate = async () => {
-            const savedDate = await calendarDao.getDate()
+            const savedDate = await calendarDao.getDate(calendar.name)
             setDate(savedDate)
             setDisplayDate({
                 year: savedDate.year,
@@ -72,7 +72,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
 
     const nextDate = async () => {
         const nextDate = calendar.getDateAtOffset(date, 1);
-        setDate(await calendarDao.setDate(nextDate))
+        setDate(await calendarDao.setDate(calendar.name, nextDate))
         setDisplayDate({
             year: nextDate.year,
             month: nextDate.month
@@ -81,7 +81,7 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
 
     const previousDate = async () => {
         const previousDate = calendar.getDateAtOffset(date, -1);
-        setDate(await calendarDao.setDate(previousDate))
+        setDate(await calendarDao.setDate(calendar.name, previousDate))
         setDisplayDate({
             year: previousDate.year,
             month: previousDate.month

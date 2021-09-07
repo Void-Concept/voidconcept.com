@@ -1,11 +1,11 @@
 import { getToken } from "../../oauth/oauthClient";
-import { atagothCalendar, Calendar, CalendarDate, unnamedCalendar } from "./calendar";
+import { atagothCalendar, Calendar, CalendarDate, CalendarImpl, unnamedCalendar } from "./calendar";
 
 export interface CalendarDao {
     getCalendar: (calendarName: string) => Promise<Calendar | undefined>
     getCalendarNames: () => Promise<string[]>
-    getDate: () => Promise<CalendarDate>
-    setDate: (date: CalendarDate) => Promise<CalendarDate>
+    getDate: (calendarName: string) => Promise<CalendarDate>
+    setDate: (calendarName: string, date: CalendarDate) => Promise<CalendarDate>
 }
 
 const calendars: { [key: string]: Calendar | undefined } = {
@@ -28,42 +28,48 @@ export class InMemoryCalendarDao implements CalendarDao {
         return Object.keys(calendars)
     }
 
-    async getDate(): Promise<CalendarDate> {
+    async getDate(calendarName: string): Promise<CalendarDate> {
         return this.date;
     }
 
-    async setDate(date: CalendarDate): Promise<CalendarDate> {
+    async setDate(name: string, date: CalendarDate): Promise<CalendarDate> {
         this.date = date;
         return this.date;
     }
 }
 
 export class GenericStorageCalendarDao implements CalendarDao {
-    private calendarUrl = "https://calendar.voidconcept.com/dnd/calendars"
+    private calendarUrl = "https://calendar.voidconcept.com/dnd/calendar"
 
     async getCalendar(calendarName: string): Promise<Calendar | undefined> {
-        return calendars[calendarName]
+        const response = await fetch(`${this.calendarUrl}/${calendarName}`, {
+            method: "GET"
+        })
+        const apiCalendar = await response.json()
+        return new CalendarImpl(apiCalendar.name, apiCalendar.weekDays, apiCalendar.months, apiCalendar.daysInMonth, apiCalendar.epochOffset);
     }
 
     async getCalendarNames(): Promise<string[]> {
         return Object.keys(calendars)
     }
 
-    async getDate() {
-        const response = await fetch(this.calendarUrl, {
+    async getDate(calendarName: string) {
+        const response = await fetch(`${this.calendarUrl}/${calendarName}`, {
             method: "GET"
         })
-        return await response.json();
+        const apiCalendar = await response.json()
+        return apiCalendar.currentDate
     }
 
-    async setDate(date: CalendarDate): Promise<CalendarDate> {
-        const response = await fetch(this.calendarUrl, {
+    async setDate(calendarName: string, date: CalendarDate): Promise<CalendarDate> {
+        const response = await fetch(`${this.calendarUrl}/${calendarName}`, {
             method: "POST",
             headers: {
                 Authorization: getToken()
             },
             body: JSON.stringify(date)
         })
-        return await response.json();
+        const apiCalendar = await response.json()
+        return apiCalendar.currentDate
     }
 }

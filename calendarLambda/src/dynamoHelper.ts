@@ -175,16 +175,14 @@ export class DynamoHelper {
     }
 
     postDndCalendar = async (calendarName: string, calendar: DndCalendar): Promise<DndCalendar> => {
-        const request: DynamoDB.PutItemInputAttributeMap = {
+        const request: DynamoDB.PutRequest = {
             Item: this.toDynamoCalendar(calendar)
         };
 
         const response = await this.dynamoDb.batchWriteItem({
             RequestItems: {
                 [this.calendarTableName]: [{
-                    PutRequest: {
-                        Item: request
-                    }
+                    PutRequest: request
                 }]
             }
         }).promise()
