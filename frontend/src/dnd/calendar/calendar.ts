@@ -101,4 +101,4 @@ export const unnamedMonths = [
     "Levaldreda",
     "Veraldreda"
 ]
-export const unnamedCalendar = new CalendarImpl("campaign2", unnamedWeekDays, unnamedMonths, 26, 2)
+export const unnamedCalendar = new CalendarImpl("campaign2", unnamedWeekDays, unnamedMonths, 26, 1)
