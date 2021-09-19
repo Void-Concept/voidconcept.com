@@ -1,6 +1,6 @@
 export type SpellLevel = "Cantrip" | "1st" | "2nd" | "3rd" | "4th" | "5th" | "6th" | "7th" | "8th" | "9th"
 
-export type SpellSchool = string //TODO: list schools of magic
+export type SpellSchool = "Abjuration" | "Conjuration" | "Divination" | "Enchantment" | "Evocation" | "Illusion" | "Necromancy" | "Transmutation"
 
 export type Spell = {
     name: string
