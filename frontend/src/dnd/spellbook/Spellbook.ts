@@ -670,7 +670,6 @@ export const spells: Spell[] = [
         components: "V, S, M",
         materials: "a statuette of yourself carved from ivory and decorated with gems worth at least 1,500 gp",
         duration: "10 days",
-        concentration: true,
         description: [
             "Choose a spell of 5th level or lower that you can cast, that has a casting time of 1 action, and that can target you. You cast that spell--called the contingent spell--as part of casting contingency, expending spell slots for both, but the contingent spell doesn't come into effect. Instead, it takes effect when a certain circumstance occurs. You describe that circumstance when you cast the two spells. For example, a contingency cast with water breathing might stipulate that water breathing comes into effect when you are engulfed in water or a similar liquid.",
             "The contingent spell takes effect immediately after the circumstance is met for the first time, whether or not you want it to, and then contingency ends.",
@@ -687,7 +686,6 @@ export const spells: Spell[] = [
         components: "V, S, M",
         materials: "a bit of fleece and jade dust worth at least 25 gp",
         duration: "Until Dispelled",
-        concentration: true,
         description: [
             "You create an illusion of an object, a creature, or some other visible phenomenon within range that activates when a specific condition occurs. The illusion is imperceptible until then. It must be no larger than a 30-foot cube, and you decide when you cast the spell how the illusion behaves and what sounds it makes. This scripted performance can last up to 5 minutes.",
             "When the condition you specify occurs, the illusion springs into existence and performs in the manner you described. Once the illusion finishes performing, it disappears and remains dormant for 10 minutes. After this time, the illusion can be activated again.",
