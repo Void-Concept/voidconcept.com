@@ -1,10 +1,10 @@
-
-.vc-table-row {
-    display: flex;
+.vc-table {
+    border-spacing: 0;
+    border: 1px solid black;
 }
 
 .vc-table-cell {
     padding: 4px;
-    flex: 1;
+    /* flex: 1; */
     border: 1px solid black; 
 }

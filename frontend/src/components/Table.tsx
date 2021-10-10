@@ -6,9 +6,9 @@ type TableProps = {
 }
 export const Table = ({ children }: TableProps) => {
     return (
-        <div className="vc-table">
+        <table className="vc-table">
             {children}
-        </div>
+        </table>
     )
 }
 
@@ -18,9 +18,9 @@ type RowProps = {
 }
 export const Row = ({ children, ...restProps }: RowProps) => {
     return (
-        <div className="vc-table-row" {...restProps}>
+        <tr className="vc-table-row" {...restProps}>
             {children}
-        </div>
+        </tr>
     )
 }
 
@@ -31,8 +31,8 @@ type CellProps = {
 }
 export const Cell = ({ children, className, ...otherProps }: CellProps) => {
     return (
-        <div className={`vc-table-cell ${className || ''}`} {...otherProps}>
+        <td className={`vc-table-cell ${className || ''}`} {...otherProps}>
             {children}
-        </div>
+        </td>
     )
 }
