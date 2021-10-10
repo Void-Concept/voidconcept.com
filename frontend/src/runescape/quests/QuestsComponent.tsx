@@ -98,9 +98,9 @@ type QuestOverviewComponentProps = {
 }
 const QuestOverviewComponent = ({ users, overview, tabLevel, onFetchQuestOverview }: QuestOverviewComponentProps) => {
     return (
-        <div>
+        <>
             <QuestTableView users={users} questTable={overview.questRequirements} tabLevel={tabLevel} onFetchQuestOverview={onFetchQuestOverview} />
-        </div>
+        </>
     )
 }
 
