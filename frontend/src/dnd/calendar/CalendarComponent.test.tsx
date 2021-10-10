@@ -3,7 +3,7 @@ import { CalendarComponent } from './CalendarComponent';
 import { render, fireEvent, RenderResult } from '@testing-library/react';
 import { CalendarDao } from './CalendarDao';
 import { act } from 'react-dom/test-utils';
-import { atagothCalendar, CalendarDate } from './calendar';
+import { atagothCalendar, DndCalendarDate } from './calendar';
 import { CalendarProvider } from './CalendarContext';
 
 describe("CalendarComponent", () => {
@@ -30,7 +30,7 @@ describe("CalendarComponent", () => {
                 month: 3,
                 day: 25
             }),
-            setDate: jest.fn().mockImplementation((name: string, nextDate: CalendarDate) => {
+            setDate: jest.fn().mockImplementation((name: string, nextDate: DndCalendarDate) => {
                 return Promise.resolve(nextDate);
             }),
             getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -49,7 +49,7 @@ describe("CalendarComponent", () => {
                 month: 3,
                 day: 25
             }),
-            setDate: jest.fn().mockImplementation((name: string, nextDate: CalendarDate) => {
+            setDate: jest.fn().mockImplementation((name: string, nextDate: DndCalendarDate) => {
                 return Promise.resolve(nextDate);
             }),
             getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -61,7 +61,7 @@ describe("CalendarComponent", () => {
         const nextButton = await wrapper.findByText("Next") as HTMLButtonElement;
         await fireEvent.click(nextButton)
 
-        expect(calendarDao.setDate).toHaveBeenCalledWith({
+        expect(calendarDao.setDate).toHaveBeenCalledWith("atagoth", {
             year: 4067,
             month: 3,
             day: 26
@@ -76,7 +76,7 @@ describe("CalendarComponent", () => {
                 month: 3,
                 day: 25
             }),
-            setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+            setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                 return Promise.resolve(newDate);
             }),
             getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -88,7 +88,7 @@ describe("CalendarComponent", () => {
         const previousButton = await wrapper.findByText("Previous") as HTMLButtonElement;
         await fireEvent.click(previousButton)
 
-        expect(calendarDao.setDate).toHaveBeenCalledWith({
+        expect(calendarDao.setDate).toHaveBeenCalledWith("atagoth", {
             year: 4067,
             month: 3,
             day: 24
@@ -104,7 +104,7 @@ describe("CalendarComponent", () => {
                     month: 3,
                     day: 25
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -123,7 +123,7 @@ describe("CalendarComponent", () => {
                     month: 3,
                     day: 10
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -142,7 +142,7 @@ describe("CalendarComponent", () => {
                     month: 3,
                     day: 2
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -161,7 +161,7 @@ describe("CalendarComponent", () => {
                     month: 3,
                     day: 17
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -182,7 +182,7 @@ describe("CalendarComponent", () => {
                     month: 6,
                     day: 1
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -201,7 +201,7 @@ describe("CalendarComponent", () => {
                     month: 6,
                     day: 8
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),
@@ -220,7 +220,7 @@ describe("CalendarComponent", () => {
                     month: 6,
                     day: 15
                 }),
-                setDate: jest.fn().mockImplementation((name: string, newDate: CalendarDate) => {
+                setDate: jest.fn().mockImplementation((name: string, newDate: DndCalendarDate) => {
                     return Promise.resolve(newDate);
                 }),
                 getCalendar: jest.fn().mockResolvedValue(atagothCalendar),

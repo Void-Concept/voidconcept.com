@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, CalendarDate } from './calendar';
+import { Calendar, DndCalendarDate } from './calendar';
 import "./calendarGrid.css"
 import ChevronUpIcon from "mdi-react/ChevronUpIcon";
 import ChevronDownIcon from "mdi-react/ChevronDownIcon";
@@ -8,7 +8,7 @@ import { useCalendar } from './CalendarContext';
 interface CalendarGridProps {
     year: number
     month: number
-    currentDay: CalendarDate
+    currentDay: DndCalendarDate
     onPreviousMonth?: () => void
     onNextMonth?: () => void
 }
@@ -57,7 +57,7 @@ const CalendarHeader = ({ }: CalendarHeaderProps) => {
 
 interface CalendarRowProps {
     row: number
-    currentDay: CalendarDate
+    currentDay: DndCalendarDate
     year: number
     month: number
 }
@@ -75,7 +75,7 @@ const CalendarRow = ({ row, currentDay, month, year }: CalendarRowProps) => {
 interface CalendarCellProps {
     row: number
     column: number
-    currentDay: CalendarDate
+    currentDay: DndCalendarDate
     year: number
     month: number
 }
@@ -92,6 +92,22 @@ const CalendarCell = ({ row, column, currentDay, month, year }: CalendarCellProp
     return (
         <td className={`calendar-cell ${maybeGrayStyle} ${maybeCurrentDay}`}>
             {cellDate.day}
+            <CalendarEvents year={cellDate.year} month={cellDate.month} day={cellDate.day} />
         </td>
+    )
+}
+
+interface CalendarEventsProps {
+    day: number
+    year: number
+    month: number
+}
+const CalendarEvents = ({ day, month, year }: CalendarEventsProps) => {
+    const calendar = useCalendar()
+    const events = calendar.getEventsFor(calendar.getDateEpoch({ year, month, day }))
+    return (
+        <>
+            {events.map((event, index) => <div key={index}>* {event.name}</div>)}
+        </>
     )
 }

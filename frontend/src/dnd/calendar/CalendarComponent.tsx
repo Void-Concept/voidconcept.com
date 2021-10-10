@@ -9,11 +9,11 @@ import MoneyIcon from "mdi-react/HomeCurrencyUsdIcon";
 import { CalendarProvider, useCalendar } from './CalendarContext'
 import { CalendarGrid } from './CalendarGrid'
 import "./calendar.css"
-import { Calendar, CalendarDate } from './calendar';
+import { Calendar, DndCalendarDate } from './calendar';
 import { useRouteMatch } from 'react-router';
 
 interface MoonPhaseIconProps {
-    date: CalendarDate
+    date: DndCalendarDate
 }
 const MoonPhaseIcon = ({ date }: MoonPhaseIconProps) => {
     switch (date.day) {
@@ -32,7 +32,7 @@ const MoonPhaseIcon = ({ date }: MoonPhaseIconProps) => {
 };
 
 interface InnPaymentIconProps {
-    date: CalendarDate
+    date: DndCalendarDate
 }
 const InnPaymentIcon = ({ date }: InnPaymentIconProps) => {
     const calendar = useCalendar()
@@ -55,7 +55,7 @@ type DisplayDate = {
 export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
     const calendar = useCalendar();
 
-    const [date, setDate] = useState<CalendarDate | undefined>()
+    const [date, setDate] = useState<DndCalendarDate | undefined>()
     const [displayDate, setDisplayDate] = useState<DisplayDate>()
     useEffect(() => {
         const fetchDate = async () => {

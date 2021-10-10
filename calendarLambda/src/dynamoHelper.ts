@@ -1,10 +1,15 @@
 import { DynamoDB } from "aws-sdk";
 
-type DndCalendarRepeat = "yearly" | "monthly" | "weekly" | "daily" //TODO: is this all that's needed?
+type DndCalendarRepeatUnit = "year" | "month" | "week" | "day"
+
+type DndCalendarRepeat = {
+    frequency: number
+    timeUnit: DndCalendarRepeatUnit
+}
 
 interface DndCalendarEvent {
     name: string
-    date: DndCalendarDate
+    date: number
     repeat?: DndCalendarRepeat
 }
 
@@ -33,6 +38,7 @@ export interface NotificationChannel {
     roleId: string
     disabled: boolean
 }
+
 export class DynamoHelper {
     constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
     }
@@ -148,18 +154,30 @@ export class DynamoHelper {
         disabled: this.fromDynamoBoolean(notificationChannel.M!.disabled),
     })
 
+    private toDynamoEventRepeat = (repeat: DndCalendarRepeat): DynamoDB.AttributeValue => ({
+        M: this.withoutUndefined({
+            frequency: this.toDynamoNumber(repeat.frequency),
+            timeUnit: this.toDynamoString(repeat.timeUnit)
+        })
+    })
+
+    private fromDynamoEventRepeat = (repeat: DynamoDB.AttributeValue): DndCalendarRepeat => ({
+        frequency: this.fromDynamoNumber(repeat.M!.frequency),
+        timeUnit: this.fromDynamoString(repeat.M!.timeUnit) as DndCalendarRepeatUnit
+    })
+
     private toDynamoEvent = (event: DndCalendarEvent): DynamoDB.AttributeValue => ({
         M: this.withoutUndefined({
             name: this.toDynamoString(event.name),
-            date: this.toDynamoCalendarDate(event.date),
-            repeat: event.repeat && this.toDynamoString(event.repeat)
+            date: this.toDynamoNumber(event.date),
+            repeat: event.repeat && this.toDynamoEventRepeat(event.repeat)
         })
     })
 
     private fromDynamoEvent = (event: DynamoDB.AttributeValue): DndCalendarEvent => ({
         name: this.fromDynamoString(event.M!.name),
-        date: this.fromDynamoCalendarDate(event.M!.date),
-        repeat: event.M!.repeat && (event.M!.repeat as DndCalendarRepeat)
+        date: this.fromDynamoNumber(event.M!.date),
+        repeat: event.M!.repeat && this.fromDynamoEventRepeat(event.M!.repeat)
     })
 
     private withoutUndefined = (obj: { [key: string]: DynamoDB.AttributeValue | undefined }): { [key: string]: DynamoDB.AttributeValue } => {

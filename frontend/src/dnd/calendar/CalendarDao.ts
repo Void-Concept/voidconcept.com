@@ -1,11 +1,11 @@
 import { getToken } from "../../oauth/oauthClient";
-import { atagothCalendar, Calendar, CalendarDate, CalendarImpl, unnamedCalendar } from "./calendar";
+import { atagothCalendar, Calendar, DndCalendarDate, CalendarImpl, unnamedCalendar } from "./calendar";
 
 export interface CalendarDao {
     getCalendar: (calendarName: string) => Promise<Calendar | undefined>
     getCalendarNames: () => Promise<string[]>
-    getDate: (calendarName: string) => Promise<CalendarDate>
-    setDate: (calendarName: string, date: CalendarDate) => Promise<CalendarDate>
+    getDate: (calendarName: string) => Promise<DndCalendarDate>
+    setDate: (calendarName: string, date: DndCalendarDate) => Promise<DndCalendarDate>
 }
 
 const calendars: { [key: string]: Calendar | undefined } = {
@@ -14,7 +14,7 @@ const calendars: { [key: string]: Calendar | undefined } = {
 };
 
 export class InMemoryCalendarDao implements CalendarDao {
-    date: CalendarDate = {
+    date: DndCalendarDate = {
         year: 4068,
         month: 1,
         day: 1
@@ -28,11 +28,11 @@ export class InMemoryCalendarDao implements CalendarDao {
         return Object.keys(calendars)
     }
 
-    async getDate(calendarName: string): Promise<CalendarDate> {
+    async getDate(calendarName: string): Promise<DndCalendarDate> {
         return this.date;
     }
 
-    async setDate(name: string, date: CalendarDate): Promise<CalendarDate> {
+    async setDate(name: string, date: DndCalendarDate): Promise<DndCalendarDate> {
         this.date = date;
         return this.date;
     }
@@ -46,7 +46,7 @@ export class GenericStorageCalendarDao implements CalendarDao {
             method: "GET"
         })
         const apiCalendar = await response.json()
-        return new CalendarImpl(apiCalendar.name, apiCalendar.weekDays, apiCalendar.months, apiCalendar.daysInMonth, apiCalendar.epochOffset);
+        return new CalendarImpl(apiCalendar.name, apiCalendar.weekDays, apiCalendar.months, apiCalendar.daysInMonth, apiCalendar.epochOffset, apiCalendar.events || []);
     }
 
     async getCalendarNames(): Promise<string[]> {
@@ -61,7 +61,7 @@ export class GenericStorageCalendarDao implements CalendarDao {
         return apiCalendar.currentDate
     }
 
-    async setDate(calendarName: string, date: CalendarDate): Promise<CalendarDate> {
+    async setDate(calendarName: string, date: DndCalendarDate): Promise<DndCalendarDate> {
         const response = await fetch(`${this.calendarUrl}/${calendarName}`, {
             method: "POST",
             headers: {

@@ -1,4 +1,4 @@
-import { atagothCalendar, atagothWeekDays, unnamedCalendar } from './calendar'
+import { atagothCalendar, atagothWeekDays, DndCalendarEvent, unnamedCalendar, unnamedWeekDays } from './calendar'
 
 describe("atagothCalendar", () => {
     describe("getDayOfWeek", () => {
@@ -256,6 +256,46 @@ describe("atagothCalendar", () => {
             expect(date).toEqual(expectedDate)
         });
     });
+
+    describe("getEventsFor", () => {
+        it("should inn payment event on correct day", () => {
+            const testRuns = [{
+                date: {
+                    year: 4068,
+                    month: 1,
+                    day: 1
+                },
+                events: ["Inn Payment"]
+            }, {
+                date: {
+                    year: 4068,
+                    month: 1,
+                    day: 2
+                },
+                events: []
+            }, {
+                date: {
+                    year: 4068,
+                    month: 1,
+                    day: 8
+                },
+                events: []
+            }, {
+                date: {
+                    year: 4068,
+                    month: 1,
+                    day: 15
+                },
+                events: ["Inn Payment"]
+            }]
+
+            testRuns.forEach(({ date, events }) => {
+                const actualEvents = atagothCalendar.getEventsFor(atagothCalendar.getDateEpoch(date))
+
+                expect(actualEvents.map(event => event.name)).toEqual(events)
+            })
+        })
+    })
 })
 
 describe("UnnamedCalendar", () => {
@@ -266,7 +306,7 @@ describe("UnnamedCalendar", () => {
             const day = 1;
 
             const dayOfWeek = unnamedCalendar.getDayOfWeek({ year, month, day });
-            expect(dayOfWeek).toEqual("Monday")
+            expect(dayOfWeek).toEqual("Sunday")
         });
 
         it("should get the correct day of the week", () => {
@@ -276,15 +316,15 @@ describe("UnnamedCalendar", () => {
 
             [...Array(7)].map((_, index) => {
                 const dayOfWeek = unnamedCalendar.getDayOfWeek({ year, month, day: day + index });
-                expect(dayOfWeek).toEqual(atagothWeekDays[index])
+                expect(dayOfWeek).toEqual(unnamedWeekDays[(index + unnamedWeekDays.length - 1) % 7])
             });
         });
 
         it("should work across year boundaries", () => {
             const previousDate = unnamedCalendar.getDayOfWeek({ year: 1, month: 15, day: 26 })
             const nextDate = unnamedCalendar.getDayOfWeek({ year: 2, month: 1, day: 1 })
-            expect(previousDate).toEqual("Friday")
-            expect(nextDate).toEqual("Saturday")
+            expect(previousDate).toEqual("Thursday")
+            expect(nextDate).toEqual("Friday")
         });
     });
 })

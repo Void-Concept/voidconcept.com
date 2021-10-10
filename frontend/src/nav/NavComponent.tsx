@@ -88,8 +88,6 @@ interface NavComponentProps {
 
 export const NavComponent = ({ routes }: NavComponentProps) => {
     return (
-        <div>
-            <NavHeader routeCategories={routes} />
-        </div>
+        <NavHeader routeCategories={routes} />
     )
 }
