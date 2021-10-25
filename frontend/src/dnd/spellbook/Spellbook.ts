@@ -370,6 +370,7 @@ export const spells: Spell[] = [
         level: "2nd",
         school: "Divination",
         castTime: "1 action",
+        concentration: true,
         range: "Self",
         components: "V, S, M",
         materials: "A copper piece",
