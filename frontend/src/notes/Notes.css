@@ -1,0 +1,39 @@
+.notes-container ul {
+    margin: 0;
+}
+
+.notes-container p {
+    margin: 0;
+}
+
+.notes-container ul + p {
+    margin-top: 0.5em;
+}
+
+.notes-container p + p {
+    margin-top: 0.5em;
+}
+
+.h1 {
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    border: 0;
+}
+.h1:hover {
+    border: 0;
+    outline: 0;
+}
+
+.h1:focus {
+    border: 0;
+    outline: 0;
+}
+.h1:focus-visible {
+    border: 0;
+    outline: 0;
+}

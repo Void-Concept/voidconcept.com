@@ -15,6 +15,7 @@ import { CitadelComponent } from './runescape/citadel/CitadelComponent'
 import * as R from 'ramda';
 import { CalendarProvider } from './dnd/calendar/CalendarContext';
 import { atagothCalendar, unnamedCalendar } from './dnd/calendar/calendar';
+import { Notes } from './notes';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -87,6 +88,11 @@ const routes: RouteType[] = [{
     name: "citadel",
     path: "/rs/citadel",
     render: () => <CitadelComponent />
+}, {
+    category: "Notes",
+    name: "notes",
+    path: "/notes",
+    render: () => <Notes />
 }]
 
 const routesInNav = routes
