@@ -1,7 +1,6 @@
-import React, { ChangeEventHandler, EventHandler, useState } from 'react'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
+import React, { ChangeEventHandler, EventHandler, useEffect, useState } from 'react'
 import './Notes.css'
+import Editor from "rich-markdown-editor";
 
 type NotesProps = {
 
@@ -9,36 +8,25 @@ type NotesProps = {
 
 export const Notes = ({ }: NotesProps) => {
     const [notes, setNotes] = useState("")
+    const [working, setWorking] = useState(false)
 
-    marked.setOptions({
-        breaks: true,
-        gfm: true
-    })
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            console.log(notes)
+            setWorking(false)
+        }, 750)
+        return () => clearTimeout(timeout)
+    }, [notes])
 
-    marked.use({
-        renderer: {
-            heading(text, level) {
-                const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-
-                return `<input class="h${level}" value="${text}"/>`;
-            }
-        }
-    })
-
-    const markdown = DOMPurify.sanitize(marked.parse(notes))
-
-    const onTextInput: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-        setNotes(event.target.value)
+    const onEditorChange = (value: () => string) => {
+        setWorking(true)
+        setNotes(value())
     }
 
     return (
-        <div>
-            <textarea onChange={onTextInput} />
-            <div className="notes-container" dangerouslySetInnerHTML={{ __html: markdown }} />
-            <h1>text</h1>
-            <div>
-                {markdown}
-            </div>
+        <div className={"notes-container"}>
+            {working ? "WORKING" : "SAVED"}
+            <Editor onChange={onEditorChange}/>
         </div>
     )
 }
