@@ -1,22 +1,20 @@
-import React, { useMemo } from 'react';
-import './App.css';
-import { Router, Route, Switch, Redirect } from 'react-router';
-import { createBrowserHistory, History } from 'history';
-import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
-import { LocalTimeComponent } from './time/local/LocalTimeComponent';
-import { CalendarComponent, DndCalendar } from './dnd/calendar/CalendarComponent';
-import { CalendarList } from './dnd/calendar/CalendarList';
-import { NamesComponent } from './dnd/irilic/NamesComponent';
-import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
-import { NavComponent } from './nav';
-import { OauthCallback } from './oauth';
-import { QuestsComponent } from './runescape/quests/QuestsComponent'
-import { CitadelComponent } from './runescape/citadel/CitadelComponent'
+import { History } from 'history';
 import * as R from 'ramda';
-import { CalendarProvider } from './dnd/calendar/CalendarContext';
-import { atagothCalendar, unnamedCalendar } from './dnd/calendar/calendar';
-import { DndCalendarEvent } from './dnd/calendar/event'
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import './App.css';
+import { DndCalendar } from './dnd/calendar/CalendarComponent';
+import { GenericStorageCalendarDao, InMemoryCalendarDao } from './dnd/calendar/CalendarDao';
+import { CalendarList } from './dnd/calendar/CalendarList';
+import { DndCalendarEvent } from './dnd/calendar/event';
+import { NamesComponent } from './dnd/irilic/NamesComponent';
+import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
+import { NavComponent } from './nav';
 import { Notes } from './notes';
+import { OauthCallback } from './oauth';
+import { CitadelComponent } from './runescape/citadel/CitadelComponent';
+import { QuestsComponent } from './runescape/quests/QuestsComponent';
+import { LocalTimeComponent } from './time/local/LocalTimeComponent';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {

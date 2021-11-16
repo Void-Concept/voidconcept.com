@@ -1,6 +1,6 @@
-import React, { ChangeEventHandler, EventHandler, useEffect, useState } from 'react'
-import './Notes.css'
+import React, { useEffect, useState } from 'react';
 import Editor from "rich-markdown-editor";
+import './Notes.css';
 
 type NotesProps = {
 
