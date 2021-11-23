@@ -10,6 +10,7 @@ import { AuthStack } from './stacks/AuthStack';
 import { RunescapeProxyStack } from './stacks/RunescapeProxyStack';
 import { CalendarStack } from './stacks/CalendarStack';
 import { QuestListStack } from './stacks/QuestListStack';
+import { NotesStack } from './stacks/NotesStack';
 
 const app = new cdk.App();
 
@@ -64,6 +65,14 @@ new CalendarStack(app, "CalendarStack", {
 
 new QuestListStack(app, "QuestListStack", {
     hostedZone: hostedZoneStack.hostedZone,
+    env: {
+        region: "us-east-1"
+    }
+})
+
+new NotesStack(app, "NotesStack", {
+    hostedZone: hostedZoneStack.hostedZone,
+    cognitoUserPool: authStack.userPool,
     env: {
         region: "us-east-1"
     }

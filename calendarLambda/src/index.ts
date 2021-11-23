@@ -61,8 +61,8 @@ export const handleCalendarListEvent = async (
         }
     } else {
         return {
-            statusCode: 404,
-            body: JSON.stringify("Operation not found")
+            statusCode: 405,
+            body: JSON.stringify("Method Not Allowed")
         }
     }
 }
@@ -96,9 +96,10 @@ const withErrorHandling = async (resolver: Promise<APIGatewayProxyResult>): Prom
     try {
         return await resolver
     } catch (error) {
+        const message = error instanceof Error ? error.message : error
         return {
             statusCode: 500,
-            body: JSON.stringify(`Internal server error: ${error.message}`)
+            body: JSON.stringify(`Internal server error: ${message}`)
         }
     }
 }
