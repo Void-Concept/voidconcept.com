@@ -47,6 +47,7 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
     const [firstLoad, setFirstLoad] = useState(true)
     const [notes, setNotes] = useState<Notes>(initialNotes)
     const [working, setWorking] = useState<WorkingState>("SAVED")
+    const [readOnly, setReadOnly] = useState(false)
 
     useEffect(() => {
         if (firstLoad) return setFirstLoad(false) //skip first render
@@ -58,6 +59,7 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
                     setWorking("SAVED")
                 } catch (error) {
                     console.error(error)
+                    setReadOnly(true)
                     setWorking("SAVE_ERROR")
                 }
             }
@@ -79,7 +81,7 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
     return (
         <div className={"notes-container"}>
             {working}
-            <Editor onChange={onEditorChange} defaultValue={notes.notes}/>
+            <Editor readOnly={readOnly} onChange={onEditorChange} defaultValue={notes.notes}/>
         </div>
     )
 }
