@@ -1,5 +1,1 @@
-import { NavComponent } from './NavComponent'
-
-export {
-    NavComponent
-}
+export * from './NavComponent'

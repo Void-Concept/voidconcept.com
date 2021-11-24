@@ -10,7 +10,9 @@ import { DndCalendarEvent } from './dnd/calendar/event';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
 import { NavComponent } from './nav';
-import { Notes } from './notes';
+import { NotesDaoImpl } from './notes/NotesDao';
+import { NotesEditor } from './notes/NotesEditor';
+import { NotesList } from './notes/NotesList';
 import { OauthCallback } from './oauth';
 import { CitadelComponent } from './runescape/citadel/CitadelComponent';
 import { QuestsComponent } from './runescape/quests/QuestsComponent';
@@ -23,6 +25,8 @@ const getCalendarDao = () => {
         return new GenericStorageCalendarDao();
     }
 }
+
+const notesDao = new NotesDaoImpl()
 
 type RouteType = {
     category: string,
@@ -100,7 +104,14 @@ const routes: RouteType[] = [{
     category: "Notes",
     name: "notes",
     path: "/notes",
-    render: () => <Notes />
+    exact: true,
+    render: () => <NotesList notesDao={notesDao} />
+}, {
+    category: "Notes",
+    name: "notes",
+    path: "/notes/:id",
+    showInNav: false,
+    render: () => <NotesEditor notesDao={notesDao} />
 }]
 
 const routesInNav = routes
