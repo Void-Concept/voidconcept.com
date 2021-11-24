@@ -51,7 +51,8 @@ export class DynamoHelper {
                 notes: {
                     Value: this.toDynamoString(notes)
                 }
-            }
+            },
+            ReturnValues: "ALL_NEW"
         }).promise()
         if (!newState.Attributes) throw new Error("Could not update")
 
@@ -60,13 +61,20 @@ export class DynamoHelper {
 
     createNotes = async (name: string): Promise<Notes> => {
         const generatedId = uuidv1()
-        const newState = await this.dynamoDb.putItem({
+        const newState = await this.dynamoDb.updateItem({
             TableName: this.notesTableName,
-            Item: this.toDynamoNotes({
-                id: generatedId,
-                name: name,
-                notes: ""
-            })
+            Key: {
+                id: this.toDynamoString(generatedId)
+            },
+            AttributeUpdates: {
+                name: {
+                    Value: this.toDynamoString(name)
+                },
+                notes: {
+                    Value: this.toDynamoString("")
+                }
+            },
+            ReturnValues: "ALL_NEW"
         }).promise()
         if (!newState.Attributes) throw new Error("Could not create")
 

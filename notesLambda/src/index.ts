@@ -3,9 +3,9 @@ import { DynamoHelper } from "./dynamoHelper";
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const dynamoDbTableName = process.env.tableName as string;
+    const notesTableName = process.env.notesTableName as string;
     const dynamoDb = new DynamoDB();
-    const dynamoHelper = new DynamoHelper(dynamoDb, dynamoDbTableName);
+    const dynamoHelper = new DynamoHelper(dynamoDb, notesTableName);
 
     const response = withCors(event.headers.Origin, await dependencyInjectedHandler(event, dynamoHelper));
     console.log("responding with", response);
@@ -41,7 +41,7 @@ export const handleNotesEvent = async (
             body: JSON.stringify(await dynamoHelper.getNotes(notesId))
         }
     } else if (event.httpMethod === "POST") {
-        const { name, notes } = parseEventBody(event)
+        const { name, notes } = parseUpdateEvent(event)
         await dynamoHelper.updateNotes(notesId, name, notes)
 
         return {
@@ -56,12 +56,19 @@ export const handleNotesEvent = async (
     }
 }
 
-type NotesBody = {
+type NotesBodyCreate = {
+    name: string
+}
+const parseCreateEvent = (event: APIGatewayProxyEvent): NotesBodyCreate => {
+    if (!event.body) throw new Error("Invalid notes payload")
+    return JSON.parse(event.body.toString());
+};
+type NotesBodyUpdate = {
     name: string
     notes: string
 }
-const parseEventBody = (event: APIGatewayProxyEvent): NotesBody => {
-    if (!event.body) throw new Error("Invalid calendar payload")
+const parseUpdateEvent = (event: APIGatewayProxyEvent): NotesBodyUpdate => {
+    if (!event.body) throw new Error("Invalid notes payload")
     return JSON.parse(event.body.toString());
 };
 
@@ -73,6 +80,13 @@ export const handleNotesListEvent = async (
         return {
             statusCode: 200,
             body: JSON.stringify(await dynamoHelper.getNotesList())
+        }
+    } else if (event.httpMethod === "POST") {
+        const { name } = parseCreateEvent(event)
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(await dynamoHelper.createNotes(name))
         }
     } else {
         return {

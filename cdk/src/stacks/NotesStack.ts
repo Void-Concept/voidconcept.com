@@ -68,6 +68,13 @@ export class NotesStack extends cdk.Stack {
         const notes = api.root.addResource("notes");
         const notesId = notes.addResource("{notesId}");
 
+        notes.addMethod("GET");
+        notes.addMethod("POST", undefined, {
+            authorizationType: apigateway.AuthorizationType.COGNITO,
+            authorizationScopes: ["openid"],
+            authorizer
+        });
+
         notesId.addMethod("GET");
         notesId.addMethod("POST", undefined, {
             authorizationType: apigateway.AuthorizationType.COGNITO,
