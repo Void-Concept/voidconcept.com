@@ -11,6 +11,7 @@ import { RunescapeProxyStack } from './stacks/RunescapeProxyStack';
 import { CalendarStack } from './stacks/CalendarStack';
 import { QuestListStack } from './stacks/QuestListStack';
 import { NotesStack } from './stacks/NotesStack';
+import { DynDnsStack } from './stacks/DynDnsStack';
 
 const app = new cdk.App();
 
@@ -20,6 +21,14 @@ const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
     env: {
         region: "us-east-1"
     },
+})
+
+new DynDnsStack(app, "DynDnsStack", {
+    domainName: config.domainName,
+    hostedZone: hostedZoneStack.hostedZone,
+    env: {
+        region: "us-east-1"
+    }
 })
 
 const authStack = new AuthStack(app, "AuthStack", {
