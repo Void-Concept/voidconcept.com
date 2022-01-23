@@ -26,6 +26,6 @@
         "@types/aws-lambda": "^8.10.72",
         "aws-lambda": "^1.0.6",
         "aws-sdk": "^2.844.0",
-        "node-fetch": "^2.6.1"
+        "node-fetch": "^2.6.7"
     }
 }
