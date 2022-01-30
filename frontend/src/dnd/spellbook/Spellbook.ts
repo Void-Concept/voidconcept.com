@@ -383,6 +383,20 @@ export const spells: Spell[] = [
             "Once you detect the presence of a creature in this way, you can read its thoughts for the rest of the duration as described above, even if you can’t see it, but it must still be within range.",
         ],
     }, {
+        name: "Invisibility",
+        level: "2nd",
+        school: "Illusion",
+        castTime: "1 action",
+        concentration: true,
+        range: "Touch",
+        components: "V, S, M",
+        materials: "An eyelash encased in gum arabic",
+        duration: "1 Hour",
+        description: [
+            "A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person. The spell ends for a target that attacks or casts a spell.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."
+    }, {
         name: "Counterspell",
         level: "3rd",
         school: "Abjuration",
