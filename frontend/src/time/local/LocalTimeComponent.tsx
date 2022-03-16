@@ -22,13 +22,13 @@ export const LocalTimeComponent = () => {
     const zoneOffset = time.utcOffset() / 60
     
     const discordHelperTimes = [
-        [`<t:${epochTime}:d>`, time.format("MM/DD/YYYY")],
-        [`<t:${epochTime}:f>`, time.format("MMMM DD, YYYY H:mm A")],
-        [`<t:${epochTime}:t>`, time.format("H:mm A")],
-        [`<t:${epochTime}:D>`, time.format("MMMM DD, YYYY")],
-        [`<t:${epochTime}:F>`, time.format("dddd, MMMM DD, YYYY H:mm A")],
-        [`<t:${epochTime}:T>`, time.format("H:mm:ss A")],
-        [`<t:${epochTime}:R>`, time.fromNow()],
+        [`<t:${epochTime / 1000}:d>`, time.format("MM/DD/YYYY")],
+        [`<t:${epochTime / 1000}:f>`, time.format("MMMM DD, YYYY h:mm A")],
+        [`<t:${epochTime / 1000}:t>`, time.format("h:mm A")],
+        [`<t:${epochTime / 1000}:D>`, time.format("MMMM DD, YYYY")],
+        [`<t:${epochTime / 1000}:F>`, time.format("dddd, MMMM DD, YYYY h:mm A")],
+        [`<t:${epochTime / 1000}:T>`, time.format("h:mm:ss A")],
+        [`<t:${epochTime / 1000}:R>`, time.fromNow()],
     ]
 
     return (
