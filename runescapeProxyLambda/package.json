@@ -1,5 +1,5 @@
 {
-    "name": "runescape-proxy-lambda",
+    "name": "@voidconcept/runescape-proxy-lambda",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",

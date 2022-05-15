@@ -1,5 +1,5 @@
 {
-  "name": "notes-lambda",
+  "name": "@voidconcept/notes-lambda",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
