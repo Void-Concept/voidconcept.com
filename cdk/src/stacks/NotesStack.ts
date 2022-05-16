@@ -37,7 +37,7 @@ export class NotesStack extends cdk.Stack {
         const endpoint = new lambda.Function(this, "NotesApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../notesLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/notes/build")),
             environment: {
                 notesTableName: notesTable.tableName,
             }

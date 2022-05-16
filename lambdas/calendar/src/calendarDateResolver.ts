@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { CalendarImpl } from "./calendar";
 import { DiscordService } from "./DiscordService";
-import { DndCalendarDate, DynamoHelper } from "./DynamoHelper";
+import { DndCalendarDate, DynamoHelper } from "./dynamoHelper";
 
 export const doGet = (dynamoHelper: DynamoHelper) => async (event: APIGatewayProxyEvent) => {
     const calendarName = getCalendarName(event)

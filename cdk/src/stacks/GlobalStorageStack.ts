@@ -38,7 +38,7 @@ export class GlobalStorageStack extends cdk.Stack {
         const endpoint = new lambda.Function(this, "StorageApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../globalStorageLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/globalStorage/build")),
             environment: {
                 tableName: this.genericStorageTable.tableName
             }

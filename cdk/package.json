@@ -6,7 +6,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "build-deps": "yarn --cwd '../globalStorageLambda' bundle && yarn --cwd '../runescapeProxyLambda' bundle && yarn --cwd '../calendarLambda' bundle && yarn --cwd '../questListLambda' bundle && yarn --cwd '../notesLambda' bundle",
+        "build-deps": "yarn --cwd '../lambdas/globalStorage' bundle && yarn --cwd '../lambdas/runescapeProxy' bundle && yarn --cwd '../lambdas/calendar' bundle && yarn --cwd '../lambdas/questList' bundle && yarn --cwd '../lambdas/notes' bundle",
         "watch": "tsc -w",
         "test": "jest",
         "cdk": "cdk",

@@ -43,7 +43,7 @@ export class CalendarStack extends cdk.Stack {
         const endpoint = new lambda.Function(this, "CalendarApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../calendarLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/calendar/build")),
             environment: {
                 calendarTableName: calendarTable.tableName,
                 genericStorageTableName: genericStorageTable.tableName,

@@ -34,7 +34,7 @@ export class QuestListStack extends cdk.Stack {
         const endpoint = new lambda.Function(this, "QuestListEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../questListLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/questList/build")),
             environment: {
                 tableName: questTable.tableName
             }

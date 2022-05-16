@@ -1,6 +1,6 @@
 import { DndCalendarEvent } from './calendar';
 import { DiscordApi } from './DiscordApi';
-import { DndCalendarDate, DynamoHelper, NotificationChannel } from './DynamoHelper';
+import { DndCalendarDate, DynamoHelper, NotificationChannel } from './dynamoHelper';
 
 export class DiscordService {
     constructor(private discordApi: DiscordApi, private dynamoHelper: DynamoHelper) {

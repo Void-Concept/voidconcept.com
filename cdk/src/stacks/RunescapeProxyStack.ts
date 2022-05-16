@@ -25,7 +25,7 @@ export class RunescapeProxyStack extends cdk.Stack {
         const endpoint = new lambda.Function(this, "RunescapeProxyEndpoint", {
             runtime: lambda.Runtime.NODEJS_12_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../runescapeProxyLambda/build")),
+            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/runescapeProxy/build")),
         });
 
         const api = new apigateway.RestApi(this, "RunescapeProxyGateway", {

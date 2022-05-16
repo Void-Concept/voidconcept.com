@@ -43,7 +43,7 @@ const withErrorHandling = async (resolver: Promise<APIGatewayProxyResult>): Prom
     } catch (error) {
         return {
             statusCode: 500,
-            body: JSON.stringify(`Internal server error: ${error.message}`)
+            body: JSON.stringify(`Internal server error: ${(error as Error).message}`)
         }
     }
 }
