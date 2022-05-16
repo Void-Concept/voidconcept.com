@@ -1,4 +1,5 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
+import { CalendarImpl } from "./calendar";
 import { DiscordService } from "./DiscordService";
 import { DndCalendarDate, DynamoHelper } from "./DynamoHelper";
 
@@ -23,9 +24,12 @@ export const doPost = (dynamoHelper: DynamoHelper, discordService: DiscordServic
     const totalDays = calendarDate.year * calendar.months.length * calendar.daysInMonth + calendarDate.month * calendar.daysInMonth + calendarDate.day
     const oldTotalDays = oldCalendarDate.year * calendar.months.length * calendar.daysInMonth + oldCalendarDate.month * calendar.daysInMonth + oldCalendarDate.day
 
+    const calendarImpl = new CalendarImpl(calendar.name, calendar.weekDays, calendar.months, calendar.daysInMonth, calendar.epochOffset, calendar.events || [])
+    const events = calendarImpl.getEventsFor(calendarImpl.getDateEpoch(calendarDate))
+
     const daysChanged = totalDays - oldTotalDays
     if (daysChanged !== 0) {
-        await discordService.notifyCalendarUpdate(calendar.notificationChannels, daysChanged, calendarDate)
+        await discordService.notifyCalendarUpdate(calendar.notificationChannels, daysChanged, calendarDate, events)
     }
 
     return {
