@@ -1,5 +1,5 @@
-import { expect as expectCDK, matchTemplate, MatchStyle, haveResourceLike } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as cdk from 'aws-cdk-lib';
 import { HostedZoneStack } from '../../stacks/HostedZoneStack';
 
 describe("HostedZoneStack", () => {
@@ -10,9 +10,11 @@ describe("HostedZoneStack", () => {
             domainName: "example.com"
         });
 
-        expectCDK(stack).to(haveResourceLike("AWS::Route53::HostedZone", {
+        const template = Template.fromStack(stack)
+
+        template.hasResourceProperties("AWS::Route53::HostedZone", {
             Name: "example.com."
-        }));
+        });
         expect(stack.hostedZone).toBeDefined();
     });
 });

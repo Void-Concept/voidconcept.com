@@ -1,19 +1,20 @@
 import * as path from 'path';
 
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import * as acm from '@aws-cdk/aws-certificatemanager';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
-interface QuestListStackProps extends cdk.StackProps {
+interface QuestListStackProps extends StackProps {
     hostedZone: route53.IHostedZone
 }
 
-export class QuestListStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: QuestListStackProps) {
+export class QuestListStack extends Stack {
+    constructor(scope: Construct, id: string, props: QuestListStackProps) {
         super(scope, id, props);
 
         const questTable = new dynamodb.Table(this, "QuestListStorage", {

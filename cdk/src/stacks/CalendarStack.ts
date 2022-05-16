@@ -1,24 +1,25 @@
 import * as path from 'path';
 
-import * as cdk from '@aws-cdk/core';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuthorizer';
 
-interface CalendarStackProps extends cdk.StackProps {
+interface CalendarStackProps extends StackProps {
     hostedZone: route53.IHostedZone
     cognitoUserPool: cognito.IUserPool
     genericStorageTable: dynamodb.Table
 }
 
-export class CalendarStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: CalendarStackProps) {
+export class CalendarStack extends Stack {
+    constructor(scope: Construct, id: string, props: CalendarStackProps) {
         super(scope, id, props);
         const { hostedZone, cognitoUserPool, genericStorageTable } = props
 

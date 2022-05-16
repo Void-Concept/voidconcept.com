@@ -1,20 +1,21 @@
-import * as cdk from '@aws-cdk/core';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import { CnameConfig, TxtConfig, MxConfig } from '../config';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import { CnameConfig, TxtConfig, MxConfig } from '../configTypes';
 
-interface HostedZoneStackProps extends cdk.StackProps {
+interface HostedZoneStackProps extends StackProps {
     domainName: string
     cnames?: CnameConfig[]
     txts?: TxtConfig[]
     mxs?: MxConfig[]
 }
 
-export class HostedZoneStack extends cdk.Stack {
+export class HostedZoneStack extends Stack {
     hostedZone: route53.HostedZone
     certificate: acm.Certificate
 
-    constructor(scope: cdk.Construct, id: string, props: HostedZoneStackProps) {
+    constructor(scope: Construct, id: string, props: HostedZoneStackProps) {
         super(scope, id, props);
 
         this.hostedZone = new route53.HostedZone(this, "WebsiteHostedZone", {

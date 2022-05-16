@@ -1,17 +1,18 @@
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
+import { StackProps, Stack, CfnOutput } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 
-interface FrontendStackProps extends cdk.StackProps {
+interface FrontendStackProps extends StackProps {
     hostedZone: route53.IHostedZone
     certificate: acm.ICertificate
 }
 
-export class FrontendStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: FrontendStackProps) {
+export class FrontendStack extends Stack {
+    constructor(scope: Construct, id: string, props: FrontendStackProps) {
         super(scope, id, props);
 
         const domainName = props.hostedZone.zoneName
@@ -54,11 +55,11 @@ export class FrontendStack extends cdk.Stack {
             target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(frontendCdn))
         });
 
-        new cdk.CfnOutput(this, "FrontendBucketUri", {
+        new CfnOutput(this, "FrontendBucketUri", {
             value: `s3://${frontendBucket.bucketName}`
         });
 
-        new cdk.CfnOutput(this, "FrontendCdnId", {
+        new CfnOutput(this, "FrontendCdnId", {
             value: frontendCdn.distributionId
         });
     }

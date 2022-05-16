@@ -1,18 +1,19 @@
-import * as cdk from '@aws-cdk/core';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as route53 from '@aws-cdk/aws-route53';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
 
-interface AuthStackProps extends cdk.StackProps {
+interface AuthStackProps extends StackProps {
     domainPrefix: string
     domainName: string
     hostedZone: route53.HostedZone
 }
 
-export class AuthStack extends cdk.Stack {
+export class AuthStack extends Stack {
     public userPool: cognito.UserPool
 
-    constructor(scope: cdk.Construct, id: string, props: AuthStackProps) {
+    constructor(scope: Construct, id: string, props: AuthStackProps) {
         super(scope, id, props);
 
         this.userPool = new cognito.UserPool(this, 'UserPool', {

@@ -10,3 +10,4 @@ cdk.out
 
 # Config
 src/config-file.json
+src/config.ts

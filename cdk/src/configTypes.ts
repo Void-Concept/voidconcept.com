@@ -1,5 +1,3 @@
-import config = require('./config-file.json');
-
 export interface CnameConfig {
     id: string
     prefix: string
@@ -28,5 +26,3 @@ export interface AppConfig {
         mxs: MxConfig[]
     }
 }
-
-export default config as AppConfig;

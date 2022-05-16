@@ -1,22 +1,23 @@
 import * as path from 'path';
 
-import * as cdk from '@aws-cdk/core';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as cognito from '@aws-cdk/aws-cognito';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuthorizer';
 
-interface NotesStackProps extends cdk.StackProps {
+interface NotesStackProps extends StackProps {
     hostedZone: route53.IHostedZone
     cognitoUserPool: cognito.IUserPool
 }
 
-export class NotesStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: NotesStackProps) {
+export class NotesStack extends Stack {
+    constructor(scope: Construct, id: string, props: NotesStackProps) {
         super(scope, id, props);
         const { hostedZone, cognitoUserPool } = props
 

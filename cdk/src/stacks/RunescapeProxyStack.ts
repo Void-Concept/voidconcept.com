@@ -1,18 +1,19 @@
 import * as path from 'path';
 
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as route53Targets from '@aws-cdk/aws-route53-targets';
-import * as acm from '@aws-cdk/aws-certificatemanager';
+import { StackProps, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
-interface RunescapeProxyStackProps extends cdk.StackProps {
+interface RunescapeProxyStackProps extends StackProps {
     hostedZone: route53.IHostedZone
 }
 
-export class RunescapeProxyStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props: RunescapeProxyStackProps) {
+export class RunescapeProxyStack extends Stack {
+    constructor(scope: Construct, id: string, props: RunescapeProxyStackProps) {
         super(scope, id, props);
 
         const domainName = `runescape.${props.hostedZone.zoneName}`

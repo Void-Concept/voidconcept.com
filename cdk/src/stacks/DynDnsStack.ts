@@ -1,18 +1,19 @@
-import * as cdk from '@aws-cdk/core';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as iam from '@aws-cdk/aws-iam';
+import { StackProps, Stack, CfnOutput } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
-interface DynDnsStackProps extends cdk.StackProps {
+interface DynDnsStackProps extends StackProps {
     hostedZone: route53.HostedZone
     domainName: string
 }
 
-export class DynDnsStack extends cdk.Stack {
+export class DynDnsStack extends Stack {
     hostedZone: route53.HostedZone
     certificate: acm.Certificate
 
-    constructor(scope: cdk.Construct, id: string, props: DynDnsStackProps) {
+    constructor(scope: Construct, id: string, props: DynDnsStackProps) {
         super(scope, id, props);
     
         const user = new iam.User(this, "DynDns", {})
@@ -38,7 +39,7 @@ export class DynDnsStack extends cdk.Stack {
 
         policy.attachToUser(user)
         
-        new cdk.CfnOutput(this, "DynDnsAccessKey", { value: accessKey.accessKeyId })
-        new cdk.CfnOutput(this, "DynDnsSecretKey", { value: accessKey.secretAccessKey.toString() })
+        new CfnOutput(this, "DynDnsAccessKey", { value: accessKey.accessKeyId })
+        new CfnOutput(this, "DynDnsSecretKey", { value: accessKey.secretAccessKey.unsafeUnwrap().toString() })
     }
 }
