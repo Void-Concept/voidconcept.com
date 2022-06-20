@@ -1,0 +1,15 @@
+.notes-list-container {
+    padding-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+}
+
+.notes-list-container .notes-list-create-banner {
+    margin-bottom: 16px;
+}
+
+.notes-list-create-banner #notes-create-input {
+    margin-right: 4px;
+}

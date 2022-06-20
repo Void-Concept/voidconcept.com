@@ -1,25 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Link } from '../../components/Link';
-import { Notes, NotesDao } from '../NotesDao';
+import { useAsyncEffect, useAsyncReducer } from '../../hooks';
+import { NotesDao } from '../NotesDao';
+import './NotesList.css';
+import { notesCreateAction, notesListReducer, notesLoadAction } from './NotesListReducer';
 
-type NotesListProps = {
+type NotesCreateProps = {
+    onCreateNoteSubmit: (name: string) => void
+}
+
+const NotesCreate = ({ onCreateNoteSubmit }: NotesCreateProps) => {
+    const [name, setName] = useState("")
+
+    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value)
+    }
+
+    const onButtonClick = () => {
+        if (!!name) {
+            onCreateNoteSubmit(name)
+            setName("")
+        }
+    }
+
+    return (
+        <div className='notes-list-create-banner'>
+            <input id='notes-create-input' type='text' placeholder='New note name...' onChange={onInputChange} value={name}/>
+            <button id='notes-create-button' onClick={onButtonClick}>Create</button>
+        </div>
+    )
+}
+
+
+export type NotesListProps = {
     notesDao: NotesDao
 }
 
 export const NotesList = ({ notesDao }: NotesListProps) => {
-    const [notesList, setNotesList] = useState<Notes[]>([])
+    const [notesList, dispatch] = useAsyncReducer(notesListReducer(notesDao), [])
 
-    useEffect(() => {
-        const run = async () => {
-            setNotesList(await notesDao.list())
-        }
-        run().catch(console.error)
+    useAsyncEffect(async () => {
+        dispatch(notesLoadAction())
     }, [])
 
+    const onCreateNoteSubmit = (name: string) => {
+        dispatch(notesCreateAction(name))
+    }
+
     return (
-        <div>
+        <div className='notes-list-container'>
             <h1>Notes List</h1>
-            {notesList.map(notes => <div key={notes.id} ><Link href={`/notes/${notes.id}`} >{notes.name}</Link></div>)}
+            <NotesCreate onCreateNoteSubmit={onCreateNoteSubmit}/>
+            {notesList.map(notes => 
+                <div key={notes.id} ><Link href={`/notes/${notes.id}`} >{notes.name}</Link></div>
+            )}
         </div>
     )
 }
