@@ -6,10 +6,6 @@
     justify-items: center;
 }
 
-.notes-list-container .notes-list-create-banner {
+.notes-create-button {
     margin-bottom: 16px;
-}
-
-.notes-list-create-banner #notes-create-input {
-    margin-right: 4px;
 }
