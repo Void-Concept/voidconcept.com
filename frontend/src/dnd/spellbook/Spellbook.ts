@@ -524,6 +524,7 @@ export const spells: Spell[] = [
         level: "3rd",
         school: "Transmutation",
         castTime: "1 action",
+        concentration: true,
         range: "touch",
         components: "V, S, M",
         materials: "A wing feather from any bird",
