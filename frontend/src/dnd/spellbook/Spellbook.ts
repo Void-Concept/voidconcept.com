@@ -773,6 +773,23 @@ export const spells: Spell[] = [
             "Physical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and any noise it makes sounds hollow to the creature.",
         ],
     }, {
+        name: "Globe of Invulnerability",
+        level: "6th",
+        school: "Abjuration",
+        castTime: "1 action",
+        range: "Self",
+        areaOfEffect: "10ft radius sphere",
+        components: "V, S, M",
+        materials: "a glass or crystal bead that shatters when the spell ends",
+        duration: "1 Minute",
+        concentration: true,
+        description: [
+            "An immobile, faintly shimmering barrier springs into existence in a 10-foot radius around you and remains for the duration.",
+            "Any spell of 5th level or lower cast from outside the barrier can't affect creatures or objects within it, even if the spell is cast using a higher level spell slot. Such a spell can target creatures and objects within the barrier, but the spell has no effect on them. Similarly, the area within the barrier is excluded from the areas affected by such spells.",
+            "NOTE: THIS IS IN THE FLESH GRIMOIRE, so bonus action, no spell slot needed (also in main spellbook)"
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 7th level or higher, the barrier blocks spells of one level higher for each slot level above 6th.",
+    }, {
         name: "Forcecage",
         level: "7th",
         school: "Evocation",
