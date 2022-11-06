@@ -34,19 +34,20 @@ export const LocalTimeComponent = () => {
     return (
         <div className="time-local-container">
             <div>
-                <DatePicker
-                    selected={time.toDate()}
-                    onChange={(newDate) => {
-                        if (newDate) {
-                            const newEpochTime = newDate.valueOf()
-                            history.push(`/time/local/${newEpochTime}`)
-                        }
-                    }}
-                    showTimeSelect
-                    dateFormat="yyyy-MM-dd hh:mm:SS a"
-                />
+                <div className="time-local-date-picker">
+                    <DatePicker
+                        selected={time.toDate()}
+                        onChange={(newDate) => {
+                            if (newDate) {
+                                const newEpochTime = newDate.valueOf()
+                                history.push(`/time/local/${newEpochTime}`)
+                            }
+                        }}
+                        showTimeSelect
+                        dateFormat="yyyy-MM-dd hh:mm:SS a"
+                    />
+                </div>
                 <span className="time-local-zone">{abbrZone}</span>
-                {/* <input type="number" value={zoneOffset}/> */}
             </div>
             <ul>
                 {discordHelperTimes.map((time, index) => 

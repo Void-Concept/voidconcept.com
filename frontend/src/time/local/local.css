@@ -9,3 +9,8 @@
 .time-local-zone {
     margin-left: 4px;
 }
+
+.time-local-date-picker {
+    width: auto;
+    display: inline-block;
+}
