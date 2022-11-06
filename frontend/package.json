@@ -26,7 +26,7 @@
         "start": "REACT_APP_ENV=local react-scripts start",
         "build": "REACT_APP_ENV=prod react-scripts build",
         "test": "REACT_APP_ENV=local react-scripts test",
-        "deploy": "yarn build && ./scripts/deploy.sh"
+        "deploy": "npm run build && ./scripts/deploy.sh"
     },
     "eslintConfig": {
         "extends": "react-app"

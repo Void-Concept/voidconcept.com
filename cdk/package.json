@@ -6,13 +6,13 @@
     },
     "scripts": {
         "build": "tsc",
-        "build-deps": "yarn --cwd '../lambdas/globalStorage' bundle && yarn --cwd '../lambdas/runescapeProxy' bundle && yarn --cwd '../lambdas/calendar' bundle && yarn --cwd '../lambdas/questList' bundle && yarn --cwd '../lambdas/notes' bundle",
+        "build-deps": "npm run bundle --prefix '../lambdas/globalStorage' && npm run bundle --prefix '../lambdas/runescapeProxy' && npm run bundle --prefix '../lambdas/calendar' && npm run bundle --prefix '../lambdas/questList' && npm run bundle --prefix '../lambdas/notes'",
         "watch": "tsc -w",
         "test": "jest",
         "cdk": "cdk",
-        "cdk-diff": "yarn build-deps && cdk diff",
+        "cdk-diff": "npm run build-deps && cdk diff",
         "cdk-diff-nobuild": "cdk diff",
-        "cdk-deploy": "yarn build-deps && cdk deploy \"*\"",
+        "cdk-deploy": "npm run build-deps && cdk deploy \"*\"",
         "cdk-deploy-nobuild": "cdk deploy \"*\""
     },
     "devDependencies": {
