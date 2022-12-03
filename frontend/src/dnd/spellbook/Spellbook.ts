@@ -534,6 +534,18 @@ export const spells: Spell[] = [
         ],
         higherLevel: "When you cast this spell using a spell slot of 4th level or higher, you can target one additional creature for each slot level above 3rd."
     }, {
+        name: "Tongues",
+        level: "3rd",
+        school: "Transmutation",
+        castTime: "1 action",
+        range: "touch",
+        components: "V, M",
+        materials: "A small clay model of a ziggurat",
+        duration: "1 Hour",
+        description: [
+            "This spell grants the creature you touch the ability to understand any spoken language it hears. Moreover, when the target speaks, any creature that knows at least one language and can hear the target understands what it says.",
+        ],
+    }, {
         name: "Polymorph",
         level: "4th",
         school: "Transmutation",
