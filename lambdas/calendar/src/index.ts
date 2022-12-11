@@ -12,7 +12,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const calendarTableName = process.env.calendarTableName as string;
 
     const dynamoDb = new DynamoDB();
-    const dynamoHelper = new DynamoHelper(dynamoDb, genericStorageTableName, calendarTableName);
+    const dynamoHelper = new DynamoHelper(dynamoDb, calendarTableName);
 
     const secretsManager = new SecretsManager()
     const secretsManagerService = new SecretsManagerService(secretsManager)

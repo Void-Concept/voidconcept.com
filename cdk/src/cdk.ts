@@ -66,7 +66,6 @@ new RunescapeProxyStack(app, "RunescapeProxyStack", {
 new CalendarStack(app, "CalendarStack", {
     hostedZone: hostedZoneStack.hostedZone,
     cognitoUserPool: authStack.userPool,
-    genericStorageTable: globalStorageStack.genericStorageTable,
     env: {
         region: "us-east-1"
     },

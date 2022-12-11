@@ -40,7 +40,7 @@ export interface NotificationChannel {
 }
 
 export class DynamoHelper {
-    constructor(private dynamoDb: DynamoDB, private genericStorageTableName: string, private calendarTableName: string) {
+    constructor(private dynamoDb: DynamoDB, private calendarTableName: string) {
     }
 
     getDndCalendar = async (calendarName: string): Promise<DndCalendar> => {

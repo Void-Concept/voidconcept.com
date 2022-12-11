@@ -15,13 +15,12 @@ import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuth
 interface CalendarStackProps extends StackProps {
     hostedZone: route53.IHostedZone
     cognitoUserPool: cognito.IUserPool
-    genericStorageTable: dynamodb.Table
 }
 
 export class CalendarStack extends Stack {
     constructor(scope: Construct, id: string, props: CalendarStackProps) {
         super(scope, id, props);
-        const { hostedZone, cognitoUserPool, genericStorageTable } = props
+        const { hostedZone, cognitoUserPool } = props
 
         const domainName = `calendar.${hostedZone.zoneName}`
 
@@ -47,11 +46,9 @@ export class CalendarStack extends Stack {
             code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/calendar/build")),
             environment: {
                 calendarTableName: calendarTable.tableName,
-                genericStorageTableName: genericStorageTable.tableName,
             }
         });
         calendarTable.grantReadWriteData(endpoint);
-        genericStorageTable.grantReadWriteData(endpoint);
         discordApiKeySecret.grantRead(endpoint);
 
         const api = new apigateway.RestApi(this, "CalendarApiGateway", {
