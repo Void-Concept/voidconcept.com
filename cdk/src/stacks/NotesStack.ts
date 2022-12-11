@@ -4,6 +4,7 @@ import { StackProps, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
@@ -35,14 +36,21 @@ export class NotesStack extends Stack {
             domainName
         });
 
-        const endpoint = new lambda.Function(this, "NotesApiEndpoint", {
-            runtime: lambda.Runtime.NODEJS_12_X,
+
+        const endpoint = new lambda_nodejs.NodejsFunction(this, "NotesApiEndpoint", {
+            runtime: lambda.Runtime.NODEJS_16_X,
+            entry: "../lambdas/notes/src/index.ts",
+            depsLockFilePath: "../lambdas/package-lock.json",
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/notes/build")),
+            bundling: {
+                sourceMap: true,
+                externalModules: ["aws-sdk"],
+                tsconfig: "../lambdas/notes/tsconfig.json",
+            },
             environment: {
                 notesTableName: notesTable.tableName,
             }
-        });
+        })
         notesTable.grantReadWriteData(endpoint);
 
         const api = new apigateway.RestApi(this, "NotesApiGateway", {

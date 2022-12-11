@@ -3,6 +3,7 @@ import * as path from 'path';
 import { StackProps, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -32,10 +33,16 @@ export class QuestListStack extends Stack {
             domainName: domainName
         });
 
-        const endpoint = new lambda.Function(this, "QuestListEndpoint", {
-            runtime: lambda.Runtime.NODEJS_12_X,
+        const endpoint = new lambda_nodejs.NodejsFunction(this, "QuestListEndpoint", {
+            runtime: lambda.Runtime.NODEJS_16_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/questList/build")),
+            entry: "../lambdas/questList/src/index.ts",
+            depsLockFilePath: "../lambdas/package-lock.json",
+            bundling: {
+                sourceMap: true,
+                externalModules: ["aws-sdk"],
+                tsconfig: "../lambdas/questList/tsconfig.json",
+            },
             environment: {
                 tableName: questTable.tableName
             }

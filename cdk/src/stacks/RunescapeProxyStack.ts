@@ -3,6 +3,7 @@ import * as path from 'path';
 import { StackProps, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
@@ -23,10 +24,16 @@ export class RunescapeProxyStack extends Stack {
             domainName: domainName
         });
 
-        const endpoint = new lambda.Function(this, "RunescapeProxyEndpoint", {
-            runtime: lambda.Runtime.NODEJS_12_X,
+        const endpoint = new lambda_nodejs.NodejsFunction(this, "RunescapeProxyEndpoint", {
+            runtime: lambda.Runtime.NODEJS_16_X,
             handler: "index.handler",
-            code: lambda.Code.fromAsset(path.join(process.cwd(), "../lambdas/runescapeProxy/build")),
+            entry: "../lambdas/runescapeProxy/src/index.ts",
+            depsLockFilePath: "../lambdas/package-lock.json",
+            bundling: {
+                sourceMap: true,
+                externalModules: ["aws-sdk"],
+                tsconfig: "../lambdas/runescapeProxy/tsconfig.json",
+            }
         });
 
         const api = new apigateway.RestApi(this, "RunescapeProxyGateway", {
