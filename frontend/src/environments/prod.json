@@ -1,5 +1,6 @@
 {
     "clientId": "9ianb9n2pehfs1lce8278i0n",
     "authorizationUri": "https://login.voidconcept.com/login",
+    "userInfoUri": "https://login.voidconcept.com/oauth2/userInfo",
     "redirectUri": "https://voidconcept.com/oauth-callback"
 }

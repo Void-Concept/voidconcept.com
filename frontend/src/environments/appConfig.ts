@@ -1,6 +1,7 @@
 type AppConfig = {
     clientId: string
     authorizationUri: string
+    userInfoUri: string
     redirectUri: string
 }
 

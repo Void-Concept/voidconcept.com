@@ -1,6 +1,6 @@
 import { History } from 'history';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Router, Switch } from 'react-router';
 import './App.css';
 import { DndCalendar } from './dnd/calendar/CalendarComponent';
@@ -14,9 +14,11 @@ import { NotesDaoImpl } from './notes/NotesDao';
 import { NotesEditor } from './notes/NotesEditor';
 import { NotesList } from './notes/NotesList';
 import { OauthCallback } from './oauth';
+import { isSuperUser, safeGetUserInfo, UserInfo } from './oauth/oauthClient';
 import { CitadelComponent } from './runescape/citadel/CitadelComponent';
 import { QuestsComponent } from './runescape/quests/QuestsComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
+import { Goals } from './private/goals';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -34,7 +36,9 @@ type RouteType = {
     path: string,
     render: () => React.ReactNode,
     exact?: boolean,
-    showInNav?: boolean
+    showInNav?: boolean,
+    private?: boolean,
+    requireSuperUser?: boolean,
 }
 
 const routes: RouteType[] = [{
@@ -112,12 +116,16 @@ const routes: RouteType[] = [{
     path: "/notes/:id",
     showInNav: false,
     render: () => <NotesEditor notesDao={notesDao} />
+}, {
+    category: "Private",
+    name: "Goals",
+    path: "/private/goals",
+    private: true,
+    requireSuperUser: true,
+    render: () => <Goals />
 }]
 
-const routesInNav = routes
-    .filter(route => route.showInNav || route.showInNav === undefined)
-
-const navRoutes = R.pipe(
+const navRoutesPipe = R.pipe(
     R.groupBy<RouteType>(route => route.category),
     R.mapObjIndexed((value, key) => {
         const routes = value.map(route => ({
@@ -131,17 +139,41 @@ const navRoutes = R.pipe(
         }
     }),
     R.values
-)(routesInNav)
+)
 
 interface AppProps {
     history: History
 }
 const App = ({ history }: AppProps) => {
+    const [userInfo, setUserInfo] = useState<UserInfo | undefined>(undefined)
+    useEffect(() => {
+        (async () => {
+            setUserInfo(await safeGetUserInfo())
+        })().catch(console.error)
+    }, [])
+
+    const nonHiddenRoutes = routes
+        .filter((route) => {
+            if (!!userInfo) {
+                if (route.requireSuperUser && !isSuperUser(userInfo)) {
+                    return false
+                }
+                return true
+            } else {
+                return !route.private
+            }
+        })
+
+    const routesInNav = nonHiddenRoutes
+        .filter(route => route.showInNav || route.showInNav === undefined)
+    const navRoutes = navRoutesPipe(routesInNav)
+
     return (
         <Router history={history}>
             <NavComponent routes={navRoutes} />
             <Switch>
-                {routes.map((route, index) =>
+                {routes
+                .map((route, index) =>
                     <Route key={index} path={route.path} exact={route.exact}>
                         {route.render()}
                     </Route>
