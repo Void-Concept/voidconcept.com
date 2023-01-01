@@ -27,12 +27,10 @@ export class RunescapeProxyStack extends Stack {
         const endpoint = new lambda_nodejs.NodejsFunction(this, "RunescapeProxyEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: "index.handler",
-            entry: "../lambdas/runescapeProxy/src/index.ts",
-            depsLockFilePath: "../lambdas/package-lock.json",
+            entry: "./src/lambdas/runescapeProxy/index.ts",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-                tsconfig: "../lambdas/runescapeProxy/tsconfig.json",
             }
         });
 

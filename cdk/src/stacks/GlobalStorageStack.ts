@@ -40,12 +40,10 @@ export class GlobalStorageStack extends Stack {
         const endpoint = new lambda_nodejs.NodejsFunction(this, "StorageApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: "index.handler",
-            entry: "../lambdas/globalStorage/src/index.ts",
-            depsLockFilePath: "../lambdas/package-lock.json",
+            entry: "./src/lambdas/globalStorage/index.ts",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-                tsconfig: "../lambdas/globalStorage/tsconfig.json",
             },
             environment: {
                 tableName: this.genericStorageTable.tableName

@@ -43,13 +43,11 @@ export class CalendarStack extends Stack {
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "CalendarApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
-            entry: "../lambdas/calendar/src/index.ts",
-            depsLockFilePath: "../lambdas/package-lock.json",
+            entry: "./src/lambdas/calendar/index.ts",
             handler: "index.handler",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-                tsconfig: "../lambdas/calendar/tsconfig.json",
             },
             environment: {
                 calendarTableName: calendarTable.tableName,

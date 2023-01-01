@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import * as DynamoDB from "aws-sdk/clients/dynamodb";
 
 
 export type ChildQuest = {

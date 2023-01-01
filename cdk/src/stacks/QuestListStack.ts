@@ -36,12 +36,10 @@ export class QuestListStack extends Stack {
         const endpoint = new lambda_nodejs.NodejsFunction(this, "QuestListEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: "index.handler",
-            entry: "../lambdas/questList/src/index.ts",
-            depsLockFilePath: "../lambdas/package-lock.json",
+            entry: "./src/lambdas/questList/index.ts",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-                tsconfig: "../lambdas/questList/tsconfig.json",
             },
             environment: {
                 tableName: questTable.tableName

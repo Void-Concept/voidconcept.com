@@ -39,13 +39,11 @@ export class NotesStack extends Stack {
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "NotesApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
-            entry: "../lambdas/notes/src/index.ts",
-            depsLockFilePath: "../lambdas/package-lock.json",
+            entry: "./src/lambdas/notes/index.ts",
             handler: "index.handler",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-                tsconfig: "../lambdas/notes/tsconfig.json",
             },
             environment: {
                 notesTableName: notesTable.tableName,

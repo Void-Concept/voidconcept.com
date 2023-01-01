@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import DynamoDB from "aws-sdk/clients/dynamodb";
 
 type DndCalendarRepeatUnit = "year" | "month" | "week" | "day"
 

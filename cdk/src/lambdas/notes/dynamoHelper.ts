@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import DynamoDB from "aws-sdk/clients/dynamodb";
 import { v1 as uuidv1 } from 'uuid'
 
 type Notes = {
