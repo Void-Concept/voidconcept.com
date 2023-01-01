@@ -19,6 +19,8 @@
         "inlineSources": true,
         "experimentalDecorators": true,
         "strictPropertyInitialization": false,
+        "skipLibCheck": true,
+        "noEmit": true,
         "esModuleInterop": true,
         "typeRoots": [
             "./node_modules/@types"
