@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useRouteMatch, useHistory } from 'react-router';
+import React, { useState } from 'react'
+import { useRouteMatch } from 'react-router';
+import { useAsyncEffect } from '../../../hooks';
 import { Calendar } from '../calendar';
 import { CalendarProvider, useCalendar } from '../CalendarContext';
 import { CalendarDao } from '../CalendarDao';
@@ -33,13 +34,10 @@ export const DndCalendarEvent = ({ calendarDao }: DndCalendarProps) => {
     const [calendar, setCalendar] = useState<Calendar | undefined>();
     const [fetching, setFetching] = useState<boolean>(true);
 
-    useEffect(() => {
-        const getCalendar = async () => {
-            const fetchedCalendar = await calendarDao.getCalendar(match.params.calendarName)
-            setCalendar(fetchedCalendar)
-            setFetching(false)
-        }
-        getCalendar().catch(console.error)
+    useAsyncEffect(async () => {
+        const fetchedCalendar = await calendarDao.getCalendar(match.params.calendarName)
+        setCalendar(fetchedCalendar)
+        setFetching(false)
     }, [calendarName])
 
     if (!calendar) {

@@ -1,5 +1,6 @@
-import React, { useEffect, useState, MouseEventHandler } from 'react';
+import React, { useState, MouseEventHandler } from 'react';
 import { useHistory } from 'react-router';
+import { useAsyncEffect } from '../../hooks';
 import { CalendarDao } from './CalendarDao';
 import "./calendarList.css";
 
@@ -10,12 +11,9 @@ export const CalendarList = ({ calendarDao }: CalendarListProps) => {
     const [fetching, setFetching] = useState<boolean>(true);
     const [calendarNames, setCalendarNames] = useState<string[]>([]);
 
-    useEffect(() => {
-        const fetchNames = async () => {
-            setCalendarNames(await calendarDao.getCalendarNames());
-            setFetching(false);
-        }
-        fetchNames().catch(console.error)
+    useAsyncEffect(async () => {
+        setCalendarNames(await calendarDao.getCalendarNames());
+        setFetching(false);
     }, [])
 
     if (fetching) return <>Loading...</>

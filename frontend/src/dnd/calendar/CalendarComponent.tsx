@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CalendarDisplay } from './CalendarDisplay';
 import { CalendarDao } from './CalendarDao';
 import MoonFullIcon from "mdi-react/MoonFullIcon";
@@ -11,6 +11,7 @@ import { CalendarGrid } from './CalendarGrid'
 import "./calendar.css"
 import { Calendar, DndCalendarDate } from './calendar';
 import { useRouteMatch } from 'react-router';
+import { useAsyncEffect } from '../../hooks';
 
 interface MoonPhaseIconProps {
     date: DndCalendarDate
@@ -57,16 +58,13 @@ export const CalendarComponent = ({ calendarDao }: CalendarProps) => {
 
     const [date, setDate] = useState<DndCalendarDate | undefined>()
     const [displayDate, setDisplayDate] = useState<DisplayDate>()
-    useEffect(() => {
-        const fetchDate = async () => {
-            const savedDate = await calendarDao.getDate(calendar.name)
-            setDate(savedDate)
-            setDisplayDate({
-                year: savedDate.year,
-                month: savedDate.month
-            })
-        }
-        fetchDate();
+    useAsyncEffect(async () => {
+        const savedDate = await calendarDao.getDate(calendar.name)
+        setDate(savedDate)
+        setDisplayDate({
+            year: savedDate.year,
+            month: savedDate.month
+        })
     }, [calendarDao])
     if (!date || !displayDate) return <>Loading...</>;
 
@@ -146,13 +144,10 @@ export const DndCalendar = ({ calendarDao }: DndCalendarProps) => {
     const [calendar, setCalendar] = useState<Calendar | undefined>();
     const [fetching, setFetching] = useState<boolean>(true);
 
-    useEffect(() => {
-        const getCalendar = async () => {
-            const fetchedCalendar = await calendarDao.getCalendar(match.params.calendarName)
-            setCalendar(fetchedCalendar)
-            setFetching(false)
-        }
-        getCalendar().catch(console.error)
+    useAsyncEffect(async () => {
+        const fetchedCalendar = await calendarDao.getCalendar(match.params.calendarName)
+        setCalendar(fetchedCalendar)
+        setFetching(false)
     }, [calendarName])
 
     if (!calendar) {

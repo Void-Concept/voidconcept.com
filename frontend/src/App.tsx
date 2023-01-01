@@ -1,6 +1,6 @@
 import { History } from 'history';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Router, Switch } from 'react-router';
 import './App.css';
 import { DndCalendar } from './dnd/calendar/CalendarComponent';
@@ -19,6 +19,7 @@ import { CitadelComponent } from './runescape/citadel/CitadelComponent';
 import { QuestsComponent } from './runescape/quests/QuestsComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
 import { Goals } from './private/goals';
+import { useAsyncEffect } from './hooks';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -146,10 +147,8 @@ interface AppProps {
 }
 const App = ({ history }: AppProps) => {
     const [userInfo, setUserInfo] = useState<UserInfo | undefined>(undefined)
-    useEffect(() => {
-        (async () => {
-            setUserInfo(await safeGetUserInfo())
-        })().catch(console.error)
+    useAsyncEffect(async () => {
+        setUserInfo(await safeGetUserInfo())
     }, [])
 
     const nonHiddenRoutes = routes

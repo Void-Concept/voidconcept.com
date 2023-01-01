@@ -1,6 +1,7 @@
 import React, { useMemo, ChangeEventHandler } from 'react';
 import { useState, useEffect } from 'react';
 import { Table, Row, Cell } from '../../components';
+import { useAsyncEffect } from '../../hooks';
 import './quest-component.css';
 
 type ClanRank = string //TODO: make enum
@@ -301,17 +302,14 @@ export const QuestsComponent = () => {
         run().catch(console.error)
     }
 
-    useEffect(() => {
-        const doFetch = async () => {
-            const clanMembers = await fetchClanMembers()
-            const clanMembersIgnored = clanMembers.map(member => ({
-                ignore: false,
-                ...member
-            })).sort((a, b) => b.name.localeCompare(a.name))
-            console.log('setting clan members')
-            setClanMembers(clanMembersIgnored)
-        }
-        doFetch().catch(console.error)
+    useAsyncEffect(async () => {
+        const clanMembers = await fetchClanMembers()
+        const clanMembersIgnored = clanMembers.map(member => ({
+            ignore: false,
+            ...member
+        })).sort((a, b) => b.name.localeCompare(a.name))
+        console.log('setting clan members')
+        setClanMembers(clanMembersIgnored)
     }, [])
 
     useEffect(() => {
@@ -322,16 +320,13 @@ export const QuestsComponent = () => {
         })))
     }, [clanMembers])
 
-    useEffect(() => {
-        const doFetch = async () => {
-            console.log('fetching user data', clanMembers)
-            const questPromises = clanMembers.map(fetchUserData)
-            const questsPerUser = await Promise.all(questPromises)
-            const questsByQuest = groupByQuest(questsPerUser)
+    useAsyncEffect(async () => {
+        console.log('fetching user data', clanMembers)
+        const questPromises = clanMembers.map(fetchUserData)
+        const questsPerUser = await Promise.all(questPromises)
+        const questsByQuest = groupByQuest(questsPerUser)
 
-            setQuestTable(questsByQuest)
-        }
-        doFetch().catch(console.error)
+        setQuestTable(questsByQuest)
     }, [clanMembers])
 
     const filteredTable = useMemo(() => {
