@@ -40,7 +40,7 @@ export class NotesStack extends Stack {
         const endpoint = new lambda_nodejs.NodejsFunction(this, "NotesApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
             entry: "./src/lambdas/notes/index.ts",
-            handler: "index.handler",
+            handler: "handler",
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],

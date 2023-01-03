@@ -35,7 +35,7 @@ export class QuestListStack extends Stack {
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "QuestListEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
-            handler: "index.handler",
+            handler: "handler",
             entry: "./src/lambdas/questList/index.ts",
             bundling: {
                 sourceMap: true,

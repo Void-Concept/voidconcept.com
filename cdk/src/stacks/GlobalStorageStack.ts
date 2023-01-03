@@ -39,7 +39,7 @@ export class GlobalStorageStack extends Stack {
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "StorageApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,
-            handler: "index.handler",
+            handler: "handler",
             entry: "./src/lambdas/globalStorage/index.ts",
             bundling: {
                 sourceMap: true,
