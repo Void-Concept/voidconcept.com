@@ -123,6 +123,7 @@ export const spells: Spell[] = [
         castTime: "1 Action",
         range: "Touch",
         components: "V, M",
+        materials: "A firefly or phosphorescent moss",
         duration: "1 Hour",
         description: [
             "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.",
@@ -633,6 +634,7 @@ export const spells: Spell[] = [
         range: "120 ft",
         areaOfEffect: "Variable",
         components: "V, S, M",
+        materials: "A thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite",
         duration: "24 Hours",
         description: [
             "You make an area within range magically secure. The area is a cube that can be as small as 5 feet to as large as 100 feet on each side. The spell lasts for the duration or until you use an action to dismiss it.",
@@ -771,6 +773,7 @@ export const spells: Spell[] = [
         castTime: "1 Hour",
         range: "60 ft",
         components: "V, S, M",
+        materials: "A jewel worth at least 1,000 gp, which the spell consumes",
         duration: "24 Hours",
         description: [
             "With this spell, you attempt to bind a celestial, an elemental, a fey, or a fiend to your service. The creature must be within range for the entire casting of the spell. (Typically, the creature is first summoned into the center of an inverted magic circle in order to keep it trapped while this spell is cast.) At the completion of the casting, the target must make a Charisma saving throw. On a failed save, it is bound to serve you for the duration. If the creature was summoned or created by another spell, that spell's duration is extended to match the duration of this spell.",

@@ -53,6 +53,7 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
     const onSpellClick = () => {
         setShowDescription(!showDescription);
     }
+
     return (
         <div>
             <div className="spell" onClick={onSpellClick}>
@@ -84,10 +85,22 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
                         {spell.duration}
                     </span>
                 </div>
-                {showDescription && <div className="spell-description-container" onClick={preventClick}>
-                    <hr />
-                    <SpellDescription description={(spell.description)} />
-                </div>}
+                {showDescription &&
+                    <div className="spell-description-container" onClick={preventClick}>
+                        {spell.materials && <>
+                            <hr />
+                            Material cost: {spell.materials}
+                        </>}
+                        <hr />
+                        <SpellDescription description={(spell.description)} />
+                        {spell.higherLevel && <>
+                            <hr />
+                            <div>
+                                {spell.higherLevel}
+                            </div>
+                        </>}
+                    </div>
+                }
             </div>
             <div className="spell-buttons">
                 <button className={`spell-button ${prepared && "spell-button-prepared"}`}
