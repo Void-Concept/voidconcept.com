@@ -546,6 +546,25 @@ export const spells: Spell[] = [
             "This spell grants the creature you touch the ability to understand any spoken language it hears. Moreover, when the target speaks, any creature that knows at least one language and can hear the target understands what it says.",
         ],
     }, {
+        name: "Magic Circle",
+        level: "3rd",
+        school: "Abjuration",
+        castTime: "1 minute",
+        range: "10ft",
+        areaOfEffect: "10ft radius, 20ft tall cylinder",
+        components: "V, S, M",
+        materials: "holy water or powdered silver and iron worth at least 100 gp, which the spell consumes",
+        duration: "1 Hour",
+        description: [
+            "You create a 10-foot-radius, 20-foot-tall cylinder of magical energy centered on a point on the ground that you can see within range. Glowing runes appear wherever the cylinder intersects with the floor or other surface.",
+            "Choose one or more of the following types of creatures: celestials, elementals, fey, fiends, or undead. The circle affects a creature of the chosen type in the following ways:",
+            "The creature can't willingly enter the cylinder by nonmagical means. If the creature tries to use teleportation or interplanar travel to do so, it must first succeed on a Charisma saving throw.",
+            "- The creature has disadvantage on attack rolls against targets within the cylinder.",
+            "- Targets within the cylinder can't be charmed, frightened, or possessed by the creature.",
+            "- When you cast this spell, you can elect to cause its magic to operate in the reverse direction, preventing a creature of the specified type from leaving the cylinder and protecting targets outside it.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 4th level or higher, the duration increases by 1 hour for each slot level above 3rd.",
+    }, {
         name: "Polymorph",
         level: "4th",
         school: "Transmutation",
@@ -745,6 +764,19 @@ export const spells: Spell[] = [
             "If you command an object to attack, it can make a single melee attack against a creature within 5 feet of it. It makes a slam attack with an attack bonus and bludgeoning damage determined by its size. The GM might rule that a specific object inflicts slashing or piercing damage based on its form."
         ],
         higherLevel: "If you cast this spell using a spell slot of 6th level or higher, you can animate two additional objects for each slot level above 5th."
+    }, {
+        name: "Planar Binding",
+        level: "5th",
+        school: "Abjuration",
+        castTime: "1 Hour",
+        range: "60 ft",
+        components: "V, S, M",
+        duration: "24 Hours",
+        description: [
+            "With this spell, you attempt to bind a celestial, an elemental, a fey, or a fiend to your service. The creature must be within range for the entire casting of the spell. (Typically, the creature is first summoned into the center of an inverted magic circle in order to keep it trapped while this spell is cast.) At the completion of the casting, the target must make a Charisma saving throw. On a failed save, it is bound to serve you for the duration. If the creature was summoned or created by another spell, that spell's duration is extended to match the duration of this spell.",
+            "A bound creature must follow your instructions to the best of its ability. You might command the creature to accompany you on an adventure, to guard a location, or to deliver a message. The creature obeys the letter of your instructions, but if the creature is hostile to you, it strives to twist your words to achieve its own objectives. If the creature carries out your instructions completely before the spell ends, it travels to you to report this fact if you are on the same plane of existence. If you are on a different plane of existence, it returns to the place where you bound it and remains there until the spell ends.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of a higher level, the duration increases to 10 days with a 6th-level slot, to 30 days with a 7th- level slot, to 180 days with an 8th-level slot, and to a year and a day with a 9th-level spell slot."
     }, {
         name: "Scatter",
         level: "6th",
