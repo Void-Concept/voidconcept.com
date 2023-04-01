@@ -12,12 +12,20 @@ import { CalendarStack } from './stacks/CalendarStack';
 import { QuestListStack } from './stacks/QuestListStack';
 import { NotesStack } from './stacks/NotesStack';
 import { DynDnsStack } from './stacks/DynDnsStack';
+import { DiscordSlashCommandStack } from './stacks/DiscordSlashCommandStack';
+import { SecretsStack } from './stacks/SecretsStack';
 
 const app = new cdk.App();
 
 const hostedZoneStack = new HostedZoneStack(app, "HostedZoneStack", {
     domainName: config.domainName,
     ...config.additionalDnsRecords,
+    env: {
+        region: "us-east-1"
+    },
+})
+
+const secretsStack = new SecretsStack(app, "SecretsStack", {
     env: {
         region: "us-east-1"
     },
@@ -81,6 +89,14 @@ new QuestListStack(app, "QuestListStack", {
 new NotesStack(app, "NotesStack", {
     hostedZone: hostedZoneStack.hostedZone,
     cognitoUserPool: authStack.userPool,
+    env: {
+        region: "us-east-1"
+    }
+})
+
+new DiscordSlashCommandStack(app, "DiscordSlashCommandStack", {
+    hostedZone: hostedZoneStack.hostedZone,
+    discordSecrets: secretsStack.discordSecrets,
     env: {
         region: "us-east-1"
     }

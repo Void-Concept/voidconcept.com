@@ -1,18 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import SecretsManager from 'aws-sdk/clients/secretsmanager';
-import { DiscordService } from "./DiscordService";
 import { SecretsManagerService } from "./SecretManagerService";
-import { DiscordApi } from "./DiscordApi";
+import { InteractionType, InteractionResponseType, verifyKey } from 'discord-interactions';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const secretsManager = new SecretsManager()
     const secretsManagerService = new SecretsManagerService(secretsManager)
-    const discordApiKey = await secretsManagerService.getDiscordApiKey()
 
-    const discordApi = new DiscordApi(discordApiKey)
-    const discordService = new DiscordService(discordApi)
-
-    const response = await withErrorHandling(dependencyInjectedHandler(event, discordService));
+    const response = await withErrorHandling(dependencyInjectedHandler(event, secretsManagerService));
     console.log("responding with", response);
 
     return response
@@ -20,14 +15,20 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
 export const dependencyInjectedHandler = async (
     event: APIGatewayProxyEvent,
-    discordService: DiscordService,
+    secretsManagerService: SecretsManagerService,
 ): Promise<APIGatewayProxyResult> => {
+    if (!await validRequest(event, secretsManagerService)) {
+        return unauthorized({
+            error: 'Bad request signature'
+        })
+    }
+
     const payload = JSON.parse(event.body || "")
-    if (payload.type === 1) {
+    if (payload.type === InteractionType.PING) {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                type: 1
+                type: InteractionResponseType.PONG
             })
         }
     }
@@ -48,3 +49,14 @@ const withErrorHandling = async (resolver: Promise<APIGatewayProxyResult>): Prom
         }
     }
 }
+
+const validRequest = async (event: APIGatewayProxyEvent, secretsManagerService: SecretsManagerService): Promise<boolean> => {
+    const signature = event.headers['X-Signature-Ed25519']
+    const timestamp = event.headers['X-Signature-Timestamp']
+    return !!event.body && !!signature && !!timestamp && verifyKey(event.body, signature, timestamp, await secretsManagerService.getDiscordPublicKey())
+}
+
+const unauthorized = (body: {error: string}): APIGatewayProxyResult => ({
+    statusCode: 401,
+    body: JSON.stringify(body)
+})
