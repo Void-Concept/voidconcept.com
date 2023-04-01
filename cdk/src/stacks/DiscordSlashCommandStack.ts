@@ -53,8 +53,8 @@ export class DiscordSlashCommandStack extends Stack {
             }
         });
 
-        const userQuests = api.root.addResource("quest");
-        userQuests.addMethod("GET");
+        const slash = api.root.addResource("slash");
+        slash.addMethod("GET");
 
         new route53.ARecord(this, "DiscordSlashCommandAlias", {
             zone: hostedZone,

@@ -74,6 +74,7 @@ new RunescapeProxyStack(app, "RunescapeProxyStack", {
 new CalendarStack(app, "CalendarStack", {
     hostedZone: hostedZoneStack.hostedZone,
     cognitoUserPool: authStack.userPool,
+    discordSecrets: secretsStack.discordSecrets,
     env: {
         region: "us-east-1"
     },
