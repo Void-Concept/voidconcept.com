@@ -33,7 +33,7 @@ export class DiscordSlashCommandStack extends Stack {
                 externalModules: ["aws-sdk"],
             },
             environment: {
-                secretName: props.discordSecrets.secretName
+                discordSecretName: props.discordSecrets.secretName
             }
         });
 

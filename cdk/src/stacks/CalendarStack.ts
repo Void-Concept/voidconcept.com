@@ -16,6 +16,7 @@ import { CognitoApiGatewayAuthorizer } from '../components/CognitoApiGatewayAuth
 interface CalendarStackProps extends StackProps {
     hostedZone: route53.IHostedZone
     cognitoUserPool: cognito.IUserPool
+    discordSecrets: secretsmanager.ISecret
 }
 
 export class CalendarStack extends Stack {
@@ -51,6 +52,7 @@ export class CalendarStack extends Stack {
             },
             environment: {
                 calendarTableName: calendarTable.tableName,
+                discordSecretName: props.discordSecrets.secretName,
             }
         })
 

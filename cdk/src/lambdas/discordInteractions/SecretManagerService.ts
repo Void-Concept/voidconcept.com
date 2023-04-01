@@ -12,7 +12,7 @@ export class SecretsManagerService {
 
     private getSecret = async (): Promise<SecretManagerResponse> => {
         const secretManagerResponse = await this.secretsManager.getSecretValue({
-            SecretId: process.env.secretName!,
+            SecretId: process.env.discordSecretName!,
         }).promise()
 
         const secretString = secretManagerResponse.SecretString
