@@ -17,10 +17,12 @@ export class DiscordSlashCommandStack extends Stack {
     constructor(scope: Construct, id: string, props: DiscordSlashCommandStackProps) {
         super(scope, id, props);
 
-        const domainName = `discord.${props.hostedZone.zoneName}`
+        const { discordSecrets, hostedZone } = props
+
+        const domainName = `discord.${hostedZone.zoneName}`
 
         const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
+            hostedZone: hostedZone,
             domainName: domainName
         });
 
@@ -33,9 +35,10 @@ export class DiscordSlashCommandStack extends Stack {
                 externalModules: ["aws-sdk"],
             },
             environment: {
-                discordSecretName: props.discordSecrets.secretName
+                discordSecretName: discordSecrets.secretName
             }
         });
+        discordSecrets.grantRead(endpoint);
 
         const api = new apigateway.RestApi(this, "DiscordSlashGateway", {
             domainName: {
@@ -54,7 +57,7 @@ export class DiscordSlashCommandStack extends Stack {
         userQuests.addMethod("GET");
 
         new route53.ARecord(this, "DiscordSlashCommandAlias", {
-            zone: props.hostedZone,
+            zone: hostedZone,
             target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
             recordName: domainName
         })

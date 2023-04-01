@@ -22,7 +22,7 @@ interface CalendarStackProps extends StackProps {
 export class CalendarStack extends Stack {
     constructor(scope: Construct, id: string, props: CalendarStackProps) {
         super(scope, id, props);
-        const { hostedZone, cognitoUserPool } = props
+        const { hostedZone, cognitoUserPool, discordSecrets } = props
 
         const domainName = `calendar.${hostedZone.zoneName}`
 
@@ -32,10 +32,6 @@ export class CalendarStack extends Stack {
                 type: dynamodb.AttributeType.STRING
             }
         });
-
-        const discordApiKeySecret = new secretsmanager.Secret(this, "Secret", {
-            secretName: "discord-api-key"
-        })
 
         const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
             hostedZone,
@@ -52,12 +48,12 @@ export class CalendarStack extends Stack {
             },
             environment: {
                 calendarTableName: calendarTable.tableName,
-                discordSecretName: props.discordSecrets.secretName,
+                discordSecretName: discordSecrets.secretName,
             }
         })
 
         calendarTable.grantReadWriteData(endpoint);
-        discordApiKeySecret.grantRead(endpoint);
+        discordSecrets.grantRead(endpoint);
 
         const api = new apigateway.RestApi(this, "CalendarApiGateway", {
             domainName: {
