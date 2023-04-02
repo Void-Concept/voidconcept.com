@@ -30,7 +30,7 @@ export const dependencyInjectedHandler = async (
     } else if (payload.type === InteractionType.APPLICATION_COMMAND) {
         switch (payload.data.name.toLowerCase()) {
             case timeCommandSpec.name.toLocaleLowerCase():
-                return ok(timeImpl(payload))
+                return ok(await timeImpl(payload))
             default:
                 return badRequest("Unknown Command")
         }

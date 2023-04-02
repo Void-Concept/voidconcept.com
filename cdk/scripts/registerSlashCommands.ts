@@ -4,7 +4,9 @@ import { SecretsManagerService } from '../src/lambdas/discordInteractions/Secret
 import SecretsManager from 'aws-sdk/clients/secretsmanager';
 
 const register = async () => {
-    const secretsManager = new SecretsManager()
+    const secretsManager = new SecretsManager({
+        region: "us-east-1"
+    })
     const secretsManagerService = new SecretsManagerService(secretsManager)
     
     const token = await secretsManagerService.getDiscordApiKey()

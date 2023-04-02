@@ -16,6 +16,7 @@
     "devDependencies": {
         "@types/jest": "^27.0.3",
         "@types/node": "16.11.10",
+        "@types/node-fetch": "^2.6.3",
         "aws-cdk": "^2.58.1",
         "aws-sdk": "^2.1286.0",
         "esbuild": "^0.16.12",
@@ -30,8 +31,9 @@
         "aws-cdk-lib": "^2.58.1",
         "aws-lambda": "^1.0.7",
         "constructs": "^10.1.7",
+        "date-fns-tz": "^2.0.0",
         "discord-interactions": "^3.3.0",
-        "node-fetch": "^3.3.0",
+        "node-fetch": "^2.6.9",
         "source-map-support": "^0.5.21",
         "uuid": "^9.0.0"
     }
