@@ -51,8 +51,8 @@ const withErrorHandling = async (resolver: Promise<APIGatewayProxyResult>): Prom
 }
 
 const validRequest = async (event: APIGatewayProxyEvent, secretsManagerService: SecretsManagerService): Promise<boolean> => {
-    const signature = event.headers['X-Signature-Ed25519']
-    const timestamp = event.headers['X-Signature-Timestamp']
+    const signature = event.headers['x-signature-ed25519']
+    const timestamp = event.headers['x-signature-timestamp']
     return !!event.body && !!signature && !!timestamp && verifyKey(event.body, signature, timestamp, await secretsManagerService.getDiscordPublicKey())
 }
 
