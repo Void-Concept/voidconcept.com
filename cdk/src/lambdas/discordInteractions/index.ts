@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import SecretsManager from 'aws-sdk/clients/secretsmanager';
 import { SecretsManagerService } from "./SecretManagerService";
 import { InteractionType, InteractionResponseType, verifyKey } from 'discord-interactions';
+import { timeCommandSpec, timeImpl } from './commands'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const secretsManager = new SecretsManager()
@@ -18,24 +19,23 @@ export const dependencyInjectedHandler = async (
     secretsManagerService: SecretsManagerService,
 ): Promise<APIGatewayProxyResult> => {
     if (!await validRequest(event, secretsManagerService)) {
-        return unauthorized({
-            error: 'Bad request signature'
-        })
+        return unauthorized('Bad request signature')
     }
 
     const payload = JSON.parse(event.body || "")
     if (payload.type === InteractionType.PING) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                type: InteractionResponseType.PONG
-            })
+        return ok({
+            type: InteractionResponseType.PONG
+        })
+    } else if (payload.type === InteractionType.APPLICATION_COMMAND) {
+        switch (payload.data.name.toLowerCase()) {
+            case timeCommandSpec.name.toLocaleLowerCase():
+                return ok(timeImpl(payload))
+            default:
+                return badRequest("Unknown Command")
         }
     }
-    return {
-        statusCode: 404,
-        body: JSON.stringify("Operation not found")
-    }
+    return badRequest("Unknown Command")
 }
 
 const withErrorHandling = async (resolver: Promise<APIGatewayProxyResult>): Promise<APIGatewayProxyResult> => {
@@ -56,7 +56,21 @@ const validRequest = async (event: APIGatewayProxyEvent, secretsManagerService: 
     return !!event.body && !!signature && !!timestamp && verifyKey(event.body, signature, timestamp, await secretsManagerService.getDiscordPublicKey())
 }
 
-const unauthorized = (body: {error: string}): APIGatewayProxyResult => ({
+const unauthorized = (message: string): APIGatewayProxyResult => ({
     statusCode: 401,
+    body: JSON.stringify({
+        error: message
+    })
+})
+
+const badRequest = (message: string): APIGatewayProxyResult => ({
+    statusCode: 401,
+    body: JSON.stringify({
+        error: message
+    })
+})
+
+const ok = (body: any): APIGatewayProxyResult => ({
+    statusCode: 200,
     body: JSON.stringify(body)
 })

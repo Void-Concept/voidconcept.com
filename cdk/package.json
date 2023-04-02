@@ -10,7 +10,8 @@
         "test": "jest",
         "cdk": "cdk",
         "cdk-diff": "cdk diff",
-        "cdk-deploy": "cdk deploy \"*\""
+        "cdk-deploy": "cdk deploy \"*\"",
+        "register-slash-commands": "discordSecretName=discord-secrets ts-node ./scripts/registerSlashCommands.ts"
     },
     "devDependencies": {
         "@types/jest": "^27.0.3",

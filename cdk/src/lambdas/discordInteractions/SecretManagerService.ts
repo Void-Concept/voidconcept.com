@@ -3,6 +3,7 @@ import { SecretsManager } from "aws-sdk";
 type SecretManagerResponse = {
     apiKey: string
     publicKey: string
+    applicationId: string
 }
 
 export class SecretsManagerService {
@@ -27,5 +28,9 @@ export class SecretsManagerService {
 
     getDiscordPublicKey = async (): Promise<string> => {
         return (await this.getSecret()).publicKey
+    }
+    
+    getApplicationId = async (): Promise<string> => {
+        return (await this.getSecret()).applicationId
     }
 }
