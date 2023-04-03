@@ -1,2 +1,5 @@
-export { commandSpec as timeCommandSpec, commandImplementation as timeImpl } from './time'
+import { commandSpec as timeCommandSpec } from './time'
+import { CommandSpec } from './types'
+export * from './types'
 
+export const commandSpecs: CommandSpec[] = [timeCommandSpec]

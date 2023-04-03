@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { timeCommandSpec } from '../src/lambdas/discordInteractions/commands/index'
+import { commandSpecs, Command } from '../src/lambdas/discordInteractions/commands'
 import { SecretsManagerService } from '../src/lambdas/discordInteractions/SecretManagerService'
 import SecretsManager from 'aws-sdk/clients/secretsmanager';
 
@@ -12,6 +12,8 @@ const register = async () => {
     const token = await secretsManagerService.getDiscordApiKey()
     const applicationId = await secretsManagerService.getApplicationId()
 
+    const commands: Command[] = commandSpecs.map(spec => spec.command)
+
     const response = await fetch(
         `https://discord.com/api/v8/applications/${applicationId}/commands`,
         {
@@ -20,7 +22,7 @@ const register = async () => {
             "Authorization": `Bot ${token}`,
           },
           method: "PUT",
-          body: JSON.stringify([timeCommandSpec]),
+          body: JSON.stringify(commands),
         }
       );
       

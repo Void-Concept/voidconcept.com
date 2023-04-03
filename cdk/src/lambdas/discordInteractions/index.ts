@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import SecretsManager from 'aws-sdk/clients/secretsmanager';
 import { SecretsManagerService } from "./SecretManagerService";
 import { InteractionType, InteractionResponseType, verifyKey } from 'discord-interactions';
-import { timeCommandSpec, timeImpl } from './commands'
+import { commandSpecs } from './commands'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const secretsManager = new SecretsManager()
@@ -23,17 +23,21 @@ export const dependencyInjectedHandler = async (
     }
 
     const payload = JSON.parse(event.body || "")
+    console.log(payload)
     if (payload.type === InteractionType.PING) {
         return ok({
             type: InteractionResponseType.PONG
         })
     } else if (payload.type === InteractionType.APPLICATION_COMMAND) {
-        switch (payload.data.name.toLowerCase()) {
-            case timeCommandSpec.name.toLocaleLowerCase():
-                return ok(await timeImpl(payload))
-            default:
-                return badRequest("Unknown Command")
-        }
+        const spec = commandSpecs.find(spec => spec.command.name === payload.data.name)
+        if (!spec) return badRequest("Unknown Command")
+
+        return ok(await spec.handler(payload))
+    } else if (payload.type === InteractionType.APPLICATION_COMMAND_AUTOCOMPLETE) {
+        const spec = commandSpecs.find(spec => spec.command.name === payload.data.name)
+        if (!spec || !spec.autoCompleteHandler) return badRequest("Unknown Command")
+
+        return ok(await spec.autoCompleteHandler(payload))
     }
     return badRequest("Unknown Command")
 }
@@ -64,7 +68,7 @@ const unauthorized = (message: string): APIGatewayProxyResult => ({
 })
 
 const badRequest = (message: string): APIGatewayProxyResult => ({
-    statusCode: 401,
+    statusCode: 400,
     body: JSON.stringify({
         error: message
     })

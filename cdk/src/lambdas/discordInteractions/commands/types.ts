@@ -56,6 +56,7 @@ export type CommandOption = {
     max_value?: number
     min_length?: number
     max_length?: number
+    autocomplete?: boolean
 }
 
 export type Command = {
@@ -69,6 +70,7 @@ export type RequestOption = {
     type: CommandOptionType
     name: string
     value: string | number
+    focused?: boolean
 }
 
 export type RequestData = {
@@ -87,7 +89,29 @@ export type ResponseData = {
     content: string
 }
 
-export type Response = {
-    type: InteractionResponseType
+export type ChannelMessageResponse = {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE
     data: ResponseData
+}
+
+export type AutoCompleteChoice = {
+    name: string
+    value: string
+}
+
+export type AutoCompleteResponseData = {
+    choices: AutoCompleteChoice[]
+}
+
+export type AutoCompleteResponse = {
+    type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT
+    data: AutoCompleteResponseData
+}
+
+export type Response = ChannelMessageResponse | AutoCompleteResponse
+
+export type CommandSpec = {
+    command: Command,
+    handler: (request: Request) => Promise<Response>,
+    autoCompleteHandler?: (autoCompleteRequest: Request) => Promise<AutoCompleteResponse>,
 }
