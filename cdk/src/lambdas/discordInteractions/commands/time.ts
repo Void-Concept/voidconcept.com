@@ -1,7 +1,8 @@
 import { InteractionResponseType } from 'discord-interactions';
-import { AutoCompleteChoice, AutoCompleteResponse, Command, CommandOptionType, CommandType, Request, Response } from './types'
+import { AutoCompleteChoice, AutoCompleteResponse, Command, CommandOptionType, Request, ChannelMessageResponse } from './types'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { getTimeZones } from '@vvo/tzdb';
+import { parse, isValid } from 'date-fns';
 
 const hardCodedimeZones = [{
     name: "UTC",
@@ -38,6 +39,10 @@ export const command: Command = {
     name: "time",
     description: "Translate time using discord's time format function",
     options: [{
+        name: "date",
+        type: CommandOptionType.STRING,
+        description: "Date in the format YYYY-MM-DD. Optional: will default to today",
+    }, {
         name: "time",
         type: CommandOptionType.STRING,
         description: "Time string. ie: 10:00am",
@@ -51,12 +56,26 @@ export const command: Command = {
     }]
 }
 
-export const handler = async (request: Request): Promise<Response> => {
+const parseTimePart = (timeString: string, datePart: Date): Date => {
+    const timePart = parse(timeString, "hh:mmaa", datePart)
+    if (!isValid(timePart)) {
+        return parse(timeString, "HH:mm", datePart)
+    } else {
+        return timePart
+    }
+}
+
+export const handler = async (request: Request): Promise<ChannelMessageResponse> => {
     const timezoneOption = request.data.options?.find(option => option.name === 'timezone')
     const timezone = hardCodedimeZones.find(zone => zone.name.toLowerCase() === (timezoneOption?.value as string).toLowerCase()) || timezoneOption // fix if they submit before autocorrect translates
+    
     const time = request.data.options?.find(option => option.name === 'time')
+    const date = request.data.options?.find(option => option.name === 'date')
 
-    const utcTime = zonedTimeToUtc(time!.value, timezone!.value as string)
+    const datePart = date && parse(date.value as string, "yyyy-MM-dd", new Date()) || new Date()
+    const timePart = parseTimePart(time!.value as string, datePart)
+
+    const utcTime = zonedTimeToUtc(timePart, timezone!.value as string)
     const utcTimeNum = Math.floor(utcTime.getTime() / 1000)
 
     return {
