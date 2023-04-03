@@ -82,7 +82,7 @@ export const autoCompleteHandler = async (request: Request): Promise<AutoComplet
         const suggestions = allTimeZones
             .filter(timeZone => timeZone.name.toLowerCase().startsWith((focusedField.value as string).toLowerCase()))
 
-        return autoCompleteResult(suggestions.slice(0, 50))
+        return autoCompleteResult(suggestions.slice(0, 25))
     }
 
     return autoCompleteResult([])
