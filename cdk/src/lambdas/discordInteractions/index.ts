@@ -23,7 +23,6 @@ export const dependencyInjectedHandler = async (
     }
 
     const payload = JSON.parse(event.body || "")
-    console.log(payload)
     if (payload.type === InteractionType.PING) {
         return ok({
             type: InteractionResponseType.PONG

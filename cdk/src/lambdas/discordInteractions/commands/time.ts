@@ -3,45 +3,6 @@ import { AutoCompleteChoice, AutoCompleteResponse, Command, CommandOptionType, C
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { getTimeZones } from '@vvo/tzdb';
 
-export const command: Command = {
-    name: "time",
-    description: "Translate time using discord's time format function",
-    options: [{
-        name: "time",
-        type: CommandOptionType.STRING,
-        description: "Time string. ie: 10:00am",
-        required: true,
-    }, {
-        name: "timezone",
-        type: CommandOptionType.STRING,
-        description: "Timezone you are translating from",
-        required: true,
-        autocomplete: true,
-    }]
-}
-
-export const handler = async (request: Request): Promise<Response> => {
-    const timezone = request.data.options?.find(option => option.name === 'timezone')
-    const time = request.data.options?.find(option => option.name === 'time')
-
-    const utcTime = zonedTimeToUtc(time!.value, timezone!.value as string)
-    const utcTimeNum = Math.floor(utcTime.getTime() / 1000)
-
-    return {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: `That time is <t:${utcTimeNum}:F>`
-        }
-    }
-}
-
-const autoCompleteResult = (choices: AutoCompleteChoice[]): AutoCompleteResponse => ({
-    type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
-    data: {
-        choices
-    }
-})
-
 const hardCodedimeZones = [{
     name: "UTC",
     value: "UTC"
@@ -72,6 +33,46 @@ const canonicalNameOptions = tzdbZones.map(zone => ({
 }))
 
 const allTimeZones = [...hardCodedimeZones, ...canonicalNameOptions]
+
+export const command: Command = {
+    name: "time",
+    description: "Translate time using discord's time format function",
+    options: [{
+        name: "time",
+        type: CommandOptionType.STRING,
+        description: "Time string. ie: 10:00am",
+        required: true,
+    }, {
+        name: "timezone",
+        type: CommandOptionType.STRING,
+        description: "Timezone you are translating from",
+        required: true,
+        autocomplete: true,
+    }]
+}
+
+export const handler = async (request: Request): Promise<Response> => {
+    const timezoneOption = request.data.options?.find(option => option.name === 'timezone')
+    const timezone = hardCodedimeZones.find(zone => zone.name.toLowerCase() === (timezoneOption?.value as string).toLowerCase()) || timezoneOption // fix if they submit before autocorrect translates
+    const time = request.data.options?.find(option => option.name === 'time')
+
+    const utcTime = zonedTimeToUtc(time!.value, timezone!.value as string)
+    const utcTimeNum = Math.floor(utcTime.getTime() / 1000)
+
+    return {
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+            content: `That time is <t:${utcTimeNum}:F>`
+        }
+    }
+}
+
+const autoCompleteResult = (choices: AutoCompleteChoice[]): AutoCompleteResponse => ({
+    type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+    data: {
+        choices
+    }
+})
 
 export const autoCompleteHandler = async (request: Request): Promise<AutoCompleteResponse> => {
     const focusedField = request.data.options?.find(option => option.focused)
