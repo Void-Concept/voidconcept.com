@@ -39,31 +39,43 @@ export const command: Command = {
     name: "time",
     description: "Translate time using discord's time format function",
     options: [{
-        name: "date",
+        name: "timezone",
         type: CommandOptionType.STRING,
-        description: "Date in the format YYYY-MM-DD. Optional: will default to today",
+        description: "Timezone you are translating from",
+        required: true,
+        autocomplete: true,
     }, {
         name: "time",
         type: CommandOptionType.STRING,
         description: "Time string. ie: 10:00am",
         required: true,
     }, {
-        name: "timezone",
+        name: "date",
         type: CommandOptionType.STRING,
-        description: "Timezone you are translating from",
-        required: true,
-        autocomplete: true,
+        description: "Date in the format YYYY-MM-DD. Optional: will default to today",
     }]
 }
 
-const parseTimePart = (timeString: string, datePart: Date): Date => {
-    const timePart = parse(timeString, "hh:mmaa", datePart)
-    if (!isValid(timePart)) {
-        return parse(timeString, "HH:mm", datePart)
-    } else {
-        return timePart
-    }
+const timeFormats = [
+    "hh:mmaa",
+    "hh:mm aa",
+    "HH:mm",
+    "hh",
+    "HH",
+]
+
+const parseTimePart = (timeString: string, datePart: Date): Date | undefined => {
+    return timeFormats
+        .map(format => parse(timeString, format, datePart))
+        .find(parsed => isValid(parsed))
 }
+
+const messageResponse = (content: string): ChannelMessageResponse => ({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+        content
+    }
+})
 
 export const handler = async (request: Request): Promise<ChannelMessageResponse> => {
     const timezoneOption = request.data.options?.find(option => option.name === 'timezone')
@@ -75,15 +87,14 @@ export const handler = async (request: Request): Promise<ChannelMessageResponse>
     const datePart = date && parse(date.value as string, "yyyy-MM-dd", new Date()) || new Date()
     const timePart = parseTimePart(time!.value as string, datePart)
 
+    if (!timePart) return messageResponse("Entered time is invalid")
+
     const utcTime = zonedTimeToUtc(timePart, timezone!.value as string)
     const utcTimeNum = Math.floor(utcTime.getTime() / 1000)
 
-    return {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: `That time is <t:${utcTimeNum}:F>`
-        }
-    }
+    if (!isValid(utcTime)) return messageResponse("Entered time is invalid")
+
+    return messageResponse(`That time is <t:${utcTimeNum}:F>`)
 }
 
 const autoCompleteResult = (choices: AutoCompleteChoice[]): AutoCompleteResponse => ({
