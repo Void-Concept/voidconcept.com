@@ -61,6 +61,7 @@ const timeFormats = [
     "hh:mm aa",
     "HH:mm",
     "hh",
+    "hhaa",
     "HH",
 ]
 
