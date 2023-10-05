@@ -29,7 +29,7 @@ describe("time", () => {
 
         const response = await handler(request)
 
-        expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+        expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     })
 
     it("should convert correctly with timezone", async () => {
@@ -51,7 +51,7 @@ describe("time", () => {
 
         const response = await handler(request)
 
-        expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+        expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     })
 
     it("should convert correctly with timezone with afternoon time", async () => {
@@ -73,7 +73,7 @@ describe("time", () => {
 
         const response = await handler(request)
 
-        expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+        expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     })
 
     it("should attempt 12hr and 24hr parsing", async () => {
@@ -95,7 +95,7 @@ describe("time", () => {
 
         const response = await handler(request)
 
-        expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+        expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     })
 
     it("should attempt 12hr and 24hr parsing with afternoon time", async () => {
@@ -117,7 +117,7 @@ describe("time", () => {
 
         const response = await handler(request)
 
-        expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+        expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     })
 
     // // dependent on time, so just run locally. Normally I'd fix, but just want this working
@@ -136,6 +136,6 @@ describe("time", () => {
 
     //     const response = await handler(request)
 
-    //     expect(response.data.content).toEqual(`That time is <t:${expectedTime}:F>`)
+    //     expect(response.data.content).toEqual(`<t:${expectedTime}:F>`)
     // })
 })

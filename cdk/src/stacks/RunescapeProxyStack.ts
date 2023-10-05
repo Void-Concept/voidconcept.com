@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { StackProps, Stack } from 'aws-cdk-lib';
+import { StackProps, Stack, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -31,7 +31,8 @@ export class RunescapeProxyStack extends Stack {
             bundling: {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
-            }
+            },
+            timeout: Duration.seconds(30),
         });
 
         const api = new apigateway.RestApi(this, "RunescapeProxyGateway", {

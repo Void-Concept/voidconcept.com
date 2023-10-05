@@ -95,7 +95,7 @@ export const handler = async (request: Request): Promise<ChannelMessageResponse>
 
     if (!isValid(utcTime)) return messageResponse("Entered time is invalid")
 
-    return messageResponse(`That time is <t:${utcTimeNum}:F>`)
+    return messageResponse(`<t:${utcTimeNum}:F>`)
 }
 
 const autoCompleteResult = (choices: AutoCompleteChoice[]): AutoCompleteResponse => ({
