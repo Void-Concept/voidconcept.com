@@ -132,17 +132,23 @@ const QuestTableRow = ({ users, questRow, tabLevel, onFetchQuestOverview }: Ques
                 <Cell>
                     <a href={`https://runescape.wiki/?search=${questName}`} target="_blank">{spaces}{questName}</a>
                 </Cell>
-                {questRow.userProgress
-                    .filter(prog => !users.find(user => prog.user === user.name)?.hide)
-                    .map((questCell, index) => {
-                        const { className, text } = getStatusClass(questCell.status, questCell.userEligible)
+                {users.map((user, index) => {
+                    const userProg = questRow.userProgress.find(prog => prog.user === user.name)
+                    if (userProg) {
+                        const { className, text } = getStatusClass(userProg.status, userProg.userEligible)
                         return (
                             <Cell className={className} key={index}>
                                 {text}
                             </Cell>
                         )
-                    })
-                }
+                    } else {
+                        return (
+                            <Cell className="vc-status-pink" key={index}>
+                                Unknown
+                            </Cell>
+                        )
+                    }
+                })}
             </Row>
             {showSubquest && !questRow.overview && "Fetching..."}
             {showSubquest && questRow.overview && <QuestOverviewComponent users={users} overview={questRow.overview} tabLevel={numSpaces + 1} onFetchQuestOverview={onFetchQuestOverview} />}
