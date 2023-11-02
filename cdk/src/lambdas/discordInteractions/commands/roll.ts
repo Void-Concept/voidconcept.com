@@ -1,6 +1,6 @@
-import { ECS_DISABLE_EXPLICIT_DEPLOYMENT_CONTROLLER_FOR_CIRCUIT_BREAKER } from "aws-cdk-lib/cx-api";
 import { findOption, messageResponse } from "./helpers";
 import { CommandSpec, Command, CommandOptionType, Request, ChannelMessageResponse } from "./types";
+import { DiceRoll } from '@dice-roller/rpg-dice-roller'
 
 export const Options = {
     dice: 'dice'
@@ -18,34 +18,24 @@ export const command: Command = {
     }]
 }
 
-const rollNDice = (rng: () => number, numDice: number, upperBound: number): number[] => {
-    return new Array(numDice).fill(0).map(() => (rng() % upperBound) + 1)
-}
-
-export const handler = (rng: () => number) => async (request: Request): Promise<ChannelMessageResponse> => {
+export const handler = (rollDice: (diceStr: string) => string) => async (request: Request): Promise<ChannelMessageResponse> => {
     const diceStringOption = request.data.options?.find(findOption(Options.dice))
     if (!diceStringOption) return messageResponse('Invalid option: dice')
-    
-    const regex = /(\d+)d(\d+)/ //1 or more digit, d, 1 or more digit
 
-    const diceRoll = regex.exec(diceStringOption.value as string)
-    if (diceRoll === null) return messageResponse(`Invalid dice: ${diceStringOption.value}`)
+    const diceRoll = rollDice(diceStringOption.value as string)
 
-    const numDice = parseInt(diceRoll[1])
-    if (numDice > 20) return messageResponse('Invalid number of dice. Can only roll 20 maximum')
-
-    const upperBound = parseInt(diceRoll[2])
-
-    const randomNumbers = rollNDice(rng, numDice, upperBound)
-
-    return messageResponse(`Rolling [${diceRoll[0]}]: ${randomNumbers.join(', ')}`)
+    return messageResponse(`${diceRoll}`)
 }
 
-const defaultRng = () => {
-    return Math.floor(Math.random() * 1e16)
+export const defaultRollDice = (diceStr: string): string => {
+    try {
+        return new DiceRoll(diceStr).output
+    } catch (e) {
+        return "Error: invalid input"
+    }
 }
 
 export const commandSpec: CommandSpec = {
     command,
-    handler: handler(defaultRng),
+    handler: handler(defaultRollDice),
 }
