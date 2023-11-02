@@ -42,7 +42,7 @@ export const handler = (rng: () => number) => async (request: Request): Promise<
 }
 
 const defaultRng = () => {
-    return Math.random() * 1e16
+    return Math.floor(Math.random() * 1e16)
 }
 
 export const commandSpec: CommandSpec = {
