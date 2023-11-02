@@ -18,6 +18,10 @@ export const command: Command = {
     }]
 }
 
+const rollNDice = (rng: () => number, numDice: number, upperBound: number): number[] => {
+    return new Array(numDice).fill(0).map(() => (rng() % upperBound) + 1)
+}
+
 export const handler = (rng: () => number) => async (request: Request): Promise<ChannelMessageResponse> => {
     const diceStringOption = request.data.options?.find(findOption(Options.dice))
     if (!diceStringOption) return messageResponse('Invalid option: dice')
@@ -28,11 +32,13 @@ export const handler = (rng: () => number) => async (request: Request): Promise<
     if (diceRoll === null) return messageResponse(`Invalid dice: ${diceStringOption.value}`)
 
     const numDice = parseInt(diceRoll[1])
+    if (numDice > 20) return messageResponse('Invalid number of dice. Can only roll 20 maximum')
+
     const upperBound = parseInt(diceRoll[2])
 
-    const randomNumber = (rng() % upperBound) + 1
+    const randomNumbers = rollNDice(rng, numDice, upperBound)
 
-    return messageResponse(`Rolling [${diceStringOption.value}]: ${randomNumber}`)
+    return messageResponse(`Rolling [${diceRoll[0]}]: ${randomNumbers.join(', ')}`)
 }
 
 const defaultRng = () => {
