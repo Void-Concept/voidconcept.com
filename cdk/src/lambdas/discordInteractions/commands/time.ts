@@ -3,6 +3,7 @@ import { AutoCompleteChoice, AutoCompleteResponse, Command, CommandOptionType, R
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { getTimeZones } from '@vvo/tzdb';
 import { parse, isValid } from 'date-fns';
+import { messageResponse } from './helpers';
 
 const hardCodedimeZones = [{
     name: "UTC",
@@ -71,12 +72,6 @@ const parseTimePart = (timeString: string, datePart: Date): Date | undefined => 
         .find(parsed => isValid(parsed))
 }
 
-const messageResponse = (content: string): ChannelMessageResponse => ({
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-        content
-    }
-})
 
 export const handler = async (request: Request): Promise<ChannelMessageResponse> => {
     const timezoneOption = request.data.options?.find(option => option.name === 'timezone')
