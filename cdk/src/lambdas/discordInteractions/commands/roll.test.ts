@@ -32,14 +32,14 @@ describe('roll', () => {
         return Promise.all(returnValues.map(testRun))
     })
 
-    it.skip('should correctly roll 1d6', async () => {
+    it('should correctly roll 1d6', async () => {
         const returnValues = new Array(21).fill(0).map((_, index) => index)
 
         const testRun = async (returnValue: number) => {
             const request = createRequest([{
                 name: Options.dice,
                 type: CommandOptionType.STRING,
-                value: '1d20'
+                value: '1d6'
             }])
     
             const rng = rngReturns(returnValue)

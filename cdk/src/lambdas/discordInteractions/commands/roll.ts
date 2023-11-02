@@ -1,3 +1,4 @@
+import { ECS_DISABLE_EXPLICIT_DEPLOYMENT_CONTROLLER_FOR_CIRCUIT_BREAKER } from "aws-cdk-lib/cx-api";
 import { findOption, messageResponse } from "./helpers";
 import { CommandSpec, Command, CommandOptionType, Request, ChannelMessageResponse } from "./types";
 
@@ -18,14 +19,20 @@ export const command: Command = {
 }
 
 export const handler = (rng: () => number) => async (request: Request): Promise<ChannelMessageResponse> => {
-    const diceString = request.data.options?.find(findOption(Options.dice))
-    if (!diceString) return messageResponse('Invalid option: dice')
+    const diceStringOption = request.data.options?.find(findOption(Options.dice))
+    if (!diceStringOption) return messageResponse('Invalid option: dice')
     
-    const upperBound = 20
+    const regex = /(\d+)d(\d+)/ //1 or more digit, d, 1 or more digit
+
+    const diceRoll = regex.exec(diceStringOption.value as string)
+    if (diceRoll === null) return messageResponse(`Invalid dice: ${diceStringOption.value}`)
+
+    const numDice = parseInt(diceRoll[1])
+    const upperBound = parseInt(diceRoll[2])
 
     const randomNumber = (rng() % upperBound) + 1
 
-    return messageResponse(`Rolling [1d20]: ${randomNumber}`)
+    return messageResponse(`Rolling [${diceStringOption.value}]: ${randomNumber}`)
 }
 
 const defaultRng = () => {
