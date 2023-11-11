@@ -19,7 +19,7 @@ export type Spell = {
     alwaysPrepared?: boolean
 }
 
-export const MAX_PREPARED = 22;
+export const MAX_PREPARED = 23;
 
 export const spells: Spell[] = [
     {
@@ -1029,6 +1029,19 @@ export const spells: Spell[] = [
             "Until the spell ends, one willing creature you touch is immune to psychic damage, any effect that would sense its emotions or read its thoughts, divination spells, and the charmed condition. The spell even foils wish spells and spells or effects of similar power used to affect the target's mind or to gain information about the target.",
         ],
     }, {
+        name: "Telepathy",
+        level: "8th",
+        school: "Evocation",
+        castTime: "1 Action",
+        range: "Unlimited",
+        components: "V, S, M",
+        materials: "a pair of linked silver rings",
+        duration: "24 Hours",
+        description: [
+            "You create a telepathic link between yourself and a willing creature with which you are familiar. The creature can be anywhere on the same plane of existence as you. The spell ends if you or the target are no longer on the same plane.",
+            "Until the spell ends, you and the target can instantaneously share words, images, sounds, and other sensory messages with one another through the link, and the target recognizes you as the creature it is communicating with. The spell enables a creature with an Intelligence score of at least 1 to understand the meaning of your words and take in the scope of any sensory messages you send to it.",
+        ],
+    }, {
         name: "Wish",
         level: "9th",
         school: "Conjuration",
@@ -1069,6 +1082,22 @@ export const spells: Spell[] = [
             "6. Indigo. On a failed save, the creature is restrained. It must then make a Constitution saving throw at the end of each of its turns. If it successfully saves three times, the spell ends. If it fails its save three times, it permanently turns to stone and is subjected to the petrified condition. The successes and failures don’t need to be consecutive; keep track of both until the creature collects three of a kind.",
             "   While this layer is in place, spells can’t be cast through the wall. The layer is destroyed by bright light shed by a daylight spell or a similar spell of equal or higher level.",
             "7. Violet. On a failed save, the creature is blinded. It must then make a Wisdom saving throw at the start of your next turn. A successful save ends the blindness. If it fails that save, the creature is transported to another plane of the GM’s choosing and is no longer blinded. (Typically, a creature that is on a plane that isn’t its home plane is banished home, while other creatures are usually cast into the Astral or Ethereal planes.) This layer is destroyed by a dispel magic spell or a similar spell of equal or higher level that can end spells and magical effects.",
+        ],
+    }, {
+        name: "Gate",
+        level: "9th",
+        school: "Conjuration",
+        castTime: "1 Action",
+        concentration: true,
+        range: "60ft",
+        components: "V, S, M",
+        materials: "Diamond worth at least 5000gp",
+        duration: "1 Minute",
+        description: [
+            "You conjure a portal linking an unoccupied space you can see within range to a precise location on a different plane of existence. The portal is a circular opening, which you can make 5 to 20 feet in diameter. You can orient the portal in any direction you choose. The portal lasts for the duration.",
+            "The portal has a front and a back on each plane where it appears. Travel through the portal is possible only by moving through its front. Anything that does so is instantly transported to the other plane, appearing in the unoccupied space nearest to the portal.",
+            "Deities and other planar rulers can prevent portals created by this spell from opening in their presence or anywhere within their domains.",
+            "When you cast this spell, you can speak the name of a specific creature (a pseudonym, title, or nickname doesn't work). If that creature is on a plane other than the one you are on, the portal opens in the named creature's immediate vicinity and draws the creature through it to the nearest unoccupied space on your side of the portal. You gain no special power over the creature, and it is free to act as the GM deems appropriate. It might leave, attack you, or help you.",
         ],
     }, 
 ];
