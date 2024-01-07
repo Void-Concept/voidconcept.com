@@ -1,4 +1,4 @@
-import { StackProps, Stack } from 'aws-cdk-lib';
+import { StackProps, Stack, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -34,6 +34,7 @@ export class DiscordSlashCommandStack extends Stack {
                 sourceMap: true,
                 externalModules: ["aws-sdk"],
             },
+            timeout: Duration.minutes(1),
             environment: {
                 discordSecretName: discordSecrets.secretName
             }
