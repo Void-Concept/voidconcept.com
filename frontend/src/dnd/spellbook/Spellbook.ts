@@ -297,6 +297,32 @@ export const spells: Spell[] = [
             "An audible alarm produces the sound of a hand bell for 10 seconds within 60 feet."
         ],
     }, {
+        name: "Ice Knife",
+        level: "1st",
+        school: "Conjuration",
+        castTime: "1 Action",
+        range: "60 ft",
+        areaOfEffect: "5ft Sphere", 
+        components: "S, M",
+        materials: "A drop of water or piece of ice",
+        duration: "Instantaneous",
+        description: [
+            "You create a shard of ice and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 piercing damage. Hit or miss, the shard then explodes. The target and each creature within 5 feet of it must succeed on a Dexterity saving throw or take 2d6 cold damage.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 2nd level or higher, the cold damage increases by 1d6 for each slot level above 1st.",
+    }, {
+        name: "Silvery Barbs",
+        level: "1st",
+        school: "Enchantment",
+        castTime: "1 Reaction",
+        range: "60 ft",
+        components: "V",
+        duration: "Instantaneous",
+        description: [
+            "You magically distract the triggering creature and turn its momentary uncertainty into encouragement for another creature. The triggering creature must reroll the d20 and use the lower roll.",
+            "You can then choose a different creature you can see within range (you can choose yourself). The chosen creature has advantage on the next attack roll, ability check, or saving throw it makes within 1 minute. A creature can be empowered by only one use of this spell at a time.",
+        ],
+    }, {
         name: "Flaming Sphere",
         level: "2nd",
         school: "Conjuration",
@@ -427,6 +453,18 @@ export const spells: Spell[] = [
             "A duplicate's AC equals 10 + your Dexterity modifier. If an attack hits a duplicate, the duplicate is destroyed. A duplicate can be destroyed only by an attack that hits it. It ignores all other damage and effects. The spell ends when all three duplicates are destroyed.",
             "A creature is unaffected by this spell if it can't see, if it relies on senses other than sight, such as blindsight, or if it can perceive illusions as false, as with truesight.",
         ],
+    }, {
+        name: "Mind Spike",
+        level: "2nd",
+        school: "Divination",
+        castTime: "1 Action",
+        range: "60ft",
+        components: "S",
+        duration: "1 Hour",
+        description: [
+            "You reach into the mind of one creature you can see within range. The target must make a Wisdom saving throw, taking 3d8 psychic damage on a failed save, or half as much damage on a successful one. On a failed save, you also always know the target's location until the spell ends, but only while the two of you are on the same plane of existence. While you have this knowledge, the target can’t become hidden from you, and if it’s invisible, it gains no benefit from that condition against you.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.",
     }, {
         name: "Counterspell",
         level: "3rd",
