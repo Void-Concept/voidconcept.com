@@ -14,6 +14,8 @@ import { NotesStack } from './stacks/NotesStack';
 import { DynDnsStack } from './stacks/DynDnsStack';
 import { DiscordSlashCommandStack } from './stacks/DiscordSlashCommandStack';
 import { SecretsStack } from './stacks/SecretsStack';
+import { CombinedStorageStack } from './stacks/CombinedStorageDynamoDbStack';
+import { GraphQLStack } from './stacks/GraphQLStack';
 
 const app = new cdk.App();
 
@@ -62,6 +64,20 @@ const globalStorageStack = new GlobalStorageStack(app, "GlobalStorageStack", {
     env: {
         region: "us-east-1"
     },
+})
+
+const combinedStorageStack = new CombinedStorageStack(app, "CombinedStorageStack", {
+    env: {
+        region: "us-east-1"
+    }
+})
+
+new GraphQLStack(app, "GraphQLStack", {
+    combinedStorageTable: combinedStorageStack.combinedStorageTable,
+    userPool: authStack.userPool,
+    env: {
+        region: "us-east-1"
+    }
 })
 
 new RunescapeProxyStack(app, "RunescapeProxyStack", {

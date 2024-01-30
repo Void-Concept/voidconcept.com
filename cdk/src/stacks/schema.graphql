@@ -1,0 +1,43 @@
+enum MagicSchool {
+    Abjuration
+    Conjuration
+    Divination
+    Enchantment
+    Evocation
+    Illusion
+    Necromancy
+    Transmutation
+}
+
+type SpellComponents {
+    verbal: Boolean!
+    somatic: Boolean!
+    material: String
+}
+
+type Spell {
+    name: String!
+    level: Number!
+    school: MagicSchool!
+    castTime: String! #TODO
+    range: String! #TODO
+    areaOfEffect: String #TODO
+    components: SpellComponents!
+    duration: String!
+    description: [String!]!
+    higherLevel: String
+    concentration: Boolean
+    ritual: Boolean
+    alwaysPrepared: Boolean
+}
+
+type Spellbook {
+    ownerId: ID!
+    name: String
+    maxPrepared: Number!
+    spells: [Spell!]!
+}
+
+type Query {
+    spellbook(id: ID!): Spellbook
+}
