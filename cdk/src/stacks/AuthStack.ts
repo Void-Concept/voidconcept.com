@@ -11,7 +11,7 @@ interface AuthStackProps extends StackProps {
 }
 
 export class AuthStack extends Stack {
-    public userPool: cognito.UserPool
+    public userPool: cognito.IUserPool
 
     constructor(scope: Construct, id: string, props: AuthStackProps) {
         super(scope, id, props);
