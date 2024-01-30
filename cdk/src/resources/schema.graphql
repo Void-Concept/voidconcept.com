@@ -17,7 +17,7 @@ type SpellComponents {
 
 type Spell {
     name: String!
-    level: Number!
+    level: Int!
     school: MagicSchool!
     castTime: String! #TODO
     range: String! #TODO
@@ -34,7 +34,7 @@ type Spell {
 type Spellbook {
     ownerId: ID!
     name: String
-    maxPrepared: Number!
+    maxPrepared: Int!
     spells: [Spell!]!
 }
 

@@ -28,7 +28,7 @@ export class GraphQLStack extends Stack {
 
         const api = new appsync.GraphqlApi(this, "Api", {
             name: "graphql",
-            definition: appsync.Definition.fromFile("schema.graphql"),
+            definition: appsync.Definition.fromFile("./src/resources/schema.graphql"),
             authorizationConfig: {
                 defaultAuthorization: {
                     authorizationType: appsync.AuthorizationType.USER_POOL,
