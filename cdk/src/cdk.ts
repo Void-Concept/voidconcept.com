@@ -75,6 +75,7 @@ const combinedStorageStack = new CombinedStorageStack(app, "CombinedStorageStack
 new GraphQLStack(app, "GraphQLStack", {
     combinedStorageTable: combinedStorageStack.combinedStorageTable,
     userPool: authStack.userPool,
+    hostedZone: hostedZoneStack.hostedZone,
     env: {
         region: "us-east-1"
     }
