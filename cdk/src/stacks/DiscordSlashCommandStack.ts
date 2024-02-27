@@ -32,6 +32,7 @@ export class DiscordSlashCommandStack extends Stack {
             entry: "./src/lambdas/discordInteractions/index.ts",
             bundling: {
                 externalModules: ["@aws-sdk/client-dynamodb", "@aws-sdk/client-secrets-manager"],
+                minify: true,
             },
             timeout: Duration.minutes(1),
             environment: {
