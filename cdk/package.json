@@ -29,7 +29,7 @@
         "typescript": "~4.5.2"
     },
     "dependencies": {
-        "@dice-roller/rpg-dice-roller": "^5.4.1",
+        "@dice-roller/rpg-dice-roller": "^5.5.0",
         "@types/aws-lambda": "^8.10.109",
         "@types/uuid": "^9.0.0",
         "@vvo/tzdb": "^6.105.0",

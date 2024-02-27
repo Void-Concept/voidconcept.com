@@ -31,8 +31,9 @@ export class DiscordSlashCommandStack extends Stack {
             handler: "handler",
             entry: "./src/lambdas/discordInteractions/index.ts",
             bundling: {
-                sourceMap: true,
+                sourceMap: false,
                 externalModules: ["aws-sdk"],
+                minify: true,
             },
             timeout: Duration.minutes(1),
             environment: {
