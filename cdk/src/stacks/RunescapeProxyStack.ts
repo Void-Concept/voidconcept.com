@@ -19,10 +19,10 @@ export class RunescapeProxyStack extends Stack {
 
         const domainName = `runescape.${props.hostedZone.zoneName}`
 
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
-            domainName: domainName
-        });
+        const certificate = new acm.Certificate(this, "SubdomainCertificate", {
+            domainName: domainName,
+            validation: acm.CertificateValidation.fromDns(props.hostedZone),
+        })
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "RunescapeProxyEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,

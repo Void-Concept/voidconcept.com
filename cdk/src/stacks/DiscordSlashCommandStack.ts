@@ -21,10 +21,10 @@ export class DiscordSlashCommandStack extends Stack {
 
         const domainName = `discord.${hostedZone.zoneName}`
 
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: hostedZone,
-            domainName: domainName
-        });
+        const certificate = new acm.Certificate(this, "SubdomainCertificate", {
+            domainName: domainName,
+            validation: acm.CertificateValidation.fromDns(hostedZone),
+        })
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "DiscordSlashCommandEndpoint", {
             runtime: lambda.Runtime.NODEJS_16_X,

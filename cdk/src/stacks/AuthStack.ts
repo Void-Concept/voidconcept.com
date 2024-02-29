@@ -22,11 +22,12 @@ export class AuthStack extends Stack {
         });
 
         const loginDomainName = `login.${props.domainName}`
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
-            domainName: loginDomainName
-        });
 
+        const certificate = new acm.Certificate(this, "SubdomainCertificate", {
+            domainName: loginDomainName,
+            validation: acm.CertificateValidation.fromDns(props.hostedZone),
+        })
+        
         const domain = this.userPool.addDomain("CognitoDomain", {
             customDomain: {
                 domainName: loginDomainName,

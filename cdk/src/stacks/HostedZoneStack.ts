@@ -22,10 +22,10 @@ export class HostedZoneStack extends Stack {
             zoneName: props.domainName
         });
 
-        this.certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: this.hostedZone,
-            domainName: props.domainName
-        });
+        this.certificate = new acm.Certificate(this, "DomainCertificate", {
+            domainName: props.domainName,
+            validation: acm.CertificateValidation.fromDns(this.hostedZone),
+        })
 
         props.cnames && props.cnames.forEach(cname => {
             new route53.CnameRecord(this, cname.id, {
