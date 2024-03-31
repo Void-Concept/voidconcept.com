@@ -710,6 +710,26 @@ export const spells: Spell[] = [
         ],
         higherLevel: "When you cast this spell using a spell slot of 5th level or higher, you can increase the size of the cube by 100 feet for each slot level beyond 4th. Thus you could protect a cube that can be up to 200 feet on one side by using a spell slot of 5th level."
     }, {
+        name: "Conjure Minor Elementals",
+        level: "4th",
+        school: "Conjuration",
+        castTime: "1 minute",
+        range: "90 ft",
+        components: "V, S",
+        duration: "1 Hour",
+        concentration: true,
+        description: [
+            "You summon elementals that appear in unoccupied spaces that you can see within range. You choose one the following options for what appears:",
+            "- One elemental of challenge rating 2 or lower",
+            "- Two elementals of challenge rating 1 or lower",
+            "- Four elementals of challenge rating 1/2 or lower",
+            "- Eight elementals of challenge rating 1/4 or lower.",
+            "An elemental summoned by this spell disappears when it drops to 0 hit points or when the spell ends.",
+            "The summoned creatures are friendly to you and your companions. Roll initiative for the summoned creatures as a group, which has its own turns. They obey any verbal commands that you issue to them (no action required by you). If you don't issue any commands to them, they defend themselves from hostile creatures, but otherwise take no actions.",
+            "The GM has the creatures' statistics.",
+        ],
+        higherLevel: "When you cast this spell using certain higher-level spell slots, you choose one of the summoning options above, and more creatures appear: twice as many with a 6th-level slot and three times as many with an 8th-level slot."
+    }, {
         name: "Secret Chest",
         level: "4th",
         school: "Conjuration",
@@ -1180,6 +1200,18 @@ export const spells: Spell[] = [
             "Object into Creature. You can turn an object into any kind of creature, as long as the creature’s size is no larger than the object’s size and the creature’s challenge rating is 9 or lower. The creature is friendly to you and your companions. It acts on each of your turns. You decide what action it takes and how it moves. The GM has the creature’s statistics and resolves all of its actions and movement.",
             "If the spell becomes permanent, you no longer control the creature. It might remain friendly to you, depending on how you have treated it.",
             "Creature into Object. If you turn a creature into an object, it transforms along with whatever it is wearing and carrying into that form. The creature’s statistics become those of the object, and the creature has no memory of time spent in this form, after the spell ends and it returns to its normal form.",
+        ],
+    }, {
+        name: "Time Stop",
+        level: "9th",
+        school: "Transmutation",
+        castTime: "1 Action",
+        range: "Self",
+        components: "V",
+        duration: "Instantaneous",
+        description: [
+            "You briefly stop the flow of time for everyone but yourself. No time passes for other creatures, while you take 1d4 + 1 turns in a row, during which you can use actions and move as normal.",
+            "This spell ends if one of the actions you use during this period, or any effects that you create during this period, affects a creature other than you or an object being worn or carried by someone other than you. In addition, the spell ends if you move to a place more than 1,000 feet from the location where you cast it.",
         ],
     }, 
 ];
