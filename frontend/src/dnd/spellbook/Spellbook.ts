@@ -877,7 +877,7 @@ export const spells: Spell[] = [
         name: "Transmute Rock",
         level: "5th",
         school: "Transmutation",
-        castTime: "Instantaneous",
+        castTime: "1 Action",
         range: "120 ft",
         areaOfEffect: "40 ft cube",
         components: "V, S, M",
