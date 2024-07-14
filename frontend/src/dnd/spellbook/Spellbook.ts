@@ -481,6 +481,18 @@ export const spells: Spell[] = [
         ],
         higherLevel: "When you cast this spell using a spell slot of 3rd level or higher, you can create two additional globes of fresh air for each slot level above 2nd.",
     }, {
+        name: "Mind Whip",
+        level: "2nd",
+        school: "Enchantment",
+        castTime: "1 Action",
+        range: "90ft",
+        components: "V",
+        duration: "1 Round",
+        description: [
+            "You psychically lash out at one creature you can see within range. The target must make an Intelligence saving throw. On a failed save, the target takes 3d6 psychic damage, and it can’t take a reaction until the end of its next turn. Moreover, on its next turn, it must choose whether it gets a move, an action, or a bonus action; it gets only one of the three. On a successful save, the target takes half as much damage and suffers none of the spell’s other effects.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd. The creatures must be within 30 feet of each other when you target them.",
+    }, {
         name: "Counterspell",
         level: "3rd",
         school: "Abjuration",
@@ -964,6 +976,18 @@ export const spells: Spell[] = [
         ],
         higherLevel: "When you cast this spell using a spell slot of 7th level or higher, the barrier blocks spells of one level higher for each slot level above 6th.",
     }, {
+        name: "Psychic Crush",
+        level: "6th",
+        school: "Enchantment",
+        castTime: "1 action",
+        range: "60ft",
+        components: "V, S",
+        duration: "1 Minute",
+        description: [
+            "You overload the mind of one creature you can see within range, filling its psyche with discordant emotions. The target must make an Intelligence saving throw. On a failed save, the target takes 12d6 psychic damage and is stunned for 1 minute. On a successful save, the target takes half as much damage and isn’t stunned.",
+            "The stunned target can make an Intelligence saving throw at the end of each of its turns. On a successful save, the spell ends on the target.",
+        ],
+    }, {
         name: "Forcecage",
         level: "7th",
         school: "Evocation",
@@ -1046,6 +1070,32 @@ export const spells: Spell[] = [
             "This spell has no effect if you cast it while you are on the Ethereal Plane or a plane that doesn't border it, such as one of the Outer Planes.",
         ],
         higherLevel: "When you cast this spell using a spell slot of 8th level or higher, you can target up to three willing creatures (including you) for each slot level above 7th. The creatures must be within 10 feet of you when you cast the spell.",
+    }, {
+        name: "Crown of Stars",
+        level: "7th",
+        school: "Evocation",
+        castTime: "1 action",
+        range: "Self",
+        components: "V, S",
+        duration: "1 hour",
+        description: [
+            "Seven star-like motes of light appear and orbit your head until the spell ends. You can use a bonus action to send one of the motes streaking toward one creature or object within 120 feet of you. When you do so, make a ranged spell attack. On a hit, the target takes 4d12 radiant damage. Whether you hit or miss, the mote is expended. The spell ends early if you expend the last mote. If you have four or more motes remaining, they shed bright light in a 30-foot radius and dim light for an additional 30 feet. If you have one to three motes remaining, they shed dim light in a 30-foot radius.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 8th level or higher, the number of motes created increases by two for each slot level above 7th.",
+    }, {
+        name: "Plane Shift",
+        level: "7th",
+        school: "Conjuration",
+        castTime: "1 Action",
+        range: "Touch",
+        components: "V, S, M",
+        materials: "a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence",
+        duration: "Instantaneous",
+        description: [
+            "You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, such as the City of Brass on the Elemental Plane of Fire or the palace of Dispater on the second level of the Nine Hells, and you appear in or near that destination. If you are trying to reach the City of Brass, for example, you might arrive in its Street of Steel, before its Gate of Ashes, or looking at the city from across the Sea of Fire, at the GM's discretion.",
+            "Alternatively, if you know the sigil sequence of a teleportation circle on another plane of existence, this spell can take you to that circle. If the teleportation circle is too small to hold all the creatures you transported, they appear in the closest unoccupied spaces next to the circle.",
+            "You can use this spell to banish an unwilling creature to another plane. Choose a creature within your reach and make a melee spell attack against it. On a hit, the creature must make a Charisma saving throw. If the creature fails this save, it is transported to a random location on the plane of existence you specify. A creature so transported must find its own way back to your current plane of existence.",
+        ],
     }, {
         name: "Demiplane",
         level: "8th",
@@ -1154,6 +1204,21 @@ export const spells: Spell[] = [
             "Until the spell ends, you and the target can instantaneously share words, images, sounds, and other sensory messages with one another through the link, and the target recognizes you as the creature it is communicating with. The spell enables a creature with an Intelligence score of at least 1 to understand the meaning of your words and take in the scope of any sensory messages you send to it.",
         ],
     }, {
+        name: "Reality Break",
+        level: "8th",
+        school: "Conjuration",
+        castTime: "1 Action",
+        range: "60 ft",
+        components: "V, S, M",
+        materials: "a crystal prism",
+        duration: "1 Minute",
+        concentration: true,
+        description: [
+            "You shatter the barriers between realities and timelines, thrusting a creature into turmoil and madness. The target must succeed on a Wisdom saving throw, or it can't take reactions until the spell ends. The affected target must also roll a d10 at the start of each of its turns; the number rolled determines what happens to the target as shown on the Reality Break Effects table.",
+            "At the end of each of its turns, the affected target can repeat the Wisdom saving throw, ending the spell on itself on a success",
+            "http://dnd5e.wikidot.com/spell:reality-break",
+        ],
+    }, {
         name: "Wish",
         level: "9th",
         school: "Conjuration",
@@ -1243,6 +1308,21 @@ export const spells: Spell[] = [
         description: [
             "You briefly stop the flow of time for everyone but yourself. No time passes for other creatures, while you take 1d4 + 1 turns in a row, during which you can use actions and move as normal.",
             "This spell ends if one of the actions you use during this period, or any effects that you create during this period, affects a creature other than you or an object being worn or carried by someone other than you. In addition, the spell ends if you move to a place more than 1,000 feet from the location where you cast it.",
+        ],
+    }, {
+        name: "Ravenous Void",
+        level: "9th",
+        school: "Evocation",
+        castTime: "1 Action",
+        range: "1000ft",
+        components: "V, S, M",
+        materials: "a small, nine-pointed star made of iron",
+        concentration: true,
+        duration: "1 Minute",
+        description: [
+            "You create a 20-foot-radius sphere of destructive gravitation force centered on a point you can see within range. For the spell's duration, the sphere and any space within 100 feet of it are difficult terrain, and nonmagical objects fully inside the sphere are destroyed if they aren't being worn or carried.",
+            "When the sphere appears and at the start of each of your turns until the spell ends, unsecured objects within 100 feet of the sphere are pulled toward the sphere's center, ending in an unoccupied space as close to the center as possible.",
+            "A creature that starts its turn within 100 feet of the sphere must succeed on a Strength saving throw or be pulled straight toward the sphere's center, ending in an unoccupied space as close to the center as possible. A creature that enters the sphere for the first time on a turn or starts its turn there takes 5d10 force damage and is restrained until it is no longer in the sphere. If the sphere is in the air, the restrained creature hovers inside the sphere. A creature can use its action to make a Strength check against your spell save DC, ending this restrained condition on itself or another creature in the sphere that it can reach. A creature reduced to 0 hit points by this spell is annihilated, along with any nonmagical items it is wearing or carrying.",
         ],
     }, 
 ];
