@@ -9,7 +9,7 @@
         "client-oauth2": "^4.3.3",
         "history": "^4.9.0",
         "mdi-react": "^7.4.0",
-        "moment": "^2.29.1",
+        "moment": "^2.29.4",
         "moment-timezone": "^0.5.33",
         "prosemirror-tables": "^1.2.5",
         "ramda": "^0.27.1",
