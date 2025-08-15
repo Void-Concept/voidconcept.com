@@ -43,7 +43,7 @@ export class NotesStack extends Stack {
             handler: "handler",
             bundling: {
                 sourceMap: true,
-                externalModules: ["aws-sdk"],
+                externalModules: [],
             },
             environment: {
                 notesTableName: notesTable.tableName,

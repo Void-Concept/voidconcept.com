@@ -37,7 +37,7 @@ export class QuestListStack extends Stack {
             entry: "./src/lambdas/questList/index.ts",
             bundling: {
                 sourceMap: true,
-                externalModules: ["aws-sdk"],
+                externalModules: [],
             },
             environment: {
                 tableName: questTable.tableName

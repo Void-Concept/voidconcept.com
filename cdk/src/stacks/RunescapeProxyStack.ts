@@ -30,7 +30,7 @@ export class RunescapeProxyStack extends Stack {
             entry: "./src/lambdas/runescapeProxy/index.ts",
             bundling: {
                 sourceMap: true,
-                externalModules: ["aws-sdk"],
+                externalModules: [],
             },
             timeout: Duration.seconds(30),
         });

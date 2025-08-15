@@ -43,7 +43,7 @@ export class GlobalStorageStack extends Stack {
             entry: "./src/lambdas/globalStorage/index.ts",
             bundling: {
                 sourceMap: true,
-                externalModules: ["aws-sdk"],
+                externalModules: [],
             },
             environment: {
                 tableName: this.genericStorageTable.tableName
