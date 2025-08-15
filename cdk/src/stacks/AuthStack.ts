@@ -34,6 +34,8 @@ export class AuthStack extends Stack {
             }
         })
 
+        this.exportValue(this.userPool.userPoolId)
+
         new route53.ARecord(this, "CognitoDomainRecord", {
             recordName: "login",
             zone: props.hostedZone,
