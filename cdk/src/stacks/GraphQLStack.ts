@@ -6,7 +6,6 @@ import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambda_nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
-import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
 interface GraphQLStackProps extends StackProps {
@@ -44,7 +43,7 @@ export class GraphQLStack extends Stack {
         })
 
         const querySpellbookbookLambda = new lambda_nodejs.NodejsFunction(this, "QuerySpellbookbookLambda", {
-            runtime: lambda.Runtime.NODEJS_16_X,
+            runtime: lambda.Runtime.NODEJS_22_X,
             entry: "./src/lambdas/graphql/spellbook/get.ts",
             handler: "handler",
             bundling: {
