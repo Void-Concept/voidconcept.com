@@ -50,7 +50,7 @@ const authStack = new AuthStack(app, "AuthStack", {
 
 new FrontendStack(app, 'FrontendStack', {
     hostedZone: hostedZoneStack.hostedZone,
-    certificate: hostedZoneStack.certificate,
+    domainName: config.domainName,
     env: {
         region: "us-east-1"
     },

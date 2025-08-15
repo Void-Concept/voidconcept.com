@@ -13,18 +13,12 @@ interface HostedZoneStackProps extends StackProps {
 
 export class HostedZoneStack extends Stack {
     hostedZone: route53.HostedZone
-    certificate: acm.Certificate
 
     constructor(scope: Construct, id: string, props: HostedZoneStackProps) {
         super(scope, id, props);
 
         this.hostedZone = new route53.HostedZone(this, "WebsiteHostedZone", {
             zoneName: props.domainName
-        });
-
-        this.certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: this.hostedZone,
-            domainName: props.domainName
         });
 
         props.cnames && props.cnames.forEach(cname => {

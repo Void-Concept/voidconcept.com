@@ -8,7 +8,7 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 
 interface FrontendStackProps extends StackProps {
     hostedZone: route53.IHostedZone
-    certificate: acm.ICertificate
+    domainName: string
 }
 
 export class FrontendStack extends Stack {
@@ -25,6 +25,11 @@ export class FrontendStack extends Stack {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS_ONLY,
         });
 
+        const certificate = new acm.Certificate(this, "frontendCertificate", {
+            domainName: props.domainName,
+            validation: acm.CertificateValidation.fromDns(props.hostedZone),
+        });
+
         const frontendCdn = new cloudfront.CloudFrontWebDistribution(this, "frontendDistribution", {
             originConfigs: [{
                 s3OriginSource: {
@@ -34,7 +39,7 @@ export class FrontendStack extends Stack {
                     isDefaultBehavior: true
                 }]
             }],
-            viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(props.certificate, {
+            viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(certificate, {
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2018,
                 aliases: [domainName]
             }),
