@@ -39,7 +39,7 @@ export class CalendarStack extends Stack {
         });
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "CalendarApiEndpoint", {
-            runtime: lambda.Runtime.NODEJS_16_X,
+            runtime: lambda.Runtime.NODEJS_22_X,
             entry: "./src/lambdas/calendar/index.ts",
             handler: "handler",
             bundling: {

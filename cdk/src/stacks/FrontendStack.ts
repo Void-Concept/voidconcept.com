@@ -22,6 +22,7 @@ export class FrontendStack extends Stack {
             websiteErrorDocument: "index.html",
             accessControl: s3.BucketAccessControl.PUBLIC_READ,
             publicReadAccess: true,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS_ONLY,
         });
 
         const frontendCdn = new cloudfront.CloudFrontWebDistribution(this, "frontendDistribution", {

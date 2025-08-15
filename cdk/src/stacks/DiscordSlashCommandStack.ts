@@ -27,7 +27,7 @@ export class DiscordSlashCommandStack extends Stack {
         });
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "DiscordSlashCommandEndpoint", {
-            runtime: lambda.Runtime.NODEJS_16_X,
+            runtime: lambda.Runtime.NODEJS_22_X,
             handler: "handler",
             entry: "./src/lambdas/discordInteractions/index.ts",
             bundling: {

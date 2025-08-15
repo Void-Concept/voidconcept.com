@@ -23,9 +23,9 @@
         "typescript": "~4.1.5"
     },
     "scripts": {
-        "start": "REACT_APP_ENV=local react-scripts start",
-        "build": "REACT_APP_ENV=prod react-scripts build",
-        "test": "REACT_APP_ENV=local react-scripts test",
+        "start": "NODE_OPTIONS=--openssl-legacy-provider REACT_APP_ENV=local react-scripts start",
+        "build": "NODE_OPTIONS=--openssl-legacy-provider REACT_APP_ENV=prod react-scripts build",
+        "test": "NODE_OPTIONS=--openssl-legacy-provider REACT_APP_ENV=local react-scripts test",
         "deploy": "npm run build && ./scripts/deploy.sh"
     },
     "eslintConfig": {
