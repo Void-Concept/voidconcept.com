@@ -45,6 +45,8 @@ export class AuthStack extends Stack {
             })
         })
 
+        this.exportValue(this.userPool.userPoolId)
+
         //TODO export clientId and use elsewhere
         const client = this.userPool.addClient("app-client", {
             authFlows: {
