@@ -32,10 +32,10 @@ export class GlobalStorageStack extends Stack {
             }
         });
 
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone: props.hostedZone,
-            domainName: domainName
-        });
+        const certificate = new acm.Certificate(this, "certificate", {
+            domainName,
+            validation: acm.CertificateValidation.fromDns(props.hostedZone),
+        })
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "StorageApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_22_X,

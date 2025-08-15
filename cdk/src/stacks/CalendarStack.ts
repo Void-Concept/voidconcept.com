@@ -33,10 +33,11 @@ export class CalendarStack extends Stack {
             }
         });
 
-        const certificate = new acm.DnsValidatedCertificate(this, "certificate", {
-            hostedZone,
-            domainName
-        });
+        const certificate = new acm.Certificate(this, "certificate", {
+            domainName,
+            validation: acm.CertificateValidation.fromDns(hostedZone),
+        })
+
 
         const endpoint = new lambda_nodejs.NodejsFunction(this, "CalendarApiEndpoint", {
             runtime: lambda.Runtime.NODEJS_22_X,
