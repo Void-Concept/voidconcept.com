@@ -1,5 +1,3 @@
-import * as path from 'path';
-
 import { StackProps, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
@@ -42,8 +40,7 @@ export class GlobalStorageStack extends Stack {
             handler: "handler",
             entry: "./src/lambdas/globalStorage/index.ts",
             bundling: {
-                sourceMap: true,
-                externalModules: [],
+                externalModules: ["@aws-sdk/client-dynamodb", "@aws-sdk/client-secrets-manager"],
             },
             environment: {
                 tableName: this.genericStorageTable.tableName

@@ -1,4 +1,4 @@
-import DynamoDB from "aws-sdk/clients/dynamodb";
+import { DynamoDB, PutRequest, AttributeValue } from "@aws-sdk/client-dynamodb";
 
 type DndCalendarRepeatUnit = "year" | "month" | "week" | "day"
 
@@ -49,7 +49,7 @@ export class DynamoHelper {
             Key: {
                 name: this.toDynamoString(calendarName)
             }
-        }).promise();
+        });
         if (!response.Item) {
             throw new Error("Could not find DnD calendar")
         }
@@ -58,7 +58,7 @@ export class DynamoHelper {
     }
 
     postDndCalendar = async (calendarName: string, calendar: DndCalendar): Promise<DndCalendar> => {
-        const request: DynamoDB.PutRequest = {
+        const request: PutRequest = {
             Item: this.toDynamoCalendar(calendar)
         };
 
@@ -68,7 +68,7 @@ export class DynamoHelper {
                     PutRequest: request
                 }]
             }
-        }).promise()
+        })
 
         if (response.UnprocessedItems && Object.keys(response.UnprocessedItems).length > 0) {
             throw new Error("Could not write Dnd calendar")
@@ -76,7 +76,7 @@ export class DynamoHelper {
         return this.getDndCalendar(calendarName);
     }
 
-    private toDynamoCalendar = (dndCalendar: DndCalendar): DynamoDB.AttributeMap => ({
+    private toDynamoCalendar = (dndCalendar: DndCalendar): Record<string, AttributeValue> => ({
         name: this.toDynamoString(dndCalendar.name),
         months: this.toDynamoList(dndCalendar.months, this.toDynamoString),
         weekDays: this.toDynamoList(dndCalendar.weekDays, this.toDynamoString),
@@ -87,7 +87,7 @@ export class DynamoHelper {
         events: this.toDynamoList(dndCalendar.events, this.toDynamoEvent)
     })
 
-    private fromDynamoCalendar = (dndCalendar: DynamoDB.AttributeMap): DndCalendar => ({
+    private fromDynamoCalendar = (dndCalendar: Record<string, AttributeValue>): DndCalendar => ({
         name: this.fromDynamoString(dndCalendar.name),
         months: this.fromDynamoList(dndCalendar.months, this.fromDynamoString),
         weekDays: this.fromDynamoList(dndCalendar.weekDays, this.fromDynamoString),
@@ -98,33 +98,33 @@ export class DynamoHelper {
         events: this.fromDynamoList(dndCalendar.events, this.fromDynamoEvent)
     })
 
-    private toDynamoList = <T>(list: T[], elementMapper: (elem: T) => DynamoDB.AttributeValue): DynamoDB.AttributeValue => ({
+    private toDynamoList = <T>(list: T[], elementMapper: (elem: T) => AttributeValue): AttributeValue => ({
         L: list.map(elementMapper)
     })
 
-    private fromDynamoList = <T>(list: DynamoDB.AttributeValue, elementMapper: (elem: DynamoDB.AttributeValue) => T): T[] => (
+    private fromDynamoList = <T>(list: AttributeValue, elementMapper: (elem: AttributeValue) => T): T[] => (
         list.L!.map(elementMapper)
     )
 
-    private toDynamoString = (str: string): DynamoDB.AttributeValue => ({
+    private toDynamoString = (str: string): AttributeValue => ({
         S: str
     })
 
-    private fromDynamoString = (str: DynamoDB.AttributeValue): string => str.S!
+    private fromDynamoString = (str: AttributeValue): string => str.S!
 
-    private toDynamoNumber = (num: number): DynamoDB.AttributeValue => ({
+    private toDynamoNumber = (num: number): AttributeValue => ({
         N: num.toString()
     })
 
-    private fromDynamoNumber = (num: DynamoDB.AttributeValue): number => parseInt(num.N!)
+    private fromDynamoNumber = (num: AttributeValue): number => parseInt(num.N!)
 
-    private toDynamoBoolean = (bool: boolean): DynamoDB.AttributeValue => ({
+    private toDynamoBoolean = (bool: boolean): AttributeValue => ({
         BOOL: bool
     })
 
-    private fromDynamoBoolean = (bool: DynamoDB.AttributeValue): boolean => bool.BOOL!
+    private fromDynamoBoolean = (bool: AttributeValue): boolean => bool.BOOL!
 
-    private toDynamoCalendarDate = (currentDate: DndCalendarDate): DynamoDB.AttributeValue => ({
+    private toDynamoCalendarDate = (currentDate: DndCalendarDate): AttributeValue => ({
         M: {
             year: this.toDynamoNumber(currentDate.year),
             month: this.toDynamoNumber(currentDate.month),
@@ -132,13 +132,13 @@ export class DynamoHelper {
         }
     })
 
-    private fromDynamoCalendarDate = (currentDate: DynamoDB.AttributeValue): DndCalendarDate => ({
+    private fromDynamoCalendarDate = (currentDate: AttributeValue): DndCalendarDate => ({
         year: this.fromDynamoNumber(currentDate.M!.year),
         month: this.fromDynamoNumber(currentDate.M!.month),
         day: this.fromDynamoNumber(currentDate.M!.day),
     })
 
-    private toDynamoNotificationChannel = (notificationChannel: NotificationChannel): DynamoDB.AttributeValue => ({
+    private toDynamoNotificationChannel = (notificationChannel: NotificationChannel): AttributeValue => ({
         M: {
             name: this.toDynamoString(notificationChannel.name),
             id: this.toDynamoString(notificationChannel.id),
@@ -147,26 +147,26 @@ export class DynamoHelper {
         }
     })
 
-    private fromDynamoNotificationChannel = (notificationChannel: DynamoDB.AttributeValue): NotificationChannel => ({
+    private fromDynamoNotificationChannel = (notificationChannel: AttributeValue): NotificationChannel => ({
         name: this.fromDynamoString(notificationChannel.M!.name),
         id: this.fromDynamoString(notificationChannel.M!.id),
         roleId: this.fromDynamoString(notificationChannel.M!.roleId),
         disabled: this.fromDynamoBoolean(notificationChannel.M!.disabled),
     })
 
-    private toDynamoEventRepeat = (repeat: DndCalendarRepeat): DynamoDB.AttributeValue => ({
+    private toDynamoEventRepeat = (repeat: DndCalendarRepeat): AttributeValue => ({
         M: this.withoutUndefined({
             frequency: this.toDynamoNumber(repeat.frequency),
             timeUnit: this.toDynamoString(repeat.timeUnit)
         })
     })
 
-    private fromDynamoEventRepeat = (repeat: DynamoDB.AttributeValue): DndCalendarRepeat => ({
+    private fromDynamoEventRepeat = (repeat: AttributeValue): DndCalendarRepeat => ({
         frequency: this.fromDynamoNumber(repeat.M!.frequency),
         timeUnit: this.fromDynamoString(repeat.M!.timeUnit) as DndCalendarRepeatUnit
     })
 
-    private toDynamoEvent = (event: DndCalendarEvent): DynamoDB.AttributeValue => ({
+    private toDynamoEvent = (event: DndCalendarEvent): AttributeValue => ({
         M: this.withoutUndefined({
             name: this.toDynamoString(event.name),
             date: this.toDynamoNumber(event.date),
@@ -174,13 +174,13 @@ export class DynamoHelper {
         })
     })
 
-    private fromDynamoEvent = (event: DynamoDB.AttributeValue): DndCalendarEvent => ({
+    private fromDynamoEvent = (event: AttributeValue): DndCalendarEvent => ({
         name: this.fromDynamoString(event.M!.name),
         date: this.fromDynamoNumber(event.M!.date),
         repeat: event.M!.repeat && this.fromDynamoEventRepeat(event.M!.repeat)
     })
 
-    private withoutUndefined = (obj: { [key: string]: DynamoDB.AttributeValue | undefined }): { [key: string]: DynamoDB.AttributeValue } => {
+    private withoutUndefined = (obj: { [key: string]: AttributeValue | undefined }): { [key: string]: AttributeValue } => {
         const keys = Object.keys(obj)
         return keys.reduce((prev, curr) => {
             if (typeof obj[curr] === "undefined") {

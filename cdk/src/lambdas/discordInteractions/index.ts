@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import SecretsManager from 'aws-sdk/clients/secretsmanager';
+import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { SecretsManagerService } from "./SecretManagerService";
 import { InteractionType, InteractionResponseType, verifyKey } from 'discord-interactions';
 import { commandSpecs } from './commands'

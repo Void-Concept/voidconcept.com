@@ -40,12 +40,10 @@ export class AuthStack extends Stack {
             target: route53.RecordTarget.fromAlias({
                 bind: _record => ({
                     hostedZoneId: "Z2FDTNDATAQYW2",
-                    dnsName: domain.cloudFrontDomainName
+                    dnsName: domain.cloudFrontEndpoint
                 })
             })
         })
-
-        this.exportValue(this.userPool.userPoolId)
 
         //TODO export clientId and use elsewhere
         const client = this.userPool.addClient("app-client", {

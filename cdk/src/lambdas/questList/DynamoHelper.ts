@@ -1,4 +1,4 @@
-import DynamoDB from "aws-sdk/clients/dynamodb";
+import { DynamoDB, AttributeValue } from "@aws-sdk/client-dynamodb";
 
 
 export type ChildQuest = {
@@ -27,46 +27,22 @@ export type Quest = {
     questRequirements: ChildQuestList
 }
 
-interface DynamoQuest extends DynamoDB.AttributeMap {
-    id: {
-        S: string
-    },
-    name: {
-        S: string
-    },
-    href: {
-        S: string
-    },
-    members: {
-        BOOL: boolean
-    },
-    difficulty: {
-        S: string
-    },
-    length: {
-        S: string
-    },
-    age: {
-        S: string
-    },
-    questPoints: {
-        N: string
-    },
-    series: {
-        S: string
-    },
+interface DynamoQuest extends Record<string, AttributeValue> {
+    id: AttributeValue.SMember,
+    name: AttributeValue.SMember,
+    href: AttributeValue.SMember,
+    members: AttributeValue.BOOLMember,
+    difficulty: AttributeValue.SMember,
+    length: AttributeValue.SMember,
+    age: AttributeValue.SMember,
+    questPoints: AttributeValue.NMember,
+    series: AttributeValue.SMember,
     questRequirements: {
         L: {
             M: {
-                name: {
-                    S: string
-                },
-                id: {
-                    S?: string
-                },
-                href: {
-                    S?: string
-                }
+                name: AttributeValue.SMember,
+                id: AttributeValue.SMember | AttributeValue.NULLMember,
+                href: AttributeValue.SMember | AttributeValue.NULLMember,
             }
         }[]
     }
@@ -84,7 +60,7 @@ export class DynamoHelper {
                     S: id.toLowerCase()
                 },
             }
-        }).promise();
+        });
         if (!response.Item) {
             return null
         }

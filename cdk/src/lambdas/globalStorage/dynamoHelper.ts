@@ -1,4 +1,4 @@
-import DynamoDB from "aws-sdk/clients/dynamodb";
+import { DynamoDB, AttributeValue } from "@aws-sdk/client-dynamodb";
 
 export interface DndCalendar {
     year: number
@@ -6,7 +6,7 @@ export interface DndCalendar {
     day: number
 }
 
-interface DynamoDndCalendar extends DynamoDB.AttributeMap {
+interface DynamoDndCalendar extends Record<string, AttributeValue> {
     name: {
         S: "DndCalendar"
     },
@@ -42,7 +42,7 @@ export class DynamoHelper {
                     S: "DndCalendar"
                 },
             }
-        }).promise();
+        });
         if (!response.Item) {
             throw new Error("Could not find DnD calendar")
         }
@@ -82,7 +82,7 @@ export class DynamoHelper {
                     }
                 }]
             }
-        }).promise()
+        })
 
         if (response.UnprocessedItems && Object.keys(response.UnprocessedItems).length > 0) {
             throw new Error("Could not write Dnd calendar")

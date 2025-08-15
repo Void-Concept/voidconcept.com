@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoHelper } from "./dynamoHelper";
-import DynamoDB from 'aws-sdk/clients/dynamodb';
-import SecretsManager from 'aws-sdk/clients/secretsmanager';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { DiscordService } from "./DiscordService";
 import { SecretsManagerService } from "./SecretManagerService";
 import { doGet, doPost } from "./calendarDateResolver";

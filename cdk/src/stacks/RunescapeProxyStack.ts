@@ -1,5 +1,3 @@
-import * as path from 'path';
-
 import { StackProps, Stack, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
@@ -29,8 +27,7 @@ export class RunescapeProxyStack extends Stack {
             handler: "handler",
             entry: "./src/lambdas/runescapeProxy/index.ts",
             bundling: {
-                sourceMap: true,
-                externalModules: [],
+                externalModules: ["@aws-sdk/client-dynamodb", "@aws-sdk/client-secrets-manager"],
             },
             timeout: Duration.seconds(30),
         });

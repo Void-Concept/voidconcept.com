@@ -1,7 +1,6 @@
 import { StackProps, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
-import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { CnameConfig, TxtConfig, MxConfig } from '../configTypes';
 
 interface HostedZoneStackProps extends StackProps {

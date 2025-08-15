@@ -1,4 +1,4 @@
-import DynamoDB from "aws-sdk/clients/dynamodb";
+import { DynamoDB, AttributeValue } from "@aws-sdk/client-dynamodb";
 import { v1 as uuidv1 } from 'uuid'
 
 type Notes = {
@@ -14,7 +14,7 @@ export class DynamoHelper {
     getNotesList = async (): Promise<Notes[]> => {
         const response = await this.dynamoDb.scan({
             TableName: this.notesTableName,
-        }).promise()
+        })
         if (!response.Items) {
             throw new Error("Could not find any notes")
         }
@@ -29,7 +29,7 @@ export class DynamoHelper {
             Key: {
                 id: this.toDynamoString(id)
             }
-        }).promise()
+        })
         if (!response.Item) {
             throw new Error("Could not find notes")
         }
@@ -53,7 +53,7 @@ export class DynamoHelper {
                 }
             },
             ReturnValues: "ALL_NEW"
-        }).promise()
+        })
         if (!newState.Attributes) throw new Error("Could not update")
 
         return this.fromDynamoNotes(newState.Attributes)
@@ -75,7 +75,7 @@ export class DynamoHelper {
                 }
             },
             ReturnValues: "ALL_NEW"
-        }).promise()
+        })
         if (!newState.Attributes) throw new Error("Could not create")
 
         return this.fromDynamoNotes(newState.Attributes)
@@ -83,21 +83,21 @@ export class DynamoHelper {
 
     // ======== helpers ========
 
-    private toDynamoNotes = (notes: Notes): DynamoDB.AttributeMap => ({
+    private toDynamoNotes = (notes: Notes): Record<string, AttributeValue> => ({
         id: this.toDynamoString(notes.id),
         name: this.toDynamoString(notes.name),
         notes: this.toDynamoString(notes.notes),
     })
 
-    private fromDynamoNotes = (notes: DynamoDB.AttributeMap): Notes => ({
+    private fromDynamoNotes = (notes: Record<string, AttributeValue>): Notes => ({
         id: this.fromDynamoString(notes.id),
         name: this.fromDynamoString(notes.name),
         notes: this.fromDynamoString(notes.notes),
     })
 
-    private toDynamoString = (str: string): DynamoDB.AttributeValue => ({
+    private toDynamoString = (str: string): AttributeValue => ({
         S: str
     })
 
-    private fromDynamoString = (str: DynamoDB.AttributeValue): string => str.S!
+    private fromDynamoString = (str: AttributeValue): string => str.S!
 }

@@ -1,4 +1,4 @@
-import { SecretsManager } from "aws-sdk";
+import { SecretsManager } from "@aws-sdk/client-secrets-manager";
 
 type SecretManagerResponse = {
     apiKey: string
@@ -14,7 +14,7 @@ export class SecretsManagerService {
     private getSecret = async (): Promise<SecretManagerResponse> => {
         const secretManagerResponse = await this.secretsManager.getSecretValue({
             SecretId: process.env.discordSecretName!,
-        }).promise()
+        })
 
         const secretString = secretManagerResponse.SecretString
 

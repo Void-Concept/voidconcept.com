@@ -36,8 +36,7 @@ export class QuestListStack extends Stack {
             handler: "handler",
             entry: "./src/lambdas/questList/index.ts",
             bundling: {
-                sourceMap: true,
-                externalModules: [],
+                externalModules: ["@aws-sdk/client-dynamodb", "@aws-sdk/client-secrets-manager"],
             },
             environment: {
                 tableName: questTable.tableName
