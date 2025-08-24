@@ -88,5 +88,19 @@ describe('roll', () => {
 
             expect(diceRoll).toEqual("4d6kh3 + 2: [-3,3,3,3] + 2 = 11")
         })
+
+        it("should be able to fix keep highest at different order of rolls", () => {
+            let callNumber = 0
+            const randomResults = [6, 2, 4, 5]
+            const roller = createDiceRoller(withPlugins(keepHighestRule), {
+                random: (_min, _max) => randomResults[callNumber++]
+            })
+
+            const diceRoller = defaultRollDice(roller)
+
+            const diceRoll = diceRoller("4d6kh3")
+
+            expect(diceRoll).toEqual("4d6kh3: [-2,4,5,6] = 15")
+        })
     })
 })

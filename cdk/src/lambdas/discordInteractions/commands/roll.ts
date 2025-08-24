@@ -52,7 +52,8 @@ export const keepHighestRule: DiceRule<KeepHighestToken> = {
                 return [low, [...high, curr].sort()]
             } else {
                 if (curr > high[0]) {
-                    return [[...low, high[0]].sort(), [...high, curr].sort()]
+                    const [lowestFromHigh, ...highDropLowest] = high 
+                    return [[...low, lowestFromHigh], [...highDropLowest, curr].sort()]
                 } else {
                     return [[...low, curr].sort(), high]
                 }
