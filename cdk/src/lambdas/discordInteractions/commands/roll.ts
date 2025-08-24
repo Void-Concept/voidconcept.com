@@ -1,6 +1,6 @@
 import { findOption, messageResponse } from "./helpers";
 import { CommandSpec, Command, CommandOptionType, Request, ChannelMessageResponse } from "./types";
-import { DiceRoll } from '@dice-roller/rpg-dice-roller'
+import { createDiceRoller, DiceRoller, BaseToken } from "@airjp73/dice-notation";
 
 export const Options = {
     dice: 'dice'
@@ -27,9 +27,32 @@ export const handler = (rollDice: (diceStr: string) => string) => async (request
     return messageResponse(`${diceRoll}`)
 }
 
-export const defaultRollDice = (diceStr: string): string => {
+export const defaultRollDice = ({tokenize, rollDice, tallyRolls, calculateFinalResult, roll}: DiceRoller) => (diceStr: string): string => {
     try {
-        return new DiceRoll(diceStr).output
+        const tokens = tokenize(diceStr)
+        const rolls = rollDice(tokens)
+        const rollTotals = tallyRolls(tokens, rolls)
+        const result = calculateFinalResult(tokens, rollTotals)
+
+        const outputString = tokens.map((token, index) => {
+            if (token.type === "DiceRoll") { //TODO: token types are exported in such a way that typescript does like it; is there a workaround?
+                if (token.detailType === "_SimpleDieRoll") {
+                    return `[${rolls[index]}]`
+                } else if (token.detailType === "_Constant") {
+                    return token.content
+                } else {
+                    return ""
+                }
+            } else if (token.type === "Operator") {
+                return token.operator
+            } else if (token.type === "OpenParen" || token.type === "CloseParen") {
+                return token.content
+            } else {
+                return ""
+            }
+        }).join(" ")
+
+        return `${diceStr}: ${outputString} = ${result}`
     } catch (e) {
         return "Error: invalid input"
     }
@@ -37,5 +60,5 @@ export const defaultRollDice = (diceStr: string): string => {
 
 export const commandSpec: CommandSpec = {
     command,
-    handler: handler(defaultRollDice),
+    handler: handler(defaultRollDice(createDiceRoller())),
 }
