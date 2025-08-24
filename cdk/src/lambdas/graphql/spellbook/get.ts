@@ -1,5 +1,5 @@
 import { AppSyncResolverEvent } from "aws-lambda";
-import { Spellbook } from "./types";
+import { Spellbook } from '@voidconcept/shared'
 
 type QuerySpellbookArgs = {
     id: String

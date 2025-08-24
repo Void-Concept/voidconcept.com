@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { commandSpecs, Command } from '../src/lambdas/discordInteractions/commands'
 import { SecretsManagerService } from '../src/lambdas/discordInteractions/SecretManagerService'
-import SecretsManager from 'aws-sdk/clients/secretsmanager';
+import { SecretsManager } from '@aws-sdk/client-secrets-manager';
 
 const register = async () => {
     const secretsManager = new SecretsManager({
