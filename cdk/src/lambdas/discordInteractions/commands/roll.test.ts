@@ -1,5 +1,5 @@
 import { InteractionType } from 'discord-interactions'
-import { defaultRollDice, handler, Options } from './roll'
+import { defaultRollDice, handler, keepHighestRule, Options } from './roll'
 import { RequestOption, Request, CommandOptionType } from './types'
 import { createDiceRoller, withPlugins } from '@airjp73/dice-notation'
 import { defaultPlugins } from '@airjp73/dice-notation/dist/createDiceRoller'
@@ -12,7 +12,7 @@ describe('roll', () => {
         }
     } as Request)
 
-    const roller = createDiceRoller(withPlugins(), {
+    const roller = createDiceRoller(withPlugins(keepHighestRule), {
         random: (min, max) => Math.floor((max + min) / 2)
     })
 
@@ -77,10 +77,16 @@ describe('roll', () => {
             expect(diceRoll).toEqual("2d20 + 3d8: [10,10] + [4,4,4] = 32")
         })
 
-        it.skip("should roll 4d6kh3", () => {
+        it("should roll 4d6kh3", () => {
             const diceRoll = diceRollerFixedResult("4d6kh3")
 
-            expect(diceRoll).toEqual("4d6kh3: ")
+            expect(diceRoll).toEqual("4d6kh3: [-3,3,3,3] = 9")
+        })
+
+        it("should roll 4d6kh3 + 2", () => {
+            const diceRoll = diceRollerFixedResult("4d6kh3 + 2")
+
+            expect(diceRoll).toEqual("4d6kh3 + 2: [-3,3,3,3] + 2 = 11")
         })
     })
 })
