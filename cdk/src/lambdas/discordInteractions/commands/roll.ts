@@ -1,7 +1,7 @@
 import { RollConfig } from "@airjp73/dice-notation/dist/util/rollConfig";
 import { findOption, messageResponse } from "./helpers";
 import { CommandSpec, Command, CommandOptionType, Request, ChannelMessageResponse } from "./types";
-import { createDiceRoller, DiceRoller, BaseToken, withPlugins, DiceRule, Rolls } from "@airjp73/dice-notation";
+import { createDiceRoller, DiceRoller, withPlugins, DiceRule, Rolls } from "@airjp73/dice-notation";
 
 export const Options = {
     dice: 'dice'

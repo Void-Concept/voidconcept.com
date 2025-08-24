@@ -63,5 +63,11 @@ export class GraphQLStack extends Stack {
             typeName: "Query",
             fieldName: "spellbook",
         })
+
+        new route53.CnameRecord(this, "CnameRecord", {
+            recordName: "graphql",
+            zone: props.hostedZone,
+            domainName: api.appSyncDomainName,
+        })
     }
 }
