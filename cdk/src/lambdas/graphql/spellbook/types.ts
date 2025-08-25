@@ -19,10 +19,10 @@ export type SpellbookAttributesLine = CombinedStorageKey & Pick<Spellbook, 'maxP
 export const isSpellbookAttributesLine = 
     (line: CombinedStorageReadResponse): line is SpellbookAttributesLine => line.sortKey === spellbookAttributeStorageLineSortKey
 
-export type SpellbookSpellLinePartitonKey = `spell#${number}`
+export type SpellbookSpellLinePartitionKey = `spell#${number}`
 
 export type SpellbookSpellLine = CombinedStorageKey & Spell & {
-    sortKey: SpellbookSpellLinePartitonKey
+    sortKey: SpellbookSpellLinePartitionKey
 }
 
 export const isSpellbookSpellLine = 

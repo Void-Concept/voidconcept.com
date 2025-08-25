@@ -45,7 +45,7 @@ export const handler = async (
         ...spell
     }))
 
-    const wasCreated = await combinedStorageClient.upsert(partitionKey, [ownerLine, attributesLine, ...spellLines])
+    const wasCreated = await combinedStorageClient.upsert([ownerLine, attributesLine, ...spellLines])
 
     if (!wasCreated) {
         return null

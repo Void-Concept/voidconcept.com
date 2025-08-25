@@ -1,14 +1,12 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { BatchGetCommand, BatchWriteCommand, DynamoDBDocumentClient, NativeAttributeValue, QueryCommand } from '@aws-sdk/lib-dynamodb'
+import { BatchWriteCommand, DynamoDBDocumentClient, NativeAttributeValue, QueryCommand } from '@aws-sdk/lib-dynamodb'
 
 export type CombinedStorageKey = {
     partitionKey: string
     sortKey: string
 }
 
-export type CombinedStorageUpsertRequest = Record<string, NativeAttributeValue> & {
-    sortKey: string
-}
+export type CombinedStorageUpsertRequest = Record<string, NativeAttributeValue> & CombinedStorageKey
 
 export type CombinedStorageReadResponse = Record<string, NativeAttributeValue> & CombinedStorageKey
 
@@ -24,13 +22,13 @@ export class CombinedStorageClient {
 
     private getPartitionKey = (partitionKey: string): string => `app#${this.appName}#${partitionKey}`
 
-    upsert = async (partitionKey: string, requests: CombinedStorageUpsertRequest[]) => {
+    upsert = async (requests: CombinedStorageUpsertRequest[]) => {
+        const numOfPartitonKeys = requests.reduce((prev, curr) => prev.add(curr.partitionKey), new Set<string>())
+        if (numOfPartitonKeys.size !== 1) return false
+
         const putRequests = requests.map(request => ({
             PutRequest: {
-                Item: {
-                    partitonKey: this.getPartitionKey(partitionKey),
-                    ...request,
-                }
+                Item: request,
             }
         }))
 
@@ -41,6 +39,8 @@ export class CombinedStorageClient {
         })
 
         const output = await this.documentClient.send(command)
+
+        console.log(output)
 
         return !output.UnprocessedItems
     }
