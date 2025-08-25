@@ -15,7 +15,7 @@ export class CombinedStorageClient {
     constructor(
         dynamodb: DynamoDB, 
         private tableName: string, 
-        private appName: string
+        private appName: string,
     ) {
         this.documentClient = DynamoDBDocumentClient.from(dynamodb)
     }
@@ -26,15 +26,18 @@ export class CombinedStorageClient {
         const numOfPartitonKeys = requests.reduce((prev, curr) => prev.add(curr.partitionKey), new Set<string>())
         if (numOfPartitonKeys.size !== 1) return false
 
-        const putRequests = requests.map(request => ({
+        const putRequests = requests.map(({partitionKey, ...request}) => ({
             PutRequest: {
-                Item: request,
+                Item: {
+                    partitionKey: this.getPartitionKey(partitionKey),
+                    ...request,
+                }
             }
         }))
 
         const command = new BatchWriteCommand({
             RequestItems: {
-                [this.tableName]: putRequests
+                [this.tableName]: putRequests,
             }
         })
 
@@ -42,7 +45,7 @@ export class CombinedStorageClient {
 
         console.log(output)
 
-        return !output.UnprocessedItems
+        return !output.UnprocessedItems || Object.keys(output.UnprocessedItems).length === 0
     }
 
     read = async (partitionKey: string): Promise<CombinedStorageReadResponse[]> => {
