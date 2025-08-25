@@ -1,0 +1,98 @@
+.spell {
+    padding: 8px;
+    border: 1px solid black;
+}
+
+.spell-info {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "name spell-school"
+        "name spell-level"
+}
+
+.spell-info-icon {
+    float: left;
+    margin-top: 3px;
+    margin-right: 4px;
+}
+
+.spell-name {
+    grid-area: name;
+    font-size: 1.7em;
+}
+
+.spell-level {
+    grid-area: "level";
+    justify-self: right;
+}
+
+.spell-school {
+    grid-area: "school";
+    justify-self: right;
+}
+
+.spell-stats {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    column-gap: 8px;
+}
+
+.spell-stats span:first-child {
+    justify-self: left;
+}
+
+.spell-stats span {
+    justify-self: center;
+}
+
+.spell-stats span:last-child {
+    justify-self: right;
+}
+
+.spell-stats-icon {
+    float: left;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+.spell-description {
+    white-space: pre-wrap;
+}
+
+.spell-description * {
+    margin-bottom: 16px
+}
+
+.m-r-4 {
+    margin-right: 4px !important;
+}
+
+.spell-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    grid-gap: 8px;
+    border: 1px solid black;
+    border-top: 0;
+    padding: 8px
+}
+
+.spell-button {
+    -webkit-appearance: none;
+    background: 0;
+    border: 0;
+    color: #3d3d3d;
+    border: 1px solid rgb(209, 209, 209);
+    padding: 4px;
+}
+
+.spell-button-prepared {
+    color: rgb(0, 0, 0);
+    background: #61db80;
+}
+
+.spell-button-concentrating {
+    color: rgb(0, 0, 0);
+    background: #61c9db;
+}

@@ -102,9 +102,22 @@ input SpellDurationInput {
     duration: Int # Only applicable for ROUND, MINUTES, HOURS and DAYS
 }
 
+enum SpellLevel {
+    CANTRIP
+    LVL_1ST
+    LVL_2ND
+    LVL_3RD
+    LVL_4th
+    LVL_5th
+    LVL_6th
+    LVL_7th
+    LVL_8th
+    LVL_9th
+}
+
 type Spell {
     name: String!
-    level: Int!
+    level: SpellLevel!
     school: MagicSchool!
     castTime: SpellCastTime!
     range: SpellRange!
@@ -121,7 +134,7 @@ type Spell {
 # Needs to be manually kept in sync with Spell
 input SpellInput {
     name: String!
-    level: Int!
+    level: SpellLevel!
     school: MagicSchool!
     castTime: SpellCastTimeInput!
     range: SpellRangeInput!

@@ -6,6 +6,7 @@
         "@testing-library/jest-dom": "^5.11.9",
         "@testing-library/react": "^11.2.5",
         "@testing-library/user-event": "^12.7.1",
+        "@voidconcept/shared": "^0.1.0",
         "client-oauth2": "^4.3.3",
         "history": "^4.9.0",
         "mdi-react": "^7.4.0",

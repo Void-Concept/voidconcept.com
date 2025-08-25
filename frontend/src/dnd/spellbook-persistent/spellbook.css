@@ -1,0 +1,15 @@
+.spellbook {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    column-gap: 8px;
+    row-gap: 8px;
+}
+
+.spellbook-container {
+    padding: 8px;
+    margin-bottom: 50em;
+}
+
+.spellbook-container h1 {
+    margin: 8px 0;
+}
