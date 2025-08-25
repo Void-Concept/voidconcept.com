@@ -76,7 +76,7 @@ type SpellAreaOfEffect {
 # Needs to be manually kept in sync with SpellAreaOfEffect
 input SpellAreaOfEffectInput {
     type: SpellAreaOfEffectType!
-    dimensions: Int
+    dimensions: Int!
 }
 
 enum SpellDurationType {
@@ -102,10 +102,10 @@ input SpellDurationInput {
 }
 
 enum SpellLevel {
-    CANTRIP
-    LVL_1ST
-    LVL_2ND
-    LVL_3RD
+    Cantrip
+    LVL_1st
+    LVL_2nd
+    LVL_3rd
     LVL_4th
     LVL_5th
     LVL_6th

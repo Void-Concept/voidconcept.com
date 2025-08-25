@@ -107,11 +107,11 @@ export const renderLevel = (level: SpellLevel): string => {
     switch (level) {
         case SpellLevel.Cantrip:
             return "Cantrip"
-        case SpellLevel.Lvl_1St:
+        case SpellLevel.Lvl_1st:
             return "1st"
-        case SpellLevel.Lvl_2Nd:
+        case SpellLevel.Lvl_2nd:
             return "2nd"
-        case SpellLevel.Lvl_3Rd:
+        case SpellLevel.Lvl_3rd:
             return "3rd"
         case SpellLevel.Lvl_4th:
             return "4th"

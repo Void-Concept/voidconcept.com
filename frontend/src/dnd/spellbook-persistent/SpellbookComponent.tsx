@@ -1,10 +1,11 @@
-import React, { useReducer, Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { renderLevel, SpellComponent } from './SpellComponent';
 import * as R from 'ramda';
 import "./spellbook.css";
 import {Spell, Spellbook} from '@voidconcept/shared'
 import { useAsyncEffect } from '../../hooks';
 import { SpellbookDao } from './SpellbookDao';
+import { EditSpellComponent } from './EditSpellComponent';
 
 interface SpellsProps {
     spells: SpellbookSpell[]
@@ -84,6 +85,8 @@ export const SpellbookComponent = ({spellbookDao}: SpellbookComponentProps) => {
                     </div>
                 </div>
             ))(spellsByLevel))}
+
+            <EditSpellComponent spellbookDao={spellbookDao} />
         </div>
     )
 }
