@@ -15,6 +15,13 @@ type SpellComponents {
     material: String
 }
 
+# Needs to be manually kept in sync with SpellComponents
+input SpellComponentsInput {
+    verbal: Boolean!
+    somatic: Boolean!
+    material: String
+}
+
 enum SpellCastTimeType {
     INSTANTANEOUS
     REACTION
@@ -25,6 +32,12 @@ enum SpellCastTimeType {
 }
 
 type SpellCastTime {
+    type: SpellCastTimeType!
+    duration: Int # Only applicable for MINUTES and HOURS
+}
+
+# Needs to be manually kept in sync with SpellCastTime
+input SpellCastTimeInput {
     type: SpellCastTimeType!
     duration: Int # Only applicable for MINUTES and HOURS
 }
@@ -41,6 +54,11 @@ type SpellRange {
     distance: Int # Only applicable for FEET
 }
 
+# Needs to be manually kept in sync with SpellRange
+input SpellRangeInput {
+    range: SpellRangeType!
+    distance: Int # Only applicable for FEET
+}
 
 enum SpellAreaOfEffectType {
     CUBE
@@ -52,6 +70,12 @@ enum SpellAreaOfEffectType {
 }
 
 type SpellAreaOfEffect {
+    type: SpellAreaOfEffectType!
+    dimensions: Int
+}
+
+# Needs to be manually kept in sync with SpellAreaOfEffect
+input SpellAreaOfEffectInput {
     type: SpellAreaOfEffectType!
     dimensions: Int
 }
@@ -72,6 +96,12 @@ type SpellDuration {
     duration: Int # Only applicable for ROUND, MINUTES, HOURS and DAYS
 }
 
+# Needs to be manually kept in sync with SpellDuration
+input SpellDurationInput { 
+    type: SpellDurationType!,
+    duration: Int # Only applicable for ROUND, MINUTES, HOURS and DAYS
+}
+
 type Spell {
     name: String!
     level: Int!
@@ -88,6 +118,23 @@ type Spell {
     alwaysPrepared: Boolean!
 }
 
+# Needs to be manually kept in sync with Spell
+input SpellInput {
+    name: String!
+    level: Int!
+    school: MagicSchool!
+    castTime: SpellCastTimeInput!
+    range: SpellRangeInput!
+    areaOfEffect: SpellAreaOfEffectInput
+    components: SpellComponentsInput!
+    duration: SpellDurationInput!
+    description: [String!]!
+    higherLevel: String
+    concentration: Boolean!
+    ritual: Boolean!
+    alwaysPrepared: Boolean!
+}
+
 type Spellbook {
     ownerId: ID!
     name: String
@@ -95,8 +142,10 @@ type Spellbook {
     spells: [Spell!]!
 }
 
-type Query {
-    spellbook(id: ID!): Spellbook
+input SpellbookInput {
+    name: String
+    maxPrepared: Int!
+    spells: [SpellInput!]!
 }
 
 type CreateSpellbookResponse {
@@ -104,12 +153,10 @@ type CreateSpellbookResponse {
     spellbook: Spellbook!
 }
 
-input CreateSpellbook {
-    name: String
-    maxPrepared: Int!
-    spells: [Spell!]!
+type Query {
+    spellbook(id: ID!): Spellbook
 }
 
 type Mutation {
-    createSpellbook(spellbook: CreateSpellbook!): CreateSpellbookResponse
+    createSpellbook(spellbook: SpellbookInput!): CreateSpellbookResponse
 }

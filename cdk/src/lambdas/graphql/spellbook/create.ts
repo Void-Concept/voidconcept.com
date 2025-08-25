@@ -39,7 +39,7 @@ export const handler = async (
         name: spellbook.name,
     }
 
-    const spellLines: SpellbookSpellLine[] = spellbook.spells.map(({__typename, ...spell}, index) => ({
+    const spellLines: SpellbookSpellLine[] = spellbook.spells.map((spell, index) => ({
         partitionKey,
         sortKey: `spell#${index}`,
         ...spell

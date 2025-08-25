@@ -1,5 +1,5 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { BatchGetCommand, BatchWriteCommand, DynamoDBDocumentClient, NativeAttributeValue } from '@aws-sdk/lib-dynamodb'
+import { BatchGetCommand, BatchWriteCommand, DynamoDBDocumentClient, NativeAttributeValue, QueryCommand } from '@aws-sdk/lib-dynamodb'
 
 export type CombinedStorageKey = {
     partitionKey: string
@@ -46,22 +46,22 @@ export class CombinedStorageClient {
     }
 
     read = async (partitionKey: string): Promise<CombinedStorageReadResponse[]> => {
-        const command  = new BatchGetCommand({
-            RequestItems: {
-                [this.tableName]: {
-                    Keys: [{
-                        partitionKey: this.getPartitionKey(partitionKey),
-                    }]
+        const command = new QueryCommand({
+            TableName: this.tableName,
+            KeyConditions: {
+                partitonKey: {
+                    ComparisonOperator: "EQ",
+                    AttributeValueList: [this.getPartitionKey(partitionKey)],
                 }
             }
         })
 
         const output = await this.documentClient.send(command)
         
-        if (!output.Responses) {
+        if (!output.Items) {
             return []
         } else {
-            return output.Responses[this.tableName] as CombinedStorageReadResponse[]
+            return output.Items as CombinedStorageReadResponse[]
         }
     }
 }

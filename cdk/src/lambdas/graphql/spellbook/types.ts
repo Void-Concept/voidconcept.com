@@ -21,7 +21,7 @@ export const isSpellbookAttributesLine =
 
 export type SpellbookSpellLinePartitonKey = `spell#${number}`
 
-export type SpellbookSpellLine = CombinedStorageKey & Omit<Spell, '__typename'> & {
+export type SpellbookSpellLine = CombinedStorageKey & Spell & {
     sortKey: SpellbookSpellLinePartitonKey
 }
 
