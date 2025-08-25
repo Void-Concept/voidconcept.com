@@ -49,7 +49,7 @@ export class CombinedStorageClient {
         const command = new QueryCommand({
             TableName: this.tableName,
             KeyConditions: {
-                partitonKey: {
+                partitionKey: {
                     ComparisonOperator: "EQ",
                     AttributeValueList: [this.getPartitionKey(partitionKey)],
                 }
