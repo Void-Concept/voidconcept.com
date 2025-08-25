@@ -1,5 +1,5 @@
 import { AppSyncResolverEvent } from "aws-lambda";
-import { Spellbook, QuerySpellbookArgs, Maybe } from '@voidconcept/shared'
+import { MutationUpdateSpellbookArgs, Maybe, UpdateSpellbookResponse } from '@voidconcept/shared'
 import { CombinedStorageClient } from "../../combinedStorage/combinedStorageClient";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { isCognitoIdentity } from "./shared";
@@ -11,8 +11,8 @@ const combinedStorageClient = new CombinedStorageClient(dynamoDb, tableName, "sp
 const spellbookService = new SpellbookService(combinedStorageClient)
 
 export const handler = async (
-    event: AppSyncResolverEvent<QuerySpellbookArgs>
-): Promise<Maybe<Spellbook>> => {
+    event: AppSyncResolverEvent<MutationUpdateSpellbookArgs>
+): Promise<Maybe<UpdateSpellbookResponse>> => {
     console.log(JSON.stringify(event))
 
     const identity = event.identity
@@ -20,11 +20,14 @@ export const handler = async (
         throw new Error("You are not logged in")
     }
 
-    const spellbook = await spellbookService.get(event.arguments.id)
-    if (spellbook?.ownerId !== identity.sub) {
-        return null
-    } else {
-        return spellbook
+    const {id, spellbook} = event.arguments
+
+    const existingSpellbook = await spellbookService.get(id)
+
+    if (!existingSpellbook || existingSpellbook.ownerId !== identity.sub) {
+        throw new Error("Spellbook doesn't exist")
     }
+
+    return spellbookService.upsert(id, identity.sub, spellbook)
 }
 

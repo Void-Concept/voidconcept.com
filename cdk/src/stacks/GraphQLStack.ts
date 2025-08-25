@@ -49,10 +49,14 @@ export class GraphQLStack extends Stack {
             fieldName: "spellbook",
         })
 
-
         createResolver(this, "MutationCreateSpellbook", "./src/lambdas/graphql/spellbook/create.ts", {
             typeName: "Mutation",
             fieldName: "createSpellbook",
+        })
+
+        createResolver(this, "MutationUpdateSpellbook", "./src/lambdas/graphql/spellbook/update.ts", {
+            typeName: "Mutation",
+            fieldName: "updateSpellbook",
         })
 
         new route53.CnameRecord(this, "CnameRecord", {

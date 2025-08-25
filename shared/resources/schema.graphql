@@ -153,10 +153,16 @@ type CreateSpellbookResponse {
     spellbook: Spellbook!
 }
 
+type UpdateSpellbookResponse {
+    id: ID!
+    spellbook: Spellbook!
+}
+
 type Query {
     spellbook(id: ID!): Spellbook
 }
 
 type Mutation {
     createSpellbook(spellbook: SpellbookInput!): CreateSpellbookResponse
+    updateSpellbook(id: ID!, spellbook: SpellbookInput!): UpdateSpellbookResponse
 }

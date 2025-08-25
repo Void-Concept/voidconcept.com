@@ -67,4 +67,28 @@ export class CombinedStorageClient {
             return output.Items as CombinedStorageReadResponse[]
         }
     }
+
+    querySortKey = async (sortKey: string): Promise<CombinedStorageReadResponse[]> => {
+        const command = new QueryCommand({
+            TableName: this.tableName,
+            KeyConditions: {
+                partitionKey: {
+                    ComparisonOperator: "BEGINS_WITH",
+                    AttributeValueList: [this.getPartitionKey("")],
+                },
+                sortKey: {
+                    ComparisonOperator: "EQ",
+                    AttributeValueList: [sortKey],
+                }
+            }
+        })
+
+        const output = await this.documentClient.send(command)
+        
+        if (!output.Items) {
+            return []
+        } else {
+            return output.Items as CombinedStorageReadResponse[]
+        }
+    }
 }
