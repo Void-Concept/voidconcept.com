@@ -4,6 +4,7 @@ import { CombinedStorageClient } from "../../combinedStorage/combinedStorageClie
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { SpellbookAttributesLine, SpellbookOwnerStorageLine, SpellbookSpellLine } from "./types";
 import { randomUUID } from "crypto";
+import { isCognitoIdentity, partitionKeyFor } from "./shared";
 
 const dynamoDb = new DynamoDB()
 const tableName = process.env.combinedStorage!
@@ -14,14 +15,19 @@ export const handler = async (
 ): Promise<Maybe<CreateSpellbookResponse>> => {
     console.log(JSON.stringify(event))
 
+    const identity = event.identity
+    if (!isCognitoIdentity(identity)) {
+        throw new Error("You are not logged in")
+    }
+
     const spellbook = event.arguments.spellbook
 
     const newSpellbookId = randomUUID()
 
-    const partitionKey = `spellbook#${newSpellbookId}`
+    const partitionKey = partitionKeyFor(newSpellbookId)
 
     const ownerLine: SpellbookOwnerStorageLine = {
-        ownerId: spellbook.ownerId,
+        ownerId: identity.sub,
         partitionKey: partitionKey,
         sortKey: "owner"
     }
@@ -46,7 +52,10 @@ export const handler = async (
     } else {
         return {
             id: newSpellbookId,
-            spellbook,
+            spellbook: {
+                ownerId: identity.sub,
+                ...spellbook,
+            },
         }
     }
 }

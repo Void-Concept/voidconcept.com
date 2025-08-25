@@ -104,6 +104,12 @@ type CreateSpellbookResponse {
     spellbook: Spellbook!
 }
 
+input CreateSpellbook {
+    name: String
+    maxPrepared: Int!
+    spells: [Spell!]!
+}
+
 type Mutation {
-    createSpellbook(spellbook: Spellbook!): CreateSpellbookResponse
+    createSpellbook(spellbook: CreateSpellbook!): CreateSpellbookResponse
 }

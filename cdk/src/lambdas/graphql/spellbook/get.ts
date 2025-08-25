@@ -3,6 +3,7 @@ import { Spell, Spellbook, QuerySpellbookArgs, Maybe } from '@voidconcept/shared
 import { CombinedStorageClient } from "../../combinedStorage/combinedStorageClient";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { isSpellbookAttributesLine, isSpellbookOwnerStorageLine, isSpellbookSpellLine } from "./types";
+import { partitionKeyFor } from "./shared";
 
 const dynamoDb = new DynamoDB()
 const tableName = process.env.combinedStorage!
@@ -12,7 +13,7 @@ export const handler = async (
     event: AppSyncResolverEvent<QuerySpellbookArgs>
 ): Promise<Maybe<Spellbook>> => {
     console.log(JSON.stringify(event))
-    const records = await combinedStorageClient.read(`spellbook#${event.arguments.id}`)
+    const records = await combinedStorageClient.read(partitionKeyFor(event.arguments.id))
 
     const ownerLine = records.find(isSpellbookOwnerStorageLine)
     const attributesLine = records.find(isSpellbookAttributesLine)
