@@ -6,7 +6,7 @@ import TimerSandIcon from "mdi-react/TimerSandIcon";
 import FlaskOutlineIcon from "mdi-react/FlaskOutlineIcon";
 import ThoughtBubbleIcon from "mdi-react/ThoughtBubbleIcon";
 import BookOpenPageVariantIcon from "mdi-react/BookOpenPageVariantIcon";
-import { Spell } from './Spellbook';
+import { Spell, SpellCastTime, SpellCastTimeType, SpellComponents, SpellDuration, SpellDurationType, SpellRange, SpellRangeType, SpellLevel } from '@voidconcept/shared';
 
 interface SpellComponentProps {
     spell: Spell
@@ -44,6 +44,90 @@ const RitualIcon = ({ size, className }: RitualIconProps) => {
     );
 }
 
+const renderCastTime = (castTime: SpellCastTime): string => {
+    switch (castTime.type) {
+        case SpellCastTimeType.Action:
+            return "1 Action"
+        case SpellCastTimeType.BonusAction:
+            return "1 Bonus Action"
+        case SpellCastTimeType.Reaction:
+            return "1 Reaction"
+        case SpellCastTimeType.Hours:
+            return `${castTime.duration} Hour(s)`
+        case SpellCastTimeType.Minutes:
+            return `${castTime.duration} Minute(s)`
+    }
+}
+
+const renderRange = (range: SpellRange): string => {
+    switch (range.range) {
+        case SpellRangeType.Self:
+            return "Self"
+        case SpellRangeType.Touch:
+            return "Touch"
+        case SpellRangeType.Feet:
+            return `${range.distance} Feet`
+        case SpellRangeType.Unlimited:
+            return "Unlimited"
+    }
+}
+
+const renderComponents = (components: SpellComponents): string => {
+    return [
+        components.verbal ? "V" : null,
+        components.somatic ? "S" : null,
+        !!components.material ? "M" : null,
+    ]
+    .filter(c => c !== null)
+    .join(",")
+}
+
+const renderDuration = (duration: SpellDuration): string => {
+    switch (duration.type) {
+        case SpellDurationType.Instantaneous:
+            return "Instantaneous"
+        case SpellDurationType.Round:
+            return `${duration.duration} Round(s)`
+        case SpellDurationType.Minutes:
+            return `${duration.duration} Minute(s)`
+        case SpellDurationType.Hours:
+            return `${duration.duration} Hour(s)`
+        case SpellDurationType.Days:
+            return `${duration.duration} Day(s)`
+        case SpellDurationType.Special:
+            return "Special"
+        case SpellDurationType.UntilDispelled:
+            return "Until Dispelled"
+        case SpellDurationType.UntilDispelledOrTriggered:
+            return "Until Dispelled Or Triggered"
+    }
+}
+
+export const renderLevel = (level: SpellLevel): string => {
+    switch (level) {
+        case SpellLevel.Cantrip:
+            return "Cantrip"
+        case SpellLevel.Lvl_1St:
+            return "1st"
+        case SpellLevel.Lvl_2Nd:
+            return "2nd"
+        case SpellLevel.Lvl_3Rd:
+            return "3rd"
+        case SpellLevel.Lvl_4th:
+            return "4th"
+        case SpellLevel.Lvl_5th:
+            return "5th"
+        case SpellLevel.Lvl_6th:
+            return "6th"
+        case SpellLevel.Lvl_7th:
+            return "7th"
+        case SpellLevel.Lvl_8th:
+            return "8th"
+        case SpellLevel.Lvl_9th:
+            return "9th"
+    }
+}
+
 export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onConcentrate }: SpellComponentProps) => {
     const infoIconSize = "16px";
     const statsIconSize = "16px";
@@ -63,33 +147,33 @@ export const SpellComponent = ({ spell, prepared, concentrating, onPrepare, onCo
                     <span className="spell-level">
                         {spell.concentration ? <ConcentrationIcon size={infoIconSize} className="spell-info-icon" /> : null}
                         {spell.ritual ? <RitualIcon size={infoIconSize} className="spell-info-icon" /> : null}
-                        {spell.level}
+                        {renderLevel(spell.level)}
                     </span>
                 </div>
                 <hr />
                 <div className="spell-stats">
                     <span className="spell-cast-time">
                         <CameraTimerIcon size={statsIconSize} className="spell-stats-icon" />
-                        {spell.castTime}
+                        {renderCastTime(spell.castTime)}
                     </span>
                     <span className="spell-range">
                         <BullseyeArrowIcon size={statsIconSize} className="spell-stats-icon" />
-                        {spell.range}
+                        {renderRange(spell.range)}
                     </span>
                     <span className="spell-components">
                         <FlaskOutlineIcon size={statsIconSize} className="spell-stats-icon" />
-                        {spell.components}
+                        {renderComponents(spell.components)}
                     </span>
                     <span className="spell-duration">
                         <TimerSandIcon size={statsIconSize} className="spell-stats-icon" />
-                        {spell.duration}
+                        {renderDuration(spell.duration)}
                     </span>
                 </div>
                 {showDescription &&
                     <div className="spell-description-container" onClick={preventClick}>
-                        {spell.materials && <>
+                        {spell.components.material && <>
                             <hr />
-                            Material cost: {spell.materials}
+                            Material cost: {spell.components.material}
                         </>}
                         <hr />
                         <SpellDescription description={(spell.description)} />

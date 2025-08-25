@@ -23,7 +23,6 @@ input SpellComponentsInput {
 }
 
 enum SpellCastTimeType {
-    INSTANTANEOUS
     REACTION
     BONUS_ACTION
     ACTION

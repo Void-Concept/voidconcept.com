@@ -1,29 +1,18 @@
-import React, { useReducer, Dispatch } from 'react';
-import { SpellComponent } from './SpellComponent';
+import React, { useReducer, Dispatch, useState } from 'react';
+import { renderLevel, SpellComponent } from './SpellComponent';
 import * as R from 'ramda';
 import "./spellbook.css";
-import { spells, MAX_PREPARED, Spell } from './Spellbook';
-
-const localStorageSpellbook: SpellbookSpell[] = JSON.parse(localStorage.getItem("spellbook") || '""') || []
-
-const initialSpellbookSpells: SpellbookSpell[] = spells
-    .map(spell => {
-        const localStorageSpell = localStorageSpellbook.find(lsSpell => {
-            return R.equals(lsSpell.spell.name, spell.name);
-        })
-        return {
-            spell: spell,
-            prepared: spell.level === "Cantrip" || !!(localStorageSpell && localStorageSpell.prepared) || !!spell.alwaysPrepared,
-            concentrating: !!(localStorageSpell && localStorageSpell.concentrating)
-        }
-    })
+import {Spell, Spellbook} from '@voidconcept/shared'
+import { useAsyncEffect } from '../../hooks';
+import { SpellbookDao } from './SpellbookDao';
 
 interface SpellsProps {
     spells: SpellbookSpell[]
-    onChange: Dispatch<SpellbookReducerAction>
+    onConcentrate: (_: Spell) => void
+    onPrepare: (_: Spell) => void
 }
 
-const Spells = ({ spells, onChange }: SpellsProps) => {
+const Spells = ({ spells, onConcentrate, onPrepare }: SpellsProps) => {
     return (
         <>
             {spells.map((spell, index) => {
@@ -31,11 +20,11 @@ const Spells = ({ spells, onChange }: SpellsProps) => {
                     spell={spell.spell}
                     concentrating={spell.concentrating}
                     onConcentrate={() => {
-                        onChange({ action: "concentrate", spell: spell.spell })
+                        onConcentrate(spell.spell)
                     }}
                     prepared={spell.prepared}
                     onPrepare={() => {
-                        onChange({ action: "prepare", spell: spell.spell })
+                        onPrepare(spell.spell)
                     }} />;
             })}
         </>
@@ -48,82 +37,42 @@ interface SpellbookSpell {
     concentrating: boolean
 }
 
-interface SpellbookReducerAction {
-    action: "prepare" | "concentrate"
-    spell: Spell
+type SpellbookComponentProps = {
+    spellbookDao: SpellbookDao
 }
+export const SpellbookComponent = ({spellbookDao}: SpellbookComponentProps) => {
+    const [spellbook, setSpellbook] = useState<Spellbook | null>(null)
+    const [errors, setErrors] = useState<string | null>(null)
 
-const spellReducer = (spellbook: SpellbookSpell[], action: SpellbookReducerAction): SpellbookSpell[] => {
-    const canPrepareNewSpell = (spellbook: SpellbookSpell[]): boolean => {
-        const currentlyPrepared = spellbook.filter(spell => {
-            return spell.prepared && spell.spell.level !== "Cantrip" && !spell.spell.alwaysPrepared;
-        }).length;
-
-        return currentlyPrepared < MAX_PREPARED;
-    }
-
-    const index = spellbook.findIndex(spell => {
-        return spell.spell === action.spell
-    });
-
-    const affectedSpell = index > -1 && spellbook[index]
-    if (!affectedSpell) {
-        return spellbook;
-    }
-
-    switch (action.action) {
-        case "prepare":
-            const willBePrepared = !spellbook[index].prepared
-            const notAlwaysPrepared = spellbook[index].spell.level !== "Cantrip" && !spellbook[index].spell.alwaysPrepared;
-            if (notAlwaysPrepared && (!willBePrepared || canPrepareNewSpell(spellbook))) {
-                return [
-                    ...spellbook.slice(0, index),
-                    {
-                        ...spellbook[index],
-                        prepared: willBePrepared
-                    },
-                    ...spellbook.slice(index + 1),
-                ];
+    useAsyncEffect(async () => {
+        try {
+            const spellbook = await spellbookDao.get("f43a6844-6248-43c1-88e2-9e55828c7e70") //TODO: don't hard-code this spellbook
+            setSpellbook(spellbook)
+        } catch (e) {
+            if (e instanceof Error) {
+                setErrors(e.message)
             } else {
-                return spellbook;
+                setErrors("Unknown error occurred")
             }
-        case "concentrate":
-            const isAlreadyConcentrating = !!spellbook.find(spell => {
-                return spell.concentrating;
-            });
-            const willBeConcentrating = !spellbook[index].concentrating;
-            if (!willBeConcentrating || !isAlreadyConcentrating) {
-                return [
-                    ...spellbook.slice(0, index),
-                    {
-                        ...spellbook[index],
-                        concentrating: willBeConcentrating
-                    },
-                    ...spellbook.slice(index + 1),
-                ];
-            } else {
-                return spellbook;
-            }
+        }
+    }, [])
 
-        default:
-            return spellbook;
+    if (!!errors) {
+        return <span>Error: {errors}</span>
     }
-}
-
-const localStorageWrapper = <S, A>(reducer: (state: S, action: A) => S): (spellbook: S, action: A) => S => {
-    return (spellbook: S, action: A) => {
-        const newState = reducer(spellbook, action);
-        localStorage.setItem("spellbook", JSON.stringify(newState));
-        return newState;
+    if (!spellbook) {
+        return <span>Loading...</span>
     }
-}
 
-export const SpellbookComponent = () => {
-    const [spells, dispatch] = useReducer(localStorageWrapper(spellReducer), initialSpellbookSpells);
+    const spellbookSpells: SpellbookSpell[] = spellbook.spells.map(spell => ({
+        spell,
+        prepared: false,
+        concentrating: false,
+    }))
 
     const spellsByLevel = R.groupBy((spell: SpellbookSpell) => {
-        return spell.spell.level
-    })(spells)
+        return renderLevel(spell.spell.level)
+    })(spellbookSpells)
 
     return (
         <div className="spellbook-container">
@@ -131,7 +80,7 @@ export const SpellbookComponent = () => {
                 <div key={level}>
                     <h1>{level}</h1>
                     <div className="spellbook">
-                        <Spells spells={spellbookSpell} onChange={dispatch} />
+                        <Spells spells={spellbookSpell} onConcentrate={() => {}} onPrepare={() => {}} />
                     </div>
                 </div>
             ))(spellsByLevel))}

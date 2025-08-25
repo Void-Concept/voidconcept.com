@@ -9,6 +9,7 @@ import { CalendarList } from './dnd/calendar/CalendarList';
 import { DndCalendarEvent } from './dnd/calendar/event';
 import { NamesComponent } from './dnd/irilic/NamesComponent';
 import { SpellbookComponent } from './dnd/spellbook/SpellbookComponent';
+import { SpellbookComponent as PersistentSpellbookComponent } from './dnd/spellbook-persistent/SpellbookComponent';
 import { NavComponent } from './nav';
 import { NotesDaoImpl } from './notes/NotesDao';
 import { NotesEditor } from './notes/NotesEditor';
@@ -20,6 +21,7 @@ import { QuestsComponent } from './runescape/quests/QuestsComponent';
 import { LocalTimeComponent } from './time/local/LocalTimeComponent';
 import { Goals } from './private/goals';
 import { useAsyncEffect } from './hooks';
+import { SpellbookDaoImpl } from './dnd/spellbook-persistent/SpellbookDao';
 
 const getCalendarDao = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -30,6 +32,8 @@ const getCalendarDao = () => {
 }
 
 const notesDao = new NotesDaoImpl()
+
+const spellbookDao = new SpellbookDaoImpl()
 
 type RouteType = {
     category: string,
@@ -47,6 +51,11 @@ const routes: RouteType[] = [{
     name: "Spellbook",
     path: "/dnd/spellbook",
     render: () => <SpellbookComponent />
+}, {
+    category: "DND",
+    name: "Spellbook - persistent",
+    path: "/dnd/spellbook-persistent",
+    render: () => <PersistentSpellbookComponent spellbookDao={spellbookDao} />
 }, {
     category: "DND",
     name: "Calendars",
