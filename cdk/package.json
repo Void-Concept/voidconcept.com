@@ -31,6 +31,7 @@
         "@airjp73/dice-notation": "^2.2.2",
         "@aws-sdk/client-dynamodb": "^3.868.0",
         "@aws-sdk/client-secrets-manager": "^3.864.0",
+        "@aws-sdk/lib-dynamodb": "^3.873.0",
         "@types/aws-lambda": "^8.10.109",
         "@types/uuid": "^9.0.0",
         "@voidconcept/shared": "^0.1.0",

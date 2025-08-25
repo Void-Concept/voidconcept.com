@@ -98,3 +98,12 @@ type Spellbook {
 type Query {
     spellbook(id: ID!): Spellbook
 }
+
+type CreateSpellbookResponse {
+    id: ID!
+    spellbook: Spellbook!
+}
+
+type Mutation {
+    createSpellbook(spellbook: Spellbook): CreateSpellbookResponse
+}
