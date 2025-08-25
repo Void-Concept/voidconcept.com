@@ -105,5 +105,5 @@ type CreateSpellbookResponse {
 }
 
 type Mutation {
-    createSpellbook(spellbook: Spellbook): CreateSpellbookResponse
+    createSpellbook(spellbook: Spellbook!): CreateSpellbookResponse
 }

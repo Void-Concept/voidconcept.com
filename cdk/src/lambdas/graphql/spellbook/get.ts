@@ -1,16 +1,16 @@
 import { AppSyncResolverEvent } from "aws-lambda";
-import { Spell, Spellbook, QuerySpellbookArgs } from '@voidconcept/shared'
+import { Spell, Spellbook, QuerySpellbookArgs, Maybe } from '@voidconcept/shared'
 import { CombinedStorageClient } from "../../combinedStorage/combinedStorageClient";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { isSpellbookAttributesLine, isSpellbookOwnerStorageLine, isSpellbookSpellLine } from "./types";
 
 const dynamoDb = new DynamoDB()
-const tableName = process.env.TABLE_NAME!
+const tableName = process.env.combinedStorage!
 const combinedStorageClient = new CombinedStorageClient(dynamoDb, tableName, "spellbook")
 
 export const handler = async (
     event: AppSyncResolverEvent<QuerySpellbookArgs>
-): Promise<Spellbook | null> => {
+): Promise<Maybe<Spellbook>> => {
     console.log(JSON.stringify(event))
     const records = await combinedStorageClient.read(`spellbook#${event.arguments.id}`)
 

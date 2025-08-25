@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsc",
+        "build": "npm run codegen && tsc",
         "watch": "tsc -w",
         "test": "jest",
         "graphql-codegen": "graphql-codegen",

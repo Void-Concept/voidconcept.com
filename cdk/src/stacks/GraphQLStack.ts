@@ -42,26 +42,17 @@ export class GraphQLStack extends Stack {
             },
         })
 
-        const querySpellbookbookLambda = new lambda_nodejs.NodejsFunction(this, "QuerySpellbookbookLambda", {
-            runtime: lambda.Runtime.NODEJS_22_X,
-            entry: "./src/lambdas/graphql/spellbook/get.ts",
-            handler: "handler",
-            bundling: {
-                sourceMap: true,
-            },
-            environment: {
-                combinedStorage: props.combinedStorageTable.tableName,
-            },
-        })
-        props.combinedStorageTable.grantReadWriteData(querySpellbookbookLambda)
+        const createResolver = this.resolverFn(api, props.combinedStorageTable)
 
-        const dataSource = api.addLambdaDataSource("QuerySpellbookbook", querySpellbookbookLambda, {
-            name: "querySpellbookbook",
-        })
-
-        dataSource.createResolver("QuerySpellbookResolver", {
+        createResolver(this, "QuerySpellbook", "./src/lambdas/graphql/spellbook/get.ts", {
             typeName: "Query",
             fieldName: "spellbook",
+        })
+
+
+        createResolver(this, "MutationCreateSpellbook", "./src/lambdas/graphql/spellbook/create.ts", {
+            typeName: "Mutation",
+            fieldName: "createSpellbook",
         })
 
         new route53.CnameRecord(this, "CnameRecord", {
@@ -69,5 +60,34 @@ export class GraphQLStack extends Stack {
             zone: props.hostedZone,
             domainName: api.appSyncDomainName,
         })
+    }
+
+    private resolverFn = (
+        api: appsync.GraphqlApi, 
+        combinedStorageTable: dynamodb.ITable,
+    ) => (
+        scope: Construct,
+        resolverName: string,
+        sourceFile: string,
+        resolverProps: appsync.BaseResolverProps,
+    ): void => {
+        const resolverLambda = new lambda_nodejs.NodejsFunction(scope, `${resolverName}Lambda`, {
+            runtime: lambda.Runtime.NODEJS_22_X,
+            entry: sourceFile,
+            handler: "handler",
+            bundling: {
+                sourceMap: true,
+            },
+            environment: {
+                combinedStorage: combinedStorageTable.tableName,
+            },
+        })
+        combinedStorageTable.grantReadWriteData(resolverLambda)
+
+        const dataSource = api.addLambdaDataSource(`${resolverName}DataSource`, resolverLambda, {
+            name: resolverName,
+        })
+
+        dataSource.createResolver(`${resolverName}Resolver`, resolverProps)
     }
 }
