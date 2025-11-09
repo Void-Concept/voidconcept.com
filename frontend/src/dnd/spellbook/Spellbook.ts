@@ -324,6 +324,32 @@ export const spells: Spell[] = [
             "You can then choose a different creature you can see within range (you can choose yourself). The chosen creature has advantage on the next attack roll, ability check, or saving throw it makes within 1 minute. A creature can be empowered by only one use of this spell at a time.",
         ],
     }, {
+        name: "Disguise Self",
+        level: "1st",
+        school: "Illusion",
+        castTime: "1 Action",
+        range: "Self",
+        components: "V, S",
+        duration: "1 Hour",
+        description: [
+            "You make yourself--including your clothing, armor, weapons, and other belongings on your person--look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you.",
+            "The changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair.",
+            "To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC.",
+        ],
+    }, {
+        name: "Guest of Honor",
+        level: "1st",
+        school: "Enchantment",
+        castTime: "1 Action",
+        range: "Touch",
+        components: "V, M",
+        materials: "A signet Ring worth at least 25 gold",
+        duration: "10 Minutes",
+        description: [
+            "You whisper words of encouragement, and a target that you touch gains confidence along with approval from strangers. For the spell's duration, the subject puts their best foot forward and strangers associate the target with positive feelings. The target adds 1d4 to all Charisma (Persuasion) checks made to influence the attitudes of others and gains a +2 bonus to their status score (if used)",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 2nd level or higher, the effect lasts for an additional 10 minutes for each slot level above 1st"
+    }, {
         name: "Flaming Sphere",
         level: "2nd",
         school: "Conjuration",
@@ -769,7 +795,35 @@ export const spells: Spell[] = [
             "While the chest remains on the Ethereal Plane, you can use an action and touch the replica to recall the chest. It appears in an unoccupied space on the ground within 5 feet of you. You can send the chest back to the Ethereal Plane by using an action and touching both the chest and the replica.",
             "After 60 days, there is a cumulative 5 percent chance per day that the spell's effect ends. This effect ends if you cast this spell again, if the smaller replica chest is destroyed, or if you choose to end the spell as an action. If the spell ends and the larger chest is on the Ethereal Plane, it is irretrievably lost.",
         ],
-        higherLevel: "When you cast this spell using a spell slot of 5th level or higher, you can increase the size of the cube by 100 feet for each slot level beyond 4th. Thus you could protect a cube that can be up to 200 feet on one side by using a spell slot of 5th level."
+    }, {
+        name: "Divination",
+        level: "4th",
+        school: "Divination",
+        castTime: "1 Action",
+        range: "Self",
+        components: "V, S, M",
+        materials: "incense and a sacrificial offering appropriate to your religion, together worth at least 25 gp, which the spell consumes",
+        duration: "Instant",
+        ritual: true,
+        description: [
+            "Your magic and an offering put you in contact with a god or a god's servants. You ask a single question concerning a specific goal, event, or activity to occur within 7 days. The GM offers a truthful reply. The reply might be a short phrase, a cryptic rhyme, or an omen.",
+            "The spell doesn't take into account any possible circumstances that might change the outcome, such as the casting of additional spells or the loss or gain of a companion.",
+            "If you cast the spell two or more times before finishing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get a random reading. The GM makes this roll in secret.",
+        ],
+    }, {
+        name: "Greater Invisibility",
+        level: "4th",
+        school: "Illusion",
+        castTime: "1 Action",
+        range: "Touch",
+        components: "V, S",
+        duration: "1 Minute",
+        concentration: true,
+        description: [
+            "Your magic and an offering put you in contact with a god or a god's servants. You ask a single question concerning a specific goal, event, or activity to occur within 7 days. The GM offers a truthful reply. The reply might be a short phrase, a cryptic rhyme, or an omen.",
+            "The spell doesn't take into account any possible circumstances that might change the outcome, such as the casting of additional spells or the loss or gain of a companion.",
+            "If you cast the spell two or more times before finishing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get a random reading. The GM makes this roll in secret.",
+        ],
     }, {
         name: "Telepathic Bond",
         level: "5th",
@@ -903,6 +957,33 @@ export const spells: Spell[] = [
             "The ground in the spell's area becomes muddy enough that creatures can sink into it. Each foot that a creature moves through the mud costs 4 feet of movement, and any creature on the ground when you cast the spell must make a Strength saving throw. A creature must also make the saving throw when it moves into the area for the first time on a turn or ends its turn there. On a failed save, a creature sinks into the mud and is restrained, though it can use an action to end the restrained condition on itself by pulling itself free of the mud.",
             "If you cast the spell on a ceiling, the mud falls. Any creature under the mud when it falls must make a Dexterity saving throw. A creature takes 4d8 bludgeoning damage on a failed save, or half as much damage on a successful one.",
             "Transmute Mud to Rock. Nonmagical mud or quicksand in the area no more than 10 feet deep transforms into soft stone for the spell’s duration. Any creature in the mud when it transforms must make a Dexterity saving throw. On a successful save, a creature is shunted safely to the surface in an unoccupied space. On a failed save, a creature becomes restrained by the rock. A restrained creature, or another creature within reach, can use an action to try to break the rock by succeeding on a DC 20 Strength check or by dealing damage to it. The rock has AC 15 and 25 hit points, and it is immune to poison and psychic damage.",
+        ],
+    }, {
+        name: "Geas",
+        level: "5th",
+        school: "Enchantment",
+        castTime: "1 Minute",
+        range: "60 ft",
+        components: "V",
+        duration: "30 days",
+        description: [
+            "You place a magical command on a creature that you can see within range, forcing it to carry out some service or refrain from some action or course of activity as you decide. If the creature can understand you, it must succeed on a Wisdom saving throw or become charmed by you for the duration. While the creature is charmed by you, it takes 5d10 psychic damage each time it acts in a manner directly counter to your instructions, but no more than once each day. A creature that can't understand you is unaffected by the spell.",
+            "You can issue any command you choose, short of an activity that would result in certain death. Should you issue a suicidal command, the spell ends.",
+            "You can end the spell early by using an action to dismiss it. A remove curse, greater restoration, or wish spell also ends it.",
+        ],
+        higherLevel: "When you cast this spell using a spell slot of 7th or 8th level, the duration is 1 year. When you cast this spell using a spell slot of 9th level, the spell lasts until it is ended by one of the spells mentioned above."
+    }, {
+        name: "Legend Lore",
+        level: "5th",
+        school: "Divination",
+        castTime: "10 Minutes",
+        range: "Self",
+        components: "V, S, M",
+        materials: "incense worth at least 250 gp, which the spell consumes, and four ivory strips worth at least 50 gp each",
+        duration: "Instant",
+        description: [
+            "Name or describe a person, place, or object. The spell brings to your mind a brief summary of the significant lore about the thing you named. The lore might consist of current tales, forgotten stories, or even secret lore that has never been widely known. If the thing you named isn't of legendary importance, you gain no information. The more information you already have about the thing, the more precise and detailed the information you receive is.",
+            "The information you learn is accurate but might be couched in figurative language. For example, if you have a mysterious magic axe on hand, the spell might yield this information: “Woe to the evildoer whose hand touches the axe, for even the haft slices the hand of the evil ones. Only a true Child of Stone, lover and beloved of Moradin, may awaken the true powers of the axe, and only with the sacred word Rudnogg on the lips.",
         ],
     }, {
         name: "Scatter",
@@ -1217,6 +1298,18 @@ export const spells: Spell[] = [
             "You shatter the barriers between realities and timelines, thrusting a creature into turmoil and madness. The target must succeed on a Wisdom saving throw, or it can't take reactions until the spell ends. The affected target must also roll a d10 at the start of each of its turns; the number rolled determines what happens to the target as shown on the Reality Break Effects table.",
             "At the end of each of its turns, the affected target can repeat the Wisdom saving throw, ending the spell on itself on a success",
             "http://dnd5e.wikidot.com/spell:reality-break",
+        ],
+    }, {
+        name: "Power Word Stun",
+        level: "8th",
+        school: "Enchantment",
+        castTime: "1 Action",
+        range: "60 ft",
+        components: "V",
+        duration: "Instant",
+        description: [
+            "You speak a word of power that can overwhelm the mind of one creature you can see within range, leaving it dumbfounded. If the target has 150 hit points or fewer, it is stunned. Otherwise, the spell has no effect.",
+            "The stunned target must make a Constitution saving throw at the end of each of its turns. On a successful save, this stunning effect ends.",
         ],
     }, {
         name: "Wish",
