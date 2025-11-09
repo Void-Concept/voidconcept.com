@@ -341,6 +341,7 @@ export const spells: Spell[] = [
         level: "1st",
         school: "Enchantment",
         castTime: "1 Action",
+        ritual: true,
         range: "Touch",
         components: "V, M",
         materials: "A signet Ring worth at least 25 gold",
