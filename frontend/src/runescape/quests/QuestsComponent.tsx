@@ -453,6 +453,13 @@ const fetchUserData = async (user: ClanMember): Promise<QuestCell[]> => {
     }))
 }
 
+const virutalClanMember = (name: string): ClanMember => ({
+    name,
+    kills: 0,
+    rank: "",
+    totalXp: 0,
+})
+
 const fetchClanMembers = async (): Promise<ClanMember[]> => {
     const url = "https://runescape.voidconcept.com/clanMembers?clanName=Beach+Peaches"
     const response = await fetch(url, {
@@ -467,7 +474,7 @@ const fetchClanMembers = async (): Promise<ClanMember[]> => {
         totalXp: parseInt(row[2]),
         kills: parseInt(row[3]),
     }))
-    return clanMembers
+    return [...clanMembers, virutalClanMember("Psynocide"), virutalClanMember("Aisuu")]
 }
 
 type QuestGroupReduceResults = {
