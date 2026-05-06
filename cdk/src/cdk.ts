@@ -5,7 +5,6 @@ import { FrontendStack } from './stacks/FrontendStack';
 import { HostedZoneStack } from './stacks/HostedZoneStack';
 
 import config from './config';
-import { GlobalStorageStack } from './stacks/GlobalStorageStack';
 import { AuthStack } from './stacks/AuthStack';
 import { RunescapeProxyStack } from './stacks/RunescapeProxyStack';
 import { CalendarStack } from './stacks/CalendarStack';
@@ -57,14 +56,6 @@ new FrontendStack(app, 'FrontendStack', {
         region: "us-east-1"
     },
 });
-
-const globalStorageStack = new GlobalStorageStack(app, "GlobalStorageStack", {
-    hostedZone: hostedZoneStack.hostedZone,
-    cognitoUserPool: authStack.userPool,
-    env: {
-        region: "us-east-1"
-    },
-})
 
 const combinedStorageStack = new CombinedStorageStack(app, "CombinedStorageStack", {
     env: {
