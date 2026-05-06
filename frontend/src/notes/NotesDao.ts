@@ -3,12 +3,13 @@ import { getToken } from "../oauth/oauthClient";
 export interface NotesDao {
     list(): Promise<NotesList>
     get(id: string): Promise<Notes>
-    create(name: string): Promise<Notes>
+    create(path: string, name: string): Promise<Notes>
     update(notes: Notes): Promise<Notes>
 }
 
 export type Notes = {
     id: string
+    path: string
     name: string
     notes: string
 }
@@ -34,13 +35,13 @@ export class NotesDaoImpl {
         return notes
     }
 
-    create = async (name: string): Promise<Notes> => {
+    create = async (path: string, name: string): Promise<Notes> => {
         const response = await fetch(`${this.notesUrl}`, {
             method: "POST",
             headers: {
                 Authorization: getToken()
             },
-            body: JSON.stringify({ name })
+            body: JSON.stringify({ path, name })
         })
         const notes = await response.json() as Notes
         return notes

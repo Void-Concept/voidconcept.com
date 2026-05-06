@@ -3,6 +3,7 @@ import { v1 as uuidv1 } from 'uuid'
 
 type Notes = {
     id: string
+    path?: string
     name: string
     notes: string
 }
@@ -38,19 +39,22 @@ export class DynamoHelper {
         return this.fromDynamoNotes(notes)
     }
 
-    updateNotes = async (id: string, name: string, notes: string): Promise<Notes> => {
+    updateNotes = async (id: string, path: string | null, name: string, notes: string): Promise<Notes> => {
         const newState = await this.dynamoDb.updateItem({
             TableName: this.notesTableName,
             Key: {
                 id: this.toDynamoString(id)
             },
             AttributeUpdates: {
+                path: {
+                    Value: this.toDynamoString(path || ""),
+                },
                 name: {
-                    Value: this.toDynamoString(name)
+                    Value: this.toDynamoString(name),
                 },
                 notes: {
-                    Value: this.toDynamoString(notes)
-                }
+                    Value: this.toDynamoString(notes),
+                },
             },
             ReturnValues: "ALL_NEW"
         })
@@ -59,7 +63,7 @@ export class DynamoHelper {
         return this.fromDynamoNotes(newState.Attributes)
     }
 
-    createNotes = async (name: string): Promise<Notes> => {
+    createNotes = async (path: string | null, name: string): Promise<Notes> => {
         const generatedId = uuidv1()
         const newState = await this.dynamoDb.updateItem({
             TableName: this.notesTableName,
@@ -67,12 +71,15 @@ export class DynamoHelper {
                 id: this.toDynamoString(generatedId)
             },
             AttributeUpdates: {
+                path: {
+                    Value: this.toDynamoString(path || ""),
+                },
                 name: {
                     Value: this.toDynamoString(name)
                 },
                 notes: {
                     Value: this.toDynamoString("")
-                }
+                },
             },
             ReturnValues: "ALL_NEW"
         })
@@ -85,12 +92,14 @@ export class DynamoHelper {
 
     private toDynamoNotes = (notes: Notes): Record<string, AttributeValue> => ({
         id: this.toDynamoString(notes.id),
+        path: this.toDynamoString(notes.path || ""),
         name: this.toDynamoString(notes.name),
         notes: this.toDynamoString(notes.notes),
     })
 
     private fromDynamoNotes = (notes: Record<string, AttributeValue>): Notes => ({
         id: this.fromDynamoString(notes.id),
+        path: this.fromDynamoString(notes.path || ""),
         name: this.fromDynamoString(notes.name),
         notes: this.fromDynamoString(notes.notes),
     })

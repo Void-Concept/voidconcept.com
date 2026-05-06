@@ -95,7 +95,7 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
         setWorking("WORKING")
         const newNotes = {
             ...notes,
-            notes: value()
+            notes: value(),
         }
         setNotes(newNotes)
     }
@@ -105,13 +105,24 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
         const newName = event.target.value
         const newNotes = {
             ...notes,
-            name: newName
+            name: newName,
+        }
+        setNotes(newNotes)
+    }
+
+    const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setWorking("WORKING")
+        const newPath = event.target.value
+        const newNotes = {
+            ...notes,
+            path: newPath,
         }
         setNotes(newNotes)
     }
 
     return (
         <div className={"notes-container"}>
+            <input className="notes-title-input" type='text' value={notes.path} placeholder={"root"} onChange={onPathChange}/>
             <input className="notes-title-input" type='text' value={notes.name} placeholder={"<untitled>"} onChange={onTitleChange}/>
             <WorkingStateIcon className='notes-working-indicator' state={working}/>
             <Editor readOnly={readOnly} onChange={onEditorChange} defaultValue={notes.notes}/>

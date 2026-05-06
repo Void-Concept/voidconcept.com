@@ -20,7 +20,7 @@ export const NotesList = ({ notesDao }: NotesListProps) => {
 
     const createNote = async () => {
         setDisable(true)
-        const newNote = await notesDao.create("")
+        const newNote = await notesDao.create("", "")
         history.push(`/notes/${newNote.id}`)
     }
 

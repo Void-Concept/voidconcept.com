@@ -41,8 +41,8 @@ export const handleNotesEvent = async (
             body: JSON.stringify(await dynamoHelper.getNotes(notesId))
         }
     } else if (event.httpMethod === "POST") {
-        const { name, notes } = parseUpdateEvent(event)
-        await dynamoHelper.updateNotes(notesId, name, notes)
+        const { path, name, notes } = parseUpdateEvent(event)
+        await dynamoHelper.updateNotes(notesId, path || null, name, notes)
 
         return {
             statusCode: 200,
@@ -57,6 +57,7 @@ export const handleNotesEvent = async (
 }
 
 type NotesBodyCreate = {
+    path?: string
     name: string
 }
 const parseCreateEvent = (event: APIGatewayProxyEvent): NotesBodyCreate => {
@@ -64,6 +65,7 @@ const parseCreateEvent = (event: APIGatewayProxyEvent): NotesBodyCreate => {
     return JSON.parse(event.body.toString());
 };
 type NotesBodyUpdate = {
+    path?: string
     name: string
     notes: string
 }
@@ -82,11 +84,11 @@ export const handleNotesListEvent = async (
             body: JSON.stringify(await dynamoHelper.getNotesList())
         }
     } else if (event.httpMethod === "POST") {
-        const { name } = parseCreateEvent(event)
+        const { path, name } = parseCreateEvent(event)
 
         return {
             statusCode: 200,
-            body: JSON.stringify(await dynamoHelper.createNotes(name))
+            body: JSON.stringify(await dynamoHelper.createNotes(path || null, name))
         }
     } else {
         return {
