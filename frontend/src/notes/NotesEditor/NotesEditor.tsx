@@ -127,6 +127,7 @@ const NotesEditorLoaded = ({ notesDao, initialNotes }: NotesLoadedProps) => {
         <div className={"notes-container"}>
             <div>
                 <span>Predetermined paths: </span>
+                <button className='notes-thirteen-button' onClick={setPath("dnd/thirteen/notes")}>dnd/thirteen/notes</button>
                 <button className='notes-thirteen-button' onClick={setPath("dnd/thirteen")}>dnd/thirteen</button>
                 <br/>
                 <input className="notes-path-input" type='text' value={notes.path} placeholder={"root"} onChange={onPathChange}/>
