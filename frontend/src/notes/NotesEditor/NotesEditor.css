@@ -12,8 +12,22 @@
     font-weight: bold;
     border: none;
     padding: 0;
+    margin-bottom: 32px;
+    width: fit-content;
+}
+
+.notes-path-input {
+    font-size: x-large;
+    font-weight: bold;
+    border: none;
+    padding: 0;
     margin-bottom: 16px;
     width: fit-content;
+}
+
+.notes-thirteen-button {
+    font-weight: bold;
+    margin-right: 4px;
 }
 
 .notes-working-indicator {

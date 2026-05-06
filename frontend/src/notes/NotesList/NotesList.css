@@ -4,6 +4,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     justify-items: center;
+    padding-bottom: 50vh;
 }
 
 .notes-create-button {

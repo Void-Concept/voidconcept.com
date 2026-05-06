@@ -9,7 +9,7 @@ export interface NotesDao {
 
 export type Notes = {
     id: string
-    path: string
+    path?: string
     name: string
     notes: string
 }
